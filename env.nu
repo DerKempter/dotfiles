@@ -1,6 +1,6 @@
 zoxide init nushell | save -f ~/.zoxide.nu
 
-let keychain_output = (^keychain --eval --agents ssh --quiet id_ed25519
+let keychain_output = (^keychain --eval --quiet id_ed25519
     | lines
     | where $it =~ "setenv"
     | parse "setenv {name} {value};"
