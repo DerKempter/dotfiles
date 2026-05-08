@@ -20,7 +20,6 @@ use ~/.config/nushell/scripts/misc.nu *
 
 source ~/.config/nushell/scripts/hooks.nu
 
-
 source ~/.zoxide.nu
 
 export alias deactivate = hide-env VIRTUAL_ENV; $env.PATH = ($env.PATH | drop)
