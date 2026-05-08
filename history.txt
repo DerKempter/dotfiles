@@ -1,0 +1,1627 @@
+exit
+$env.config.buffer_editor = "zed"
+config nu
+exit
+docker
+config nu
+nu config
+config nu
+$env.config.buffer_editor = "zed"
+config nu
+$nu.env-path
+nu env
+zed $nu.env-path
+exit
+curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+exit
+sudo apt update
+sudo apt install kitty
+ls
+ls | order-by name
+ls | order
+ls | sort-by
+ls | sort-by name
+zed .config/kitty/kitty.conf
+mkdir ~/Code
+z Code
+mkdir github
+mkdir gitlab
+z gitlab/
+mkdir m-result
+z m-result/
+..
+m-result
+"m-result"
+z m-result/
+clear
+git clone git@gitlab.m-result.de:earlywarningsignals/ews-microservice.git
+mkdir ews
+mv ews-microservice/ ews/
+ls
+ls -la
+cd ews
+ls
+git clone git@gitlab.m-result.de:earlywarningsignals/ews-ai-assistant-mastra.git
+git clone git@gitlab.m-result.de:earlywarningsignals/ews-dashboard.git
+cd ..
+ls
+mkdir scraper
+mkdir scraper/skoda
+z skoda
+z scraper/skoda/
+....
+z skoda
+git clone git@gitlab.m-result.de:SentimentLab/scrapy/playwright-google-review-scraper.git
+git clone git@gitlab.m-result.de:SentimentLab/scrapy/autoscout24-review-spider.git
+git clone git@gitlab.m-result.de:SentimentLab/scrapy/mobileskodadealershipspider.git
+...
+..
+mkdir schott
+z schott
+git clone git@gitlab.m-result.de:schott/theater-extractor.git
+..
+mkdir tilly-hedrich
+z tilly-hedrich/
+git clone git@gitlab.m-result.de:tilly-hedrich/heizpellets24scraper.git
+z ews
+git clone git@gitlab.m-result.de:SentimentLab/AiDataProcessing.git
+z scraper
+..
+ls
+cd scraper/
+git clone git@gitlab.m-result.de:SentimentLab/Scraper.git
+ls
+...
+mkdir skoda
+z skoda
+mkdir dialog
+z dialog
+git clone git@gitlab.m-result.de:SFW_Dialog/AccessoryForm.git
+git clone git@gitlab.m-result.de:SFW_Dialog/sfw_clt.git
+z ~/Downloads/
+tar -xvf jetbrains-toolbox-3.2.0.65851.tar.gz -C /opt/jetbrains-toolbox
+ls /opt/
+tar -xvf jetbrains-toolbox-3.2.0.65851.tar.gz -C /opt
+ls /opt/
+mkdir /opt/jetbrains-toolbox
+z ~
+ls
+ls -la
+ls ~/.local/
+ls ~/.local/ -la
+ls ~/.local/bin/ -la
+tar -xvf jetbrains-toolbox-3.2.0.65851.tar.gz -C ~/.local/bin/jetbrains-toolbox
+mkdir ~/.local/bin/jetbrains-toolbox
+tar -xvf jetbrains-toolbox-3.2.0.65851.tar.gz -C ~/.local/bin/jetbrains-toolbox
+z Downloads/
+tar -xvf jetbrains-toolbox-3.2.0.65851.tar.gz -C ~/.local/bin/jetbrains-toolbox
+cd ~/.local/bin/jetbrains-toolbox/
+ls
+cd jetbrains-toolbox-3.2.0.65851/
+ls
+cd bin/
+ls
+..
+./bin/jetbrains-toolbox
+z ~/.local/share/applications/
+ls
+zed jetbrains-toolbox.desktop
+/home/kempter@M-Result1.M-Result.de/.local/bin/jetbrains-toolbox/jetbrains-toolbox-3.2.0.65851/bin/jetbrains-toolbox
+zed jetbrains-toolbox.desktop
+rm jetbrains-toolbox.desktop
+/home/kempter@M-Result1.M-Result.de/.local/bin/jetbrains-toolbox/jetbrains-toolbox-3.2.0.65851/bin/jetbrains-toolbox
+ls
+zed jetbrains-toolbox.desktop
+chmod +x ~/.local/share/applications/jetbrains-toolbox.desktop
+zed jetbrains-toolbox.desktop
+chmod +x ~/.local/share/applications/jetbrains-toolbox.desktop
+sudo apt install dotnet-sdk-8.0
+sudo apt install dotnet-sdk-10.0
+$env.DOTNET_ROOT = "/usr/lib/dotnet"
+$env.PATH = ($env.PATH | append $"($env.HOME)/.dotnet/tools")
+sudo apt isntall nuget
+sudo apt install nuget
+dotnet tool isntall --global dotnet-ef
+dotnet tool install --global dotnet-ef
+dotnet dev-certs https --trust
+curl -fsSL https://fnm.vercel.app/install | bash
+config env
+nu env
+nu config
+zed $nu.env-path
+fnm
+which fnm
+which fnm | is-empty
+which fnm | is-empty | not
+which fnm | is-empty not
+fnm env
+zed $nu.config-path
+fnm
+ls ~/.local/share/fnm/fnm
+~/.local/share/fnm/fnm --version
+fnm
+fnm --version
+fnm install --lts
+fnm use lts
+fnm install lts
+fnm use --lts
+fnm use
+fnm env
+curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | bash -s install lts
+curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n -o ~/.local/bin/n
+chmod +x ~/.local/bin/n
+n lts
+node -v
+npm -v
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf and sudo sysctl -p
+z EWSDashboard
+z ~/Code/gitlab/m-result/ews/ews-dashboard/
+ls
+z EWS.Dashboard.Frontend/
+z ews-dashboard
+z Frontend
+npm ci
+sudo ln -s /home/kempter@M-Result1.M-Result.de/.n/bin/node /usr/local/bin/node
+sudo ln -s /home/kempter@M-Result1.M-Result.de/.n/bin/npm /usr/local/bin/npm
+$env.PATH | where ($it | str contains ".n/bin")
+ls
+ng serve
+^ng serve
+z Frontend
+ng serve
+^ng serve
+npm ci
+^ng serve
+npm run start:default
+mkdir ~/.aspnet/https/
+dotnet dev-certs https --format Pem -ep $"($env.HOME)/.aspnet/https/ewsdashboard.pem" -np
+open ~/.aspnet/https/ewsdashboard.pem | first 1
+open ~/.aspnet/https/ewsdashboard.pem | first 4
+open ~/.aspnet/https/ewsdashboard.pem
+open ~/.aspnet/https/ewsdashboard.key
+let cert_path = $"($env.HOME)/.aspnet/https/ewsdashboard.pem"
+let key_path = $"($env.HOME)/.aspnet/https/ewsdashboard.key"
+ng serve --port 44478 --ssl --ssl-cert $cert_path --ssl-key $key_path
+npm install -g @angular/cli
+ng version
+ng serve --port 44478 --ssl --ssl-cert $cert_path --ssl-key $key_path
+npm install -g @angular/cli@19
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak install --user flathub org.keepassxc.KeePassXC
+flatpak list
+ls /etc/thunderbird/
+cat /etc/thunderbird/syspref.js
+sudo add-apt-repository ppa:mozillateam/ppa
+sudo apt install cifs-utils
+editor /etc/fstab
+sudo zed /etc/fstab
+sudo editor /etc/fstab
+sudo editor /etc/win-credentials
+sudo chmod 600 /etc/win-credentials
+sudo editor /etc/win-credentials
+sudo chmod 600 /etc/win-credentials
+sudo editor /etc/fstab
+mount -a
+systemctl daemon-reload
+mount -a
+mkdir ~/Freigaben/MRDaten
+mkdir ~/Freigaben/Call
+mount -a
+sudo mount -a
+sudo editor /etc/fstab
+zed /etc/fstab
+id
+sudo editor /etc/fstab
+sudo mount -a
+systemctl daemon-reload
+sudo mount -a
+sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/MRDaten
+sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/Call
+sudo mount -a
+clear
+sudo apt isntall kdepim-runtime
+sudo apt install kdepim-runtime
+sudo apt install akonadi-backend-ews
+akonadictl restart
+sudo apt install steam
+steam
+ssh kempter@spica-docker-01
+sudo mount -a
+pip install -r src/requirements.txt
+sudo apt isntall python3-pip
+sudo apt install python3-pip
+pip
+sudo apt install unixodbc gnupg curl
+curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/ubuntu/24.04/prod noble main" | sudo tee /etc/apt/sources.list.d/mssql-release.list
+sudo apt update
+sudo apt get update
+sudo apt-get update
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/ubuntu/24.04/prod noble main" | sudo tee /etc/apt/sources.list.d/mssql-release.list
+sudo apt-get update
+sudo rm /etc/apt/sources.list.d/mssql-release.list
+sudo rm /usr/share/keyrings/microsoft-prod.gpg
+sudo apt  update
+curl -sSL -O https://packages.microsoft.com/config/ubuntu/$(grep VERSION_ID /etc/os-release | cut -d '"' -f 2)/packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+ls
+ls Downloads/
+ls Downloads/ | order-by
+ls Downloads/ | sort-by size | reverse
+ps
+clear
+curl -fsSL https://vicinae.com/install.sh | bash<\n>
+vicinae --version
+vicinae version
+vicinae
+vicinae open
+systemctl --user enable vicinae --now
+journalctl --user -u vicinae
+sudo journalctl --user -u vicinae
+sudo apt update
+sudo apt install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+sudo tee /etc/apt/sources.list.d/docker.sources
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF<\n>Types: deb<\n>URIs: https://download.docker.com/linux/ubuntu<\n>Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")<\n>Components: stable<\n>Signed-By: /etc/apt/keyrings/docker.asc<\n>EOF
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl status docker
+sudo docker run hello-world
+docker run hello-world
+sudo groupadd docker
+sudo usermod -aG docker $USER
+sudo usermod -aG docker $env.USER
+docker run hello-world
+z Frontend
+git log
+git log | lines
+git log --pretty=%h»¦«%aN»¦«%s»¦«%aD | lines
+git log --pretty=%h»¦«%aN»¦«%s»¦«%aD | lines | split column "»¦«" | first 10
+git log --pretty=%h»¦«%aN»¦«%s»¦«%aD | lines | split column "»¦«" sha1 committer desc merged_at | first 10
+clear
+git log --pretty=%h»¦«%aN»¦«%s»¦«%aD | lines | split column "»¦«" sha1 committer desc merged_at | first 10
+git log --pretty=%h»¦«%aN»¦«%s»¦«%aD | lines | split column "»¦«" sha1 committer desc merged_at | histogram committer merger
+zed $nu.config-path
+z Frontend
+git histogram
+^git log --pretty=%h»¦«%aN»¦«%s»¦«%aD | lines | split column "»¦«" sha1 committer desc merged_at | histogram committer merger
+z Frontend
+git histogram
+let delimiter = "»¦«"
+$delimiter
+let format = [ "%h" "%aN" "%s" "%aD" ] | str join $delimiter
+$format
+git log --pretty $format
+git log --pretty=$format
+^git log --pretty=$format
+z Frontend
+git histogram
+let delimiter = "»¦«"
+let format = [ "%h" "%aN" "%s" "%aD" ] | str join $delimiter
+git log --pretty=format:($format)
+git log --pretty=format:($format) | lines
+git log --pretty=format:($format) | lines | split column $delimiter sha1 comitter desc merged_at
+git log --pretty=format:($format) | lines | split column $delimiter sha1 committer desc merged_at | histogram committer merger
+^git log --pretty=format:($format) | lines | split column $delimiter sha1 committer desc merged_at | histogram committer merger
+let limit = 100
+^git log --max-count=$limit --pretty=format:($format) | lines | split column $delimiter sha1 committer desc merged_at | histogram committer merger
+^git log --max-count=($limit) --pretty=format:($format) | lines | split column $delimiter sha1 committer desc merged_at | histogram committer merger
+^git log --max-count=($limit) --pretty=format($format) | lines | split column $delimiter sha1 committer desc merged_at | histogram committer merger
+^git log --max-count=($limit) --pretty=($format) | lines | split column $delimiter sha1 committer desc merged_at | histogram committer merger
+let limit = -1
+^git log --max-count=($limit) --pretty=($format) | lines | split column $delimiter sha1 committer desc merged_at | histogram committer merger
+z Frontend
+git histogram
+z ~
+z ~/Code/gitlab/m-result/scraper/
+mkdir mastra
+z mastra
+git clone git@gitlab.m-result.de:SentimentLab/mastra/youtube-scraper.git
+sudo ACCEPT_EULA=Y apt-get install --yes msodbcsql18=18.5.1.1-1
+sudo ACCEPT_EULA=Y apt-get install msodbcsql18=18.5.1.1-1
+z ews-ai-assistent-mastra
+z Code/gitlab/m-result/ews/ews-ai-assistant-mastra/
+/
+z mastra
+/
+curl -fsSL https://ollama.com/install.sh | sh
+ollama
+/bye
+curl -fsSL https://claude.ai/install.sh | bash
+ollama
+ollama run qwem3-coder:32b
+ollama list
+ollama run qwen3:8b
+ollama list
+ollama ps
+ollama run qwen3-coder-next
+ollama -h
+ollama stop qwen3:8b
+ollama ps
+EXPORT OLLAMA_VULKAN=1
+export OLLAMA_VULKAN=1
+OLLAMA_VULKAN=1
+ollama ps
+load-env {<\n>    OLLAMA_VULKAN: "1",<\n>    OLLAMA_FLASH_ATTENTION: "1",<\n>    HSA_OVERRIDE_GFX_VERSION: "11.0.0" # Only needed if you are on Linux<\n>}
+ollama serve
+ollama stop
+ollama -h
+ps | where name ~= "ollama" | each { |it| kill -f $it.pid }
+ps | where name = "ollama" | each { |it| kill -f $it.pid }
+ps | where name == "ollama" | each { |it| kill -f $it.pid }
+sudo ps | where name == "ollama" | each { |it| kill -f $it.pid }
+ps | where name == "ollama"
+ps | where name == "ollama" | each { |it| sudo kill -f $it.pid}
+sudo kill 12659
+ollama serve
+ps | where name == "ollama"
+ollama ps
+ollama run qwen3:8b
+ps | where name = "ollama" | get env.0 | select OLLAMA_VULKAN OLLAMA_FLASH_ATTENTION
+ps | where name == "ollama" | get env.0 | select OLLAMA_VULKAN OLLAMA_FLASH_ATTENTION
+$env.OLLAMA_VULKAN = "1"
+$env.OLLAMA_FLASH_ATTENTION = "1"
+$env.HSA_OVERRIDE_GFX_VERSION = "11.0.0"
+ollama serve
+ollama run qwen3:8b
+find /usr/local/lib/ollama
+^find /usr/local/lib/ollama
+systemctl stop ollama
+ollama ps
+ssh kempter@spica-docker-01
+ollama ps
+ollama run qwen3:8b
+ollama run qwen3:8b "Write a complex TypeScript generic for a deep-merge utility" --verbose
+ollama run qwen3:8b "Write a complex TypeScript generic for a DBO" --verbose
+ollama run qwen3:8b "Write a simple TypeScript generic for a DBO" --verbose
+ollama run qwen3:8b "Write a simple TypeScript generic for a DBO. Disregard any actual implementation and consider a generic database. No need for explicit implementations" --verbose
+ollama ps
+ollama run qwen3:8b "Generate a generic typescript function that converts an input to a given output type" --verbose
+ollama ps
+ollama serve
+ssh kempter@spica-docker-01
+df
+ollama run qwen-coder-next
+ollama run qwen3-coder-next
+bits and 1 
+[1 2] | bits and
+| bits and
+flatpak install com.stremio.Stremio
+ollama run Qwen3-Coder-30B-A3B:Q4
+ollama run Qwen3-Coder:30b
+ollama run qwen3-coder:30b "Generate a generic typescript function that converts an input to a given output type" --verbose
+ollama run qwen3-coder:30b "Write a complex TypeScript generic for a deep-merge utility" --verbose
+ollama ps
+systemctl stop ollama
+ollama run qwen3-coder:30b "Write a complex TypeScript generic for a deep-merge utility" --verbose
+sudo systemctl edit ollama.service
+sudo mv /home/kempter/.ollama/models/* /usr/share/ollama/.ollama/models/
+sudo mv /home/kempter@M-Result1.M-Result.de/.ollama/models/* /usr/share/ollama/.ollama/models/
+sudo mv -r /home/kempter@M-Result1.M-Result.de/.ollama/models/* /usr/share/ollama/.ollama/models/
+sudo mv --r /home/kempter@M-Result1.M-Result.de/.ollama/models/* /usr/share/ollama/.ollama/models/
+sudo rsync -av --remove-source-files /home/kempter@M-Result1.M-Result.de/.ollama/models/ /usr/share/ollama/.ollama/models/
+sudo chown -R ollama:ollama /usr/share/ollama/.ollama/models/
+sudo systemctl edit ollama.service
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+ollama ps
+ollama serve
+ollama ps
+ollama run qwen3-coder:30b
+journalctl -u ollama --since "1 minute ago" | grep -i "Vulkan"
+sudo journalctl -u ollama --since "1 minute ago" | grep -i "Vulkan"
+sudo systemctl edit ollama.service
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+ollama ps
+sudo systemctl edit ollama.service
+ollama run qwen3-coder:30b
+sudo mkdir -p /etc/ollama
+"OLLAMA_VULKAN=1<\n>OLLAMA_FLASH_ATTENTION=1<\n>HSA_OVERRIDE_GFX_VERSION=11.0.2<\n>OLLAMA_CONTEXT_LENGTH=32768<\n>OLLAMA_MODELS=/usr/share/ollama/.ollama/models" | sudo save /etc/ollama/config.env
+sudo touch /etc/ollama/config.env
+sudo editor /etc/ollama/config.env
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+sudo journalctl -u ollama --since "1 minute ago" | grep -i "Vulkan"
+id -u
+sudo systemctl edit ollama.service
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+sudo journalctl -u ollama --since "1 minute ago" | grep -i "Vulkan"
+ollama ps
+ollama run qwen3-coder:30b
+sudo chown -R kempter@M-Result1.M-Result.de:render /usr/share/ollama/.ollama/models/
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+sudo journalctl -u ollama --since "1 minute ago" | grep -i "Vulkan"
+sudo systemctl edit ollama
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+sudo systemctl edit ollama
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+sudo journalctl -u ollama --since "1 minute ago" | grep -i "Vulkan"
+ollama run qwen3-coder:30b
+ollama run qwen3-coder:30b "Write a complex TypeScript generic for a deep-merge utility" --verbose
+ollama ps
+ollama launch claude
+z Frontend
+z mastra
+ollama stop Qwen3-Coder:30b
+ollama ps
+ssh kempter@spica-docker-01
+zed ~/.config/kitty/kitty.conf
+touch ~/.config/kitty/GruvBox_DarkHard.conf
+zed ~/.config/kitty/GruvBox_DarkHard.conf
+ls
+ps
+ps | first 10
+clear
+ps | first 10
+ps | first 10 | describe
+ollama ps
+ollama ps
+z mastra
+git status
+git histogram
+z Frontend
+git histogram
+ssh kempter@spica-docker-01
+ollama run gpt-oss-20b
+ollama run gpt-oss:20b
+sudo systemctl stop ollama
+sudo chown -R ollama:ollama /usr/share/ollama/.ollama/models
+sudo find /usr/share/ollama/.ollama/models -type d -exec chmod 755 {} +
+sudo find /usr/share/ollama/.ollama/models -type f -exec chmod 644 {} +
+sudo systemctl start ollama
+sudo rm -rf /usr/share/ollama/.ollama/models/blobs/*-partial*
+z ~
+wget https://github.com/lemonade-sdk/lemonade/releases/latest/download/lemonade-server_9.3.4_amd64.deb
+ollama run gpt-oss:20b
+wget https://github.com/lemonade-sdk/lemonade/releases/download/v9.3.4/lemonade_9.3.4_amd64.deb
+sudo apt install ./lemonade_9.3.4_amd64.deb
+plasmashell --replace
+ps
+ps | where name == "plasmashell"
+kill 351428
+ps | where name == "plasmashell"
+kquitapp6 plasmashell && kstart plasmashell
+kquitapp6 plasmashell and kstart plasmashell
+plasmashell
+plasmashell --replace
+plasmashell --replace &
+systemctl --user restart plasma-plasmashell.service
+lemonade-server status
+sudo systemctl stop ollama
+sudo systemctl disable ollama
+lemonade-server status
+lemonade-server list
+sudo systemctl status lemonade-server
+lemonade-server pull Qwen3-Coder-Next-GGUF
+docker run hello-world
+z Downloads/
+tar xjf thunderbird-148.0.tar.xz
+tar -xvf thunderbird-148.0.tar.xz
+ls
+cat thunderbird/
+ls thunderbird/
+sudo mv thunderbird/ /opt
+ls
+sudo ln -s /opt/thunderbird/thunderbird /usr/local/bin/thunderbird
+wget https://raw.githubusercontent.com/mozilla/sumo-kb/main/installing-thunderbird-linux/thunderbird.desktop -P /usr/local/share/applications
+ssh kempter@spica-docker-01
+sudo wget https://raw.githubusercontent.com/mozilla/sumo-kb/main/installing-thunderbird-linux/thunderbird.desktop -P /usr/local/share/applications
+pip
+pip install -r requirements.txt
+sudo add-apt-repository ppa:deadsnakes/ppa<\n>sudo apt update
+sudo apt install python3.10
+git histogram
+clear
+git histogram
+z ~/Code/gitlab/m-result/scraper/Scraper/
+ls
+git histogram
+mkdir -p ~/.local/share/fonts
+mkdir ~/.local/share/fonts
+wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
+unzip JetBrainsMono.zip -d ~/.local/share/fonts/JetBrainsMono
+fc-cache -fv
+zed ~/.config/kitty/kitty.conf
+ls
+systemctl --user restart plasma-plasmashell.service
+ssh kempter@spica-docker-01
+open ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | lines
+open ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | str replace --all --multiline '(?m)\n(?!\d{4}-\d{2}-\d{2})' ' ' | lines | first 5 
+open ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log<\n>| lines<\n>| reduce -f [] { |it, acc|<\n>    if ($it =~ '^\d{4}-\d{2}-\d{2}') {<\n>        $acc | append $it<\n>    } else {<\n>        let last = ($acc | last | default "")<\n>        $acc | drop last | append $"($last) ($it | str trim)"<\n>    }<\n>}<\n>| first 5
+ls
+ls | where size > 10kb
+open ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | first 5
+open ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | lines | first 5
+perl
+perl -pe 's/\n/ / if !/^\d{4}-\d{2}-\d{2}/' ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log
+perl -pe 's/\n/ / if !/^\d{4}-\d{2}-\d{2}/' ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | first 5
+perl -pe 's/\n/ / if !/^\d{4}-\d{2}-\d{2}/' ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | lines | first 5
+perl -pe 's/\n/ / if !/^\d{4}-\d{2}-\d{2}/' ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | lines | first 10
+perl -0777 -pe 's/\n/ / if !/^\d{4}-\d{2}-\d{2}/' ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | lines | first 10
+perl -0777 -pe 's/\n(?!\d{4}-\d{2}-\d{2})/ /g' ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log
+perl -0777 -pe 's/\n(?!\d{4}-\d{2}-\d{2})/ /g' ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | lines | first 10
+perl -0777 -pe 's/\n(?!\d{4}-\d{2}-\d{2})/ /g' ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | lines | parse "{date} {time} [{context}] {level}: {message}" | first 10
+perl -0777 -pe 's/\n(?!\d{4}-\d{2}-\d{2})/ /g' ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | lines | parse "{date} {time} [{context}: {dealer}] {level}: {message}" | first 10
+perl -0777 -pe 's/\n(?!\d{4}-\d{2}-\d{2})/ /g' ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | lines | parse --regex '(?<date>\d{4}-\d{2}-\d{2}) (?<time>\d{2}:\d{2}:\d{2}) \[(?<context>[\w-]+)(?:: (?<dealer>\d+))?\] (?<level>\w+): (?<message>.*)' | first 10
+zed $nu.config-path
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | first 5
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level = "ERROR" | count
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | count
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | length
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | first 20
+lemonade-server status
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | all { |entry| str contains '400' } | first
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | all { |entry| str contains '400' } | first 1
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | all { |entry| str contains '400' }
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | all { |entry| $entry | str contains '400' }
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message 
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message ~= '400'
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message =~ '400'
+awk '/^[0-9]{4}-[0-9]{2}-[0-9]{2}/ { if (line) print line; line = $0; next } { line = line " " $0 } END { print line }' ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | lines | first 10
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message =~ '400'
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | first 20
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message =~ '400'
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message =~ '400' | collect
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message =~ '400'
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message =~ '400' | collect
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message =~ '400' | select dealer | collect
+history
+history session
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message =~ '400' | select message | collect
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message =~ '400' | select message | collect | parse --regex '(?<message>.*) (?<status-code\d{3}>): (?<url>http.*)'
+parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message =~ '400' | select message | collect | lines | parse --regex '(?<message>.*) (?<status-code\d{3}>): (?<url>http.*)'
+let messages = parse-scraper ~/Dokumente/Scraper/20260226-1547-google-review-scraper-run-spiders.log | where level == "ERROR" | where message =~ '400' | select message | collect
+$messages
+$messages | parse --regex '.* (?<status>\{3}) .*'
+$messages | lines | parse --regex '.* (?<status>\{3}) .*'
+$messages | select message | lines | parse --regex '.* (?<status>\{3}) .*'
+$messages | select message | lines
+$messages | describe
+$messages | lines
+$messages | select message
+$messages | select message | parse "{message} {status}: {url}"
+$messages | select message | lines | parse "{message} {status}: {url}"
+$messages | columns
+$messages | columns | select 0
+$messages | select message | describe
+$messages | select message | lines | describe
+ssh kempter@spica-docker-01
+sudo apt install chrome
+sudo apt install ~/Downloads/google-chrome-stable_current_amd64.deb
+curl http://localhost:8000/api/v1/models
+http get http://localhost:8000/api/v1/models
+curl http://localhost:8000/api/v1/chat/completions \<\n>  -H "Content-Type: application/json" \<\n>  -d '{<\n>    "model": "Qwen3-Coder-30B-A3B-Instruct-GGUF",<\n>    "messages": [{"role": "user", "content": "Write a fibonacci function in Python"}],<\n>    "max_tokens": 500,<\n>    "stream": true<\n>  }'
+^curl http://localhost:8000/api/v1/chat/completions \<\n>  -H "Content-Type: application/json" \<\n>  -d '{<\n>    "model": "Qwen3-Coder-30B-A3B-Instruct-GGUF",<\n>    "messages": [{"role": "user", "content": "Write a fibonacci function in Python"}],<\n>    "max_tokens": 500,<\n>    "stream": true<\n>  }'
+http post http://localhost:8000/api/v1/chat/completions \<\n>  -H "Content-Type: application/json" \<\n>  -d '{<\n>    "model": "Qwen3-Coder-30B-A3B-Instruct-GGUF",<\n>    "messages": [{"role": "user", "content": "Write a fibonacci function in Python"}],<\n>    "max_tokens": 500,<\n>    "stream": true<\n>  }'
+http post http://localhost:8000/api/v1/chat/completions<\n>  --content-type application/json<\n>  {<\n>    model: "Qwen3-Coder-30B-A3B-Instruct-GGUF",<\n>    messages: [{role: "user", content: "Write a fibonacci function in Python"}],<\n>    max_tokens: 500,<\n>    stream: false<\n>  }
+http post http://localhost:8000/api/v1/chat/completions<\n>  {<\n>    model: "Qwen3-Coder-30B-A3B-Instruct-GGUF",<\n>    messages: [{role: "user", content: "Write a fibonacci function in Python"}],<\n>    max_tokens: 500,<\n>    stream: false<\n>  }
+http post http://localhost:8000/api/v1/chat/completions<\n>  --content-type "application/json"<\n>  {<\n>    model: "Qwen3-Coder-30B-A3B-Instruct-GGUF",<\n>    messages: [{role: "user", content: "Write a fibonacci function in Python"}],<\n>    max_tokens: 500,<\n>    stream: false<\n>  }
+http post --content-type "application/json" http://localhost:8000/api/v1/chat/completions {model: "Qwen3-Coder-30B-A3B-Instruct-GGUF", messages: [{role: "user", content: "Write a fibonacci function in Python"}], max_tokens: 500, stream: false}
+http post --content-type "application/json" http://localhost:8000/api/v1/chat/completions {model: "Qwen3-Coder-30B-A3B-Instruct-GGUF", messages: [{role: "user", content: "Write a fibonacci function in Python"}], max_tokens: 500, stream: false} | get timings
+http post --content-type "application/json" http://localhost:8000/api/v1/chat/completions {model: "Qwen3-Coder-Next-GGUF", messages: [{role: "user", content: "Write a fibonacci function in Python"}], max_tokens: 500, stream: false} | get timings
+lemonade-server pull QwenCoder2.5-1.5B
+lemonade-server pull user.QwenCoder2.5-1.5B
+lemonade pull user.QwenCoder2.5-1.5B --hf-model-id Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF --gguf-variant Q8_0
+lemonade-server pull user.QwenCoder2.5-1.5B --hf-model-id Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF --gguf-variant Q8_0
+lemonade-server pull --help
+lemonade-server pull user.QwenCoder2.5-1.5B --checkpoint Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF:Q8_0 --recipe llamacpp
+http get http://localhost:8000/api/v1/models
+http get http://localhost:8000/api/v1/models | get data
+http get http://localhost:8000/api/v1/models | get data | describe
+http get http://localhost:8000/api/v1/models | get data | select labels
+http get http://localhost:8000/api/v1/models | get data | select object
+http get http://localhost:8000/api/v1/models | get data | select checkpoint
+http get http://localhost:8000/api/v1/models | get data | select id
+http post --content-type "application/json" http://localhost:8000/api/v1/chat/completions {model: "user.QwenCoder2.5-1.5B", messages: [{role: "user", content: "Write a fibonacci function in Python"}], max_tokens: 500, stream: false} | get timings
+http post --content-type "application/json" http://localhost:8000/api/v1/embeddings {model: "nomic-embed-text-v1-GGUF", input: "test embedding"}
+http post --content-type "application/json" http://localhost:8000/api/v1/completions {model: "user.QwenCoder2.5-1.5B", prompt: "def fibonacci(", max_tokens: 64}
+http post --content-type "application/json" http://localhost:8000/api/v1/completions {model: "user.QwenCoder2.5-1.5B", prompt: "def fibonacci(", max_tokens: 64} | select choices
+http post --content-type "application/json" http://localhost:8000/api/v1/completions {model: "user.QwenCoder2.5-1.5B", prompt: "def fibonacci(", max_tokens: 64}
+lemonade-server list
+lemonade-server ps
+z EWS.Dashboard
+z ..
+ls
+docker compose up -d
+docker ps
+docker compose up -d
+docker compose up -d --build
+docker compose down
+docker ps
+docker stop EWS.Dashboard-backend
+docker stop ews.dashboard-backend
+docker stop 2bb4987e2aab
+docker stop 79312aadace7
+docker compose up -d --build
+docker compose logs -f
+docker compose up -d --build
+docker compose logs -f
+docker compose up -d --build
+docker compose logs -f
+docker compose up -d --build
+docker compose logs -f
+docker compose up -d --build
+docker compose logs -f
+docker compose up -d --build
+docker compose logs -f
+docker compose up -d --build
+sudo apt update
+sudo apt list --upgradable
+z /opt/zen/
+ls
+sudo chown -R $USER:$USER /opt/zen
+sudo chown -R (whoami):(whoami) /opt/zen
+sudo chown -R $env.USER /opt/zen
+ls /opt/zen/distribution
+killall zen
+killall zen-browser
+ps | where name like "zen"
+zen-browser 
+rm -rf ~/.zen/updates
+cd /tmp
+curl -L https://github.com/zen-browser/desktop/releases/latest/download/zen.linux-x86_64.tar.xz -o zen.tar.xz
+tar -xf zen.tar.xz -C /opt/
+npm install chroma-js
+npm i --save-dev @types/chroma-js
+z Frontend
+npm install chroma-js
+npm i --save-dev @types/chroma-js
+ssh kempter@spica-docker-01
+ollama --version
+systemctl start ollama
+ollama --version
+ollama list
+ollama run Qwen3-Coder:30b
+ollama pull JetBrains/Mellum-4b-sft-all
+ollama list
+ollama run Jetbrains/Mellum-4b-sft-all:latest
+ssh root@142.132.129.229
+sudo apt list --upgradable
+systemctl stop lemonade-server
+lemonade-server --version
+systemctl disable lemonade-server
+lemonade-server --version
+ollama --version
+ollama --info
+ollama --help
+clear
+z ~
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv
+uv add fast-rlm
+curl -fsSL https://deno.land/install.sh | sh
+curl -fsSL https://bun.sh/install | bash
+fast-rlm-log /home/kempter@M-Result1.M-Result.de/Code/gitlab/m-result/fast-rlm-test/logs/r_count_2026-03-04T14-01-25-026Z.jsonl
+fast-rlm-log /home/kempter@M-Result1.M-Result.de/Code/gitlab/m-result/fast-rlm-test/logs/r_count_2026-03-04T14-01-25-026Z.jsonl --tui
+fast-rlm-log /home/kempter@M-Result1.M-Result.de/Code/gitlab/m-result/fast-rlm-test/logs/r_count_2026-03-04T14-17-02-849Z.jsonl --tui
+pip install -r requirements.txt
+pip install -r src/requirements.txt
+ollama pull Qwen/Qwen3.5-9B
+ollama pull Qwen/Qwen3.5:9b
+ollama pull qwen3.5:9b
+curl -fsSL https://ollama.com/install.sh | sh
+ollama --version
+ollama ps
+ollama list
+ollama list | describe
+ollama pull qwen3.5:9b
+ollama ps | detect columns
+ollama list | detect columns
+ollama ps
+ollama ps | detect columns
+ollama ps | lines | detect columns
+ollama ps | lines 
+ollama ps | lines | skip 1 | upsert 0 { |it| $it | str replace -r '\s{2,}' ',' }
+ollama ps | lines | skip 1 | upsert 0 { |it| $it | str replace -r '\s{2,}' ',' } | decode csv --noheaders
+ollama ps | lines | skip 1 | upsert 0 { |it| $it | str replace -r '\s{2,}' ',' } | decode csv
+ollama ps | lines | skip 1 | upsert 0 { |it| $it | str replace -r '\s{2,}' ',' } | decode csv --column [NAME ID]
+ollama ps | lines | skip 1 | upsert 0 { |it| $it | str replace -r '\s{2,}' ',' } | decode csv --help
+decode --help
+decode csv --help
+ollama ps | lines | skip 1 | upsert 0 { |it| $it | str replace -r '\s{2,}' ',' } | decode csv --noheaders --columns [NAME ID SIZE PROCESSOR CONTEXT UNTIL]
+ollama --help
+systemctl status ollama
+clear
+ollama run qwen3.5:9b
+ollama ps
+sudo mount -a
+cat /etc/fstab
+sudo editor /etc/win-credentials
+clear
+sudo mount -a
+ssh kempter@spica-docker-01
+ssh kempter@mrslscraper-04
+systemctl restart ollama
+ollama run qwen3.5
+ssh kempter@mrsldocker-04
+systemctl --user restart plasma-plasmashell.service
+sudo systemctl --user restart plasma-plasmashell.service
+plasmashell --replace &
+sudo mount -a
+sudo apt install glogg
+sudo mount -a
+ps | where name like "glogg"
+ps --help
+sudo apt install ~/Downloads/klassy_6.5.3-1_arm64.deb
+sudo apt install git build-essential cmake extra-cmake-modules libkirigami-dev libkf5style-dev libkf6kcmutils-dev libkf6colorscheme-dev libkf5config-dev libkf5configwidgets-dev libkf5coreaddons-dev libkf5guiaddons-dev libkf6i18n-dev libkf6iconthemes-dev kirigami2-dev libkf6package-dev libkf6service-dev libkf6windowsystem-dev kwayland-dev libx11-dev libkdecorations3-dev libkf5configwidgets-dev libkf5i18n-dev libkf5iconthemes-dev libkf5kcmutils-dev libkf5package-dev libkf5service-dev libkf5wayland-dev libkf5windowsystem-dev libplasma-dev libqt5x11extras5-dev qt6-base-dev qt6-declarative-dev qtbase5-dev qtdeclarative5-dev gettext qt6-svg-dev
+z ~/Code/github/
+mkdir other
+z other
+git clone https://github.com/paulmcauley/klassy
+cd klassy/
+git checkout plasma6.3
+./install.sh
+http get http://localhost:11434/api/tags
+http get http://localhost:11434/api/tags | pick models
+http get http://localhost:11434/api/tags | select models
+ollama ps
+ollama run qwen3.5:9b
+ollama logs
+ollama log
+systemctl ollama logs
+systemctl logs ollama
+ollama pull qwen3-Coder:3b
+ollama pull qwen2.5-Coder:3b
+ollama stop qwen3.5:9b
+ollama ps
+npm i
+ng update @angular/core@20 @angular/cli@20
+npm i
+ping 192.168.144.3
+ps | where name like "dolphin"
+killall dolphon
+killall dolphin
+ps | where name like "dolphin"
+killall dolphin
+ps | where name like "dolphin"
+sudo sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/Call
+sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/Call
+sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/Call --force
+sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/MRDaten --force
+sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/MRDaten --help
+sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/MRDaten --force
+sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/MRDaten -a
+sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/MRDaten -A
+sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/MRDaten --force
+flatpak install org.localsend.localsend_app
+sudo mount -a
+npm i
+git rebase dev
+git push --force-with-lease
+npm i
+ng update @angular/core@21 @angular/cli@21
+npm i
+ng update @angular/core@21 @angular/cli@21
+npm i
+npm --v
+node -v
+npm i
+npm audit
+npm i
+npm audit
+npm audit fix
+npm audit
+npm audit fix
+npm i
+npm audit
+npm i
+ssh kempter@spica-docker-01
+cd frontend/
+npm i
+z Frontenf
+z Frontend
+..
+git status
+git rebase dev
+git push --force-with-lease
+npm i
+dotnet --v
+dotnet -v
+dotnet -version
+dotnet
+dotnet --info
+z EWS.Dashboard/
+dotnet list package --outdated
+ssh kempter@spica-docker-01
+qdbus org.kde.KWin /KWin reconfigure
+dbus-send --session --dest=org.kde.KWin /KWin org.kde.KWin.reconfigure
+qdbus6 org.kde.KWin /KWin reconfigure
+grep -i enabled ~/.config/kwinrc | grep -i effect
+kwriteconfig6 --file kwinrc --group Plugins --key kwin6_effect_aura_glowEnabled false
+dbus-send --session --dest=org.kde.KWin /KWin org.kde.KWin.reconfigure
+kwriteconfig6 --file kwinrc --group Plugins --key kwin6_effect_aura_glowEnabled true
+dbus-send --session --dest=org.kde.KWin /KWin org.kde.KWin.reconfigure
+kwriteconfig6 --file kwinrc --group Plugins --key kwin4_effect_scaleEnabled true
+dbus-send --session --dest=org.kde.KWin /KWin org.kde.KWin.reconfigure
+kwriteconfig6 --file kwinrc --group Plugins --key kwin6_effect_aura_glowEnabled false
+dbus-send --session --dest=org.kde.KWin /KWin org.kde.KWin.reconfigure
+kwriteconfig6 --file kwinrc --group Plugins --key kwin4_effect_scaleEnabled true
+dbus-send --session --dest=org.kde.KWin /KWin org.kde.KWin.reconfigure
+dbus-send --session --dest=org.kde.KWin --type=method_call --print-reply /Effects org.kde.kwin.Effects.unloadEffect string:"kwin6_effect_aura_glow"
+dbus-send --session --dest=org.kde.KWin --type=method_call --print-reply /Effects org.kde.kwin.Effects.loadEffect string:"kwin6_effect_aura_glow"
+config nu
+$env.config.buffer_editor = "zed"
+config nu
+journalctl --user -u plasma-kwin_wayland.service --priority=warning..emerg -n 100 --no-pager
+sudo journalctl --user -u plasma-kwin_wayland.service --priority=warning..emerg -n 100 --no-pager
+journalctl --user -u plasma-kwin_wayland.service -b | grep -iE "aura|burn|qml|shader|opengl" | tail -n 50
+sudo journalctl --user -u plasma-kwin_wayland.service -b | grep -iE "aura|burn|qml|shader|opengl" | tail -n 50
+fix-anims
+killall thunderbird
+killall thunderbird-mail
+ps | where name like "thunderbird"
+killall thunderbird-bin
+ollama ps
+ollama pull qwen3.5:2b
+ollama pull qwen3.5:0.8b
+ollama pull qwen2.5-coder:0.5b
+ollama pull hf.co/unsloth/Qwen3.5-35B-A3B-GGUF:Q4_K_M
+ollama ps
+ollama stop qwen3.5:0.8b
+ollama ps
+ulimit -1
+ulimit
+npx playwright install
+sudo apt-get install libwoff1 libenchant-2-2 libmanette-0.2-0
+fix-anims
+lemonade-server
+lemonade-server -v
+sudo apt install ~/Downloads/lemonade-server_10.0.0_amd64.deb
+systemctl disable ollama
+systemctl enable lemonade-server
+lemonade-server -v
+lemonade-server -
+lemonade-server 
+lemonade-server launch
+lemonade-server launch --help
+systemctl status lemonade-server
+systemctl start lemonade-server
+systemctl status lemonade-server
+sudo add-apt-repository ppa:amd-team/xrt
+sudo apt update
+sudo apt install libxrt-npu2 amdxdna-dkms
+sudo reboot
+sudo apt install ~/Downloads/fastflowlm_0.9.35_ubuntu24.04_amd64.deb
+flm validate
+cat /sys/bus/pci/drivers/amdxdna/*/fw_version
+lsmod | grep amdxdna
+uname -r
+^uname -r
+sudo nano /etc/security/limits.conf
+bootctl status
+^bootctl status
+cat /etc/default/grub
+grep -r "amd_iommu" /etc/default/grub.d/
+sudo nano /etc/default/grub
+sudo update-grub
+sudo reboot
+flm validate
+dmesg | grep -i "amdnpu"
+sudo dmesg | grep -i "amdnpu"
+ls /dev/accel*
+ls -l /dev/accel/
+sudo usermod -aG render $USER
+sudo usermod -aG render $env.USER
+sudo logout
+flm validate
+lemonade-server
+lemonade-server status
+curl -fsSL https://cdn.anythingllm.com/latest/installer.sh -o installer.sh
+chmod +x installer.sh
+npx tsx src/test.ts
+./installer.sh
+flm validate
+flm validate --json
+flm port
+systemctl restart lemonade-server
+npx tsx src/test-2.ts
+npm i
+npx tsx src/test-2.ts
+killall thunderbird-bin
+mkdir /opt/stacks
+mkdir ~/stacks
+z ~/stacks/
+mkdir openwebui
+z openwebui/
+touch compose.yaml
+zed compose.yaml
+openssl rand -hex 32
+docker compose up -d
+ping localhost:8000
+ping http://localhost:8000
+lemonade-server status
+docker compose logs -f
+cat compose.yaml
+sudo systemctl edit lemonade-server
+sudo systemctl daemon-reload
+sudo systemctl restart lemonade-server
+sudo systemctl edit lemonade-server
+sudo systemctl daemon-reload
+sudo systemctl restart lemonade-server
+systemctl status lemonade-server.service
+sudo systemctl edit lemonade-server
+sudo systemctl restart lemonade-server
+systemctl status lemonade-server.service
+sudo systemctl edit lemonade-server
+sudo systemctl restart lemonade-server
+systemctl status lemonade-server.service
+sudo systemctl edit lemonade-server
+sudo systemctl restart lemonade-server
+sudo systemctl daemon-reload
+sudo systemctl edit lemonade-server
+sudo systemctl daemon-reload
+sudo systemctl restart lemonade-server
+systemctl status lemonade-server.service
+zed compose.yaml
+docker compose up -d
+docker compose logs -f
+sudo ufw allow 3000/tcp
+hostname -I
+sudo ufw allow 8000/tcp
+docker ps
+http get https://localhost:44478/api/healthz
+https get https://localhost:44478/api/healthz
+http get https://localhost:44478/api/healthz
+curl https://localhost:44478/api/healthz
+curl --ca-native https://localhost:44478/api/healthz
+curl --insecure https://localhost:44478/api/healthz
+curl --insecure https://localhost:44478/healthz
+curl --insecure https://localhost:7145/healthz
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-frontend-1
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-frontend-1 | discover
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-frontend-1 | discribe
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-frontend-1 | describe
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-frontend-1 | detect-columns
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-frontend-1 | detect columns
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-frontend-1 | detect columns --guess
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-frontend-1 | detect columns --no-headers
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-frontend-1 | lines | detect columns --no-headers
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-frontend-1 | lines
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-frontend-1 | from json
+docker inspect --format='{{json .State.Health}}' ews-dashboard-ews-dashboard-backend-1 | from json
+z dashboard
+z ..
+git status
+git rebase dev
+git stash
+git rebase dev
+git push --force-with-lease
+npm i
+npm audit
+npm i
+npm i --force
+npm i
+npm audit
+npm i
+npm audit
+npm audit fix
+npm i
+npm audit
+npm i
+git rebase dev
+git push --force-with-lease
+git rebase dev
+git push --force-with-lease
+git rebase dev
+git push --force-with-lease
+ping MRPostgres-02
+z EWS.Dashboard/
+docker build
+docker build .
+..
+docker build ./EWS.Dashboard/
+docker compose build
+docker images
+docker compose up
+fix-anims
+git status
+git stash
+git rebase dev
+git push --force-with-lease
+git stash apply
+git status
+docker ps
+ssh kempter@spica-docker-01
+git status
+git stash
+git status
+git rebase dev
+git push --force-with-lease
+npm i csv-stringify
+npm audit
+npm audit fix
+npm i xlsx
+npm audit
+npm r xlsx
+npm install exceljs
+npm audit
+npm r csv-stringify
+docker ps
+docker compose down
+npm i
+npm ci
+flm pull qwen3.5:4b
+flm list
+flm -v
+sudo apt install ~/Downloads/fastflowlm_0.9.36_ubuntu24.04_amd64.deb
+flm -v
+flm pull qwen3.5:4b
+lemonade-server -v
+flm pull qwen3.5:4b
+lemonade-server pull qwen3.5:4b-FLM
+flm pull qwen3.5:4b
+systemctl restart lemonade-server.service
+lemonade-server list
+lemonade-server pull qwen3.5-4b-FLM
+git status
+git rebase dev
+git push --force-with-lease
+...
+z local/
+npm create vite@latest
+z office-tracker/angular.json
+z office-tracker/
+npm i
+systemctl restart lemonade-server.service
+docker compose up -d --build
+npm i
+npm audit
+npm ci
+npm audit
+npm audit fix
+npm audit
+npm list zod-to-json-schema
+npm i
+docker compose up -d --build
+docker compose build --no-cache
+docker compose up -d
+docker compose up -d --build
+ip
+ip addr show
+ip -br addr
+fix-anims
+ssh kempter@spica-docker-01
+z Frontend
+git stash
+git checkout dev
+git stash apply
+ping 192.168.122.242:9200
+ping 192.168.122.242
+clear
+z gitlab
+ls
+z m-result/
+ls
+git clone git@gitlab.m-result.de:clevermail/clevermail-business.git
+dotnet publish
+docker compose -v
+docker compose --version
+docker compose -version
+docker compose --version
+docker compose version
+docker version
+z scraper/mastra/youtube-scraper/
+git status
+git pull
+git branch
+git branch origin
+git pull
+..
+z ..
+z mastra
+cd
+z mastra
+z scraper
+z ..
+z mastra/
+ls
+git clone git@gitlab.m-result.de:SentimentLab/mastra/youtube-scraper.git
+z youtube-scraper/
+npm i
+npm i lodash-es
+npm audit
+npm audit fix
+npm r lodash-es
+npm audit fix
+npm i lodash-es
+npm i --save-dev @types/lodash-es
+npm i
+fix-anims
+ssh root@142.132.129.229
+WebStorm 2026.1<\n>Build #WS-261.22158.274, built on March 25, 2026<\n>Source revision: 89c647576f1d2<\n>Licensed to m-result / Joshua Kempter<\n>You have a perpetual fallback license for this version.<\n>Subscription is active until September 29, 2027.<\n>Runtime version: 25.0.2+10-b329.72 amd64137.0.17-261-b65<\n>VM: OpenJDK 64-Bit Server VM by JetBrains s.r.o.<\n>Toolkit: sun.awt.wl.WLToolkit<\n>Linux 6.17.0-111019-tuxedo<\n>TUXEDO OS; glibc: 2.39; desktop: KDE (plasmashell 6.5.2)<\n>Exception reporter ID: 190226328da1aa1-7858-4318-af8c-97380890b3b5<\n>GC: G1 Young Generation, G1 Concurrent GC, G1 Old Generation<\n>Memory: 2048M<\n>Cores: 20<\n>Registry:<\n>  vcs.log.index.enable=true<\n>  ide.experimental.ui=true<\n>Non-Bundled Plugins:<\n>  ru.adelf.idea.dotenv (261.22158.223)<\n>  Docker (261.22158.299)<\n>  com.intellij.ml.llm (261.22158.274)<\n>  HighlightBracketPair (1.5.5)<\n>  com.kagof.pokeprogress (2.2.1)<\n>  com.github.lppedd.idea-conventional-commit (0.26.0)<\n>  com.jetbrains.space (261.22158.185)<\n>  com.github.biomejs.intellijbiome (1.10.1)<\n>  com.github.dinbtechit.jetbrainsnest
+JetBrains Rider 2025.3.4<\n>Build #RD-253.32098.77, built on March 26, 2026<\n>Source revision: 5d22fe95205b2<\n>Licensed to m-result / Joshua Kempter<\n>You have a perpetual fallback license for this version.<\n>Subscription is active until September 29, 2027.<\n>Runtime version: 21.0.10+7-b1163.110 amd64 (JCEF 137.0.17)<\n>VM: OpenJDK 64-Bit Server VM by JetBrains s.r.o.<\n>Toolkit: sun.awt.X11.XToolkit<\n>Linux 6.17.0-111019-tuxedo<\n>TUXEDO OS; glibc: 2.39<\n>.NET Core v9.0.11 x64 (Server GC)<\n>GC: G1 Young Generation, G1 Concurrent GC, G1 Old Generation<\n>Memory: 2048M<\n>Cores: 20<\n>Registry:<\n>  vcs.log.index.enable=true<\n>  ide.experimental.ui=true<\n>  llm.show.ai.promotion.window.on.start=false<\n>Non-Bundled Plugins:<\n>  com.jetbrains.space (253.32098.37)<\n>  com.kagof.pokeprogress (2.2.1)<\n>  ru.adelf.idea.dotenv (253.32098.74)<\n>  com.github.lppedd.idea-conventional-commit (0.26.0)<\n>  unreal-link (2025.3.0.1708)<\n>  com.intellij.ml.llm (253.32098.77)<\n>  HighlightBracketPair (1.5.5)<\n>  com.github.biomejs.intellijbiome (1.10.1)<\n>  com.github.dinbtechit.jetbrainsnestjs (0.0.9)<\n>  org.jetbrains.security.package-checker (253.31033.21)<\n>  com.jetbrains.sqlproj (0.1.12)<\n>  me.rafaelldi.aspire (1.9.5)<\n>Current Deskt
+clear
+npm i
+npm ci
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv
+z skoda
+z ..
+z mobile
+git status
+git push --force-with-lease
+git status
+git pull
+git rebase master
+git push --force-with-lease
+git status
+git rebase master
+git checkout master
+git pull
+z ..
+z autoscout24-review-spider/
+git status
+git rebase master
+git push --force-with-lease
+z ..
+z playwright-google-review-scraper/
+git status
+git rebase master
+git push --force-with-lease
+ssh kempter@spica-docker-01
+clear
+ssh kempter@spica-docker-01#
+node src/lightpanda.ts
+ping 192.168.200.40
+ssh kempter@spica-docker-01
+docker run -d --name lightpanda -p 9222:9222 lightpanda/browser:nightly
+node src/lightpanda.ts
+pip install -r src/requirements.txt
+node src/lightpanda.ts
+npm ci
+sudo mount -a
+ssh kempter@mrsldocker-04
+git stash
+node .mastra/output/index.mjs
+npm i --save-dev @types/exceljs
+node .mastra/output/index.mjs
+npm i
+npm ci
+z Frontend
+git rebase dev
+git stash
+git rebase dev
+git push --force-with-lease
+git stash apply
+z ..
+z clevermail/clevermail-business/
+git status
+git restore backend/.
+npm ci
+cd ..
+ls
+cd frontend/
+npm ci
+sudo mount -a
+sudo umount /home/kempter@M-Result1.M-Result.de/Freigaben/MRDaten --force
+npm ci
+z Fr
+git stash
+git rebase dev
+git checkout dev
+git pull
+git status
+git stash apply
+git stash
+git stash apply
+git stash
+git status
+git push
+git stash apply
+npm i
+npm ci
+sudo apt install ghostty
+sudo apt uninstall ghostty
+sudo apt remove ghostty
+sudo apt install ghostty
+sudo apt update
+sudo apt install ghostty
+sudo add-apt-repository ppa:mkasberg/ghostty-ubuntu
+sudo apt install ghostty
+ghostty --print-config | grep decoration
+ls
+cd ..
+ls
+cd skoda/playwright-google-review-scraper/
+clear
+overlay use .venv-3.10/bin/activate.nu 
+python3.10 -m runSpidersAsSubprocess.py
+python3.10 -m runSpidersAsSubprocess
+SHARED_FOLDER_PATH="/home/kempter@M-Result1.M-Result.de/Code/gitlab/m-result/scraper/skoda/playwright-google-review-scraper/googlereview/shared/" EXECUTE_START_PROBLEMDEALERSHIP=False EXECUTE_START_OUTLIERS=False DEALERLIST_NAME="20260326_Dealerlist_Tank_und_Rest.xlsx" SEARCHINDEX_PREFIX="tank_und_rest" python3.10 -m runSpidersAsSubprocess
+cd googlereview/
+SHARED_FOLDER_PATH="/home/kempter@M-Result1.M-Result.de/Code/gitlab/m-result/scraper/skoda/playwright-google-review-scraper/googlereview/shared/" EXECUTE_START_PROBLEMDEALERSHIP=False EXECUTE_START_OUTLIERS=False DEALERLIST_NAME="20260326_Dealerlist_Tank_und_Rest.xlsx" SEARCHINDEX_PREFIX="tank_und_rest" python3.10 -m runSpidersAsSubprocess
+overlay hide activate
+npm i
+npm ci
+sudo apt install local-send
+flatpak isntall flathub org.localsend.localsend_app
+flatpak install flathub org.localsend.localsend_app
+journalctl -u NetworkManager -f
+sudo journalctl -u NetworkManager -f
+iw dev wlp99s0 get power_save
+sudo iw dev wlp99s0 set power_save off
+iw dev wlp99s0 get power_save
+iw reg get
+systemctl is-active iwd
+systemctl is-active wpa_supplicant
+iw list
+sudo nmcli connection modify "Tuxedo-Hotspot" 802-11-wireless.band bg<\n>sudo nmcli connection modify "Tuxedo-Hotspot" 802-11-wireless.channel 1<\n>sudo nmcli connection up "Tuxedo-Hotspot"
+ls /etc/NetworkManager/system-connections/
+journalctl -xe | grep wpa_supplicant
+sudo journalctl -xe | grep wpa_supplicant
+ghostty +list-fonts
+=>
+===
+ssh kempter@spica-docker-01
+npm ci
+npm i
+npm install @mastra/core@latest @mastra/loggers@latest @mastra/memory@latest mastra@latest
+npm i
+npx install playwright
+npx playwright install
+npm i
+npx playwright install
+npm i
+npx playwright install
+npm i
+npx playwright install
+npm install @mastra/core@latest @mastra/loggers@latest @mastra/memory@latest mastra@latest
+npx @mastra/codemod@latest v1
+npm i
+npm install @mastra/observability @mastra/libsql @mastra/duckdb
+npm i
+npm install @mastra/observability @mastra/libsql @mastra/duckdb
+npm i
+z theater
+npm run dev
+clear
+npm run dev
+clear
+catt scan
+systemctl --version
+z theater
+npm run dev
+ssh kempter@spica-docker-01
+ssh kempter@spica-docker-01
+ssh kempter@mrsldocker-04
+ssh kempter@mrsldocker-04
+where python
+which python
+which python3
+pip install pre-commit==4.5.1
+pip install pre-commit==4.5.1 -g
+pip
+pip --v
+pip --vesrsion
+pip --version
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv
+uv add pre-commit==4.5.1
+uv pip install pre-commit==4.5.1
+uv pip install pre-commit==4.5.1 --system
+uv python install
+uv pip install pre-commit==4.5.1 --system
+uv python list
+uv python upgrade
+uv pip install pre-commit==4.5.1 --system
+uv tool install pre-commt@4.5.1
+uv tool install pre-commit@4.5.1
+pre-commit
+uv python list
+z dashboard
+..
+git stash
+touch package.json
+npm i
+ls
+touch commitlint.config.js
+touch .pre-commit-config.yaml
+editor commitlint.config.js
+editor .pre-commit-config.yaml
+git status
+editor .gitignore
+ls node_modules/
+ls node_modules/ | where name like package
+ls | where name like md
+ls
+touch README.md
+ls | where name like md
+editor README.md
+pre-commit install
+npm i
+echo "this is a test" | npx commitlint
+echo "test: this is a test" | npx commitlint
+echo "this: is a test" | npx commitlint
+pre-commit install
+git status
+git commit -m "this is a test"
+echo "this: is a test" | npx commitlint
+cd .git
+ls
+cd hooks/
+ls
+cat pre-commit
+git status
+...
+git status
+git commit -m "this: is a test"
+git add .pre-commit-config.yaml
+git commit -m "this: is a test"
+z clevermail/clevermail-business/
+z ..
+git status
+git add backend/Applications/MResult.CleverMail.WebApi/appsettings.json
+git status
+npm i
+ls
+pre-commit install
+git commit -m "this: is a test"
+git add backend/Applications/MResult.CleverMail.WebApi/appsettings.json
+git commit -m "this: is a test"
+pre-commit install --hook-type commit-msg
+git add backend/Applications/MResult.CleverMail.WebApi/appsettings.json
+git commit -m "this: is a test"
+z dashboard
+cd ..
+pre-commit install --install-hooks -t pre-commit -t commit-msg
+git commit -m "this: is a test"
+git rebase dev
+git push --force-with-lease
+git stash apply
+z dashboard
+..
+git rebase refactor-types-and-common-utils
+git rebase refactor-types-and-collect-common-utils
+git stash
+git rebase refactor-types-and-collect-common-utils
+git push --force-with-lease
+git stash apply
+npm install -g @google/gemini-cli
+gemini
+...
+ls
+z scraper
+ls
+ls Scraper/
+mkdir demo
+cd demo/
+....
+ls
+gemini
+..
+rm -r demo/
+ls
+z Code/gitlab/tilly-hedrich/
+ls
+sudo journalctl -u NetworkManager -f
+ls /etc/NetworkManager/system-connections/
+ls -la /etc/NetworkManager/system-connections/
+ssh kempter@mrsldocker-04
+clear
+ssh kempter@mrsldocker-04
+z dashboard
+..
+ssh kempter@mrsldocker-03
+...
+ls
+..
+cd skoda/
+ls
+cd dialog/AccessoryForm/
+ls
+git status
+git fetch
+git switch 191-broschuren-svg-text-der-mobilen-broschuren-parsen
+z frontend/src/assets/ocr/
+ls
+ls -la
+clear
+ls
+docker build -f .\svg2text.dockerfile -t svg2text .
+docker build -f svg2text.dockerfile -t svg2text .
+pwd
+docker run --rm -v "${pwd}\..\brochure\:/app/brochure" svg2text brochure/fabia/packages/fabia-zubehoer/mobile/index.html
+docker run --rm -v "${pwd}/../brochure/:/app/brochure" svg2text brochure/fabia/packages/fabia-zubehoer/mobile/index.html
+docker run --rm -v "$PWD/../brochure/:/app/brochure" svg2text brochure/fabia/packages/fabia-zubehoer/mobile/index.html
+$PWD
+docker run --rm -v "$env.PWD/../brochure/:/app/brochure" svg2text brochure/fabia/packages/fabia-zubehoer/mobile/index.html
+docker run --rm -v "$(pwd)/../brochure/:/app/brochure" svg2text brochure/fabia/packages/fabia-zubehoer/mobile/index.html
+docker run --rm -v $"((pwd)/../brochure):/app/brochure" svg2text brochure/fabia/packages/fabia-zubehoer/mobile/index.html
+git pull
+git reset --hard
+git pull
+docker build -f svg2text.dockerfile -t svg2text .
+docker run --rm -v $"((pwd)/../brochure):/app/brochure" svg2text brochure/elroq/packages/elroq-zubehoer/mobile/index.html
+ls ..
+..
+ls brochure/
+cd ocr
+docker run --rm -v $"((pwd)/../brochure):/app/brochure" svg2text brochure/kamiq/packages/kamiq-zubehoer/mobile/index.html
+docker run --rm -v $"((pwd)/../brochure):/app/brochure" svg2text brochure/kodiaq/packages/kodiaq-zubehoer/mobile/index.html
+docker run --rm -v $"((pwd)/../brochure):/app/brochure" svg2text brochure/fabia/packages/fabia-zubehoer/mobile/index.html
+git pull
+docker run --rm -v $"((pwd)/../brochure):/app/brochure" svg2text brochure/elroq/packages/elroq-zubehoer/mobile/index.html
+git pull
+docker run --rm -v $"((pwd)/../brochure):/app/brochure" svg2text brochure/kamiq/packages/kamiq-zubehoer/mobile/index.html
+git pull
+docker run --rm -v $"((pwd)/../brochure):/app/brochure" svg2text brochure/karoq/packages/karoq-zubehoer/mobile/index.html
+git pull
+git config pull.rebase true
+git pull
+docker run --rm -v $"((pwd)/../brochure):/app/brochure" svg2text brochure/kodiaq/packages/kodiaq-zubehoer/mobile/index.html
+ssh joshua@mrsldocker-03
+npm i
+npm i --save-dev @types/exceljs
+npm install csv-stringify
+npm install archiver
+npm audit
+npm i --save-dev @types/archiver
+npm i pg-query-stream
+klist
+sudo apt update && sudo apt install krb5-user
+sudo apt update and sudo apt install krb5-user
+sudo apt update; sudo apt install krb5-user
+klist
+touch ~/sqljdbc_jaas.conf
+editor ~/sqljdbc_jaas.conf
+....
+..
+z m-result/ews/ews-ai-assistant-mastra/
+ls
+ls -la
+EXPORT MISTRAL_API_KEY=xsmQHOEdgNlvZ66wGA7Z2K4tBi4Qaigq; npx mastra dev
+load-env {MISTRAL_API_KEY: "xsmQHOEdgNlvZ66wGA7Z2K4tBi4Qaigq"}; npx mastra dev
+env.nu
+$env
+clear
+load-env {MISTRAL_API_KEY: "xsmQHOEdgNlvZ66wGA7Z2K4tBi4Qaigq"}; npx mastra dev
+npm i
+npx mastra dev
+ssh joshua@mrsldocker-03
+sssh kempter@mrsldocker-04
+ssh kempter@mrsldocker-04
+sudo apt remove kitty
+ssh kempter@mrsldocker-04
+npm i
+z Frontend
+git status
+git stash
+git rebase refactor-types-and-collect-common-utils
+git status
+git rebase --continue
+git status
+git push --force-with-lease
+git stash apply
+fix-anims
+ssh kempter@spica-docker-01
+ssh kempter@mrsldocker-04
+npm i
+exit
+npm install --save-dev typed-emitter
+npm remove --save-dev typed-emitter
+fix-anims
+ssh kempter@mrsldocker-04
+# Example for version 0.100.x (check GitHub for latest)<\n>wget https://github.com/nushell/nushell/releases/download/0.100.0/nu-0.100.0-x86_64-unknown-linux-musl.tar.gz<\n>tar -xzf nu-*-musl.tar.gz
+<\n>wget https://github.com/nushell/nushell/releases/download/0.100.0/nu-0.112.2-x86_64-unknown-linux-musl.tar.gz<\n>tar -xzf nu-*-musl.tar.gz
+<\n>wget https://github.com/nushell/nushell/releases/download/0.112.2/nu-0.112.2-x86_64-unknown-linux-musl.tar.gz<\n>tar -xzf nu-*-musl.tar.gz
+ls
+ssh kempter@spica-docker-01
+curl -fsSL https://cdn.anythingllm.com/latest/installer.sh -o installer.sh
+chmod +x installer.sh
+./installer.sh
+echo $shell
+$env.shell
+curl -sS https://starship.rs/install.sh | sh
+$env
+$env.editor
+env.nu
+$nu.config-path
+config
+config nu
+$env.EDITOR = zed
+$env.EDITOR = ^zed
+config nu
+$env.EDITOR = zed
+config nu
+zed /home/kempter@M-Result1.M-Result.de/.config/nushell/config.nu
+config nu
+curl -sS https://starship.rs/install.sh | sh
+z Frontend
+mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config; touch ~/.config/starship.toml
+mkdir ~/.config; touch ~/.config/starship.toml
+editor ~/.config/starship.toml
+zed ~/.config/starship.toml
+clear
+z ~
+z frontend
+git
+git histogram
+dps
+dps | where Status =~ "Up" | select Names Image Status
+dx
+ls ~/.ssh/id_ed25519.pub
+ssh-copy-id kempter@spica-docker-01
+ssh kempter@spica-docker-01
+ssh-copy-id kempter@mrsldocker-04
+sudo apt install keychain
+config env
+ssh kempter@spica-docker-01
+$env.SSH_AUTH_SOCK? | is-empty
+$env.SSH_AUTH_SOCK
+clear
+docker context create spica-docker --docker "host=ssh://kempter@spica-docker-01"
+dx
+clear
+dx
+clear
+dx
+dx spica-docker
+dx
+dx default
+dx spica-docker
+clear
+dx
+dx default
+dx spica-docker
+dx
+dx default
+dps -a
+clear
+docker context create mrsldocker-04 --docker "host=ssh://kempter@mrsldocker-04"
+dx mrsldocker-04
+z frontend
+z ~
+clear
+z frontend
+z ..
+z EWS.Dashboard/
+dn build
+clear
+dx default
+z Code
+z gitlab/m-result/ews/ews-microservice/
+py run src/Modules/Config/config.py
+py run src/Modules/Analysis/sentimentAnalysis.py
+z gitlab/m-result/ews/ews-microservice/
+z Code/gitlab/m-result/ews/ews-microservice/
+py run src/Modules/Analysis/sentimentAnalysis.py
+deactivate
+z ~/.config/nushell/
+ls
+mkdir scripts
+touch docker.nu
+touch python.nu
+touch dotnet.nu
+touch hooks.nu
+zed docker.nu
+zed python.nu
+zed dotnet.nu
+zed hooks.nu
+touch npm.nu
+touch misc.nu
+zed npm.nu
+zed misc.nu
+zed ~/.config/nushell/docker.nu
+touch ~/.config/nushell/scripts/mod.nu
+git histogram
+z Code/gitlab/m-result/ews/ews-microservice/
+deactivate
+ls
+..
+cd ews-microservice/
+py run src/main.py
+z ~/.config/nushell/
+deactivate
+git init
+git config --global init.defaultBranch main
+git branch -m main
