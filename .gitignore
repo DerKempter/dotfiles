@@ -1,2 +1,2 @@
-history.txt
-*/.env
+*/**/history.txt
+*/**/.env
