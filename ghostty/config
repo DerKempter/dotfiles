@@ -12,7 +12,7 @@ font-feature = -calt, -liga
 
 # --- Theme (The "Direct" choice) ---
 # KDE and Gnome aesthetics perfectly.
-theme = Gruvbox Material
+theme = Rose Pine Moon
 
 # --- Cursor & Interaction ---
 cursor-style = block
