@@ -22,7 +22,7 @@ source ~/.config/nushell/scripts/hooks.nu
 
 source ~/.zoxide.nu
 
-export alias deactivate = hide-env VIRTUAL_ENV; $env.PATH = ($env.PATH | drop)
+alias deactivate = hide-env VIRTUAL_ENV; $env.PATH = ($env.PATH | drop)
 
 mkdir ($nu.data-dir | path join "vendor/autoload")
 starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
