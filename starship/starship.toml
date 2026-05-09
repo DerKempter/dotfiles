@@ -7,23 +7,26 @@ $character"""
 
 [fill]
 symbol = " "
+style = "cyan"
 
 [directory]
-style = "bold cyan"
-truncation_length = 4
+style = "bold red"
+truncation_length = 2
 truncation_symbol = "…/"
 
 [character]
-success_symbol = "[❯](bold green)"
-error_symbol = "[❯](bold red)"
+success_symbol = "[󰄾](bold blue)"
+error_symbol = "[󰄾](bold red)"
 
 [os]
 disabled = false
-style = "bold blue"
+style = "bold purple"
 
 [os.symbols]
-Ubuntu = " "
-Linux = " "
+CachyOS = " "
+Arch = "󰣇 "
+Ubuntu = "󰕈 "
+Windows = "󰍲 "
 
 [git_branch]
 symbol = " "
