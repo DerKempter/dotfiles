@@ -11,7 +11,7 @@ font-feature = -calt, -liga
 
 # --- Theme (The "Direct" choice) ---
 # KDE and Gnome aesthetics perfectly.
-theme = noctalia
+theme = Rose Pine Moon
 
 # --- Cursor & Interaction ---
 cursor-style = block
