@@ -24,5 +24,7 @@ source ~/.zoxide.nu
 
 alias deactivate = hide-env VIRTUAL_ENV; $env.PATH = ($env.PATH | drop)
 
+alias cd = z
+
 mkdir ($nu.data-dir | path join "vendor/autoload")
 starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
