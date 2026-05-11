@@ -1,7 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-$directory$fill$cmd_duration$os$docker_context
+$directory$status$fill$cmd_duration$os$sudo$docker_context
 $git_branch$git_status$nodejs$dotnet$python$kubernetes
 $character"""
 
@@ -87,6 +87,7 @@ symbol = " "
 style = "yellow"
 format = 'via [${symbol}${pyenv_prefix}(${version} )($virtualenv )]($style)'
 
+
 [palettes.catppuccin_mocha]
 # --- background ---
 crust = "#11111b"
@@ -123,3 +124,9 @@ blue = "#89b4fa"
 lavender = "#b4befe" # git branch fg
 
 dirtypink = "#240f33" # git status bg
+
+[sudo]
+disabled = false
+
+[status]
+disabled = false
