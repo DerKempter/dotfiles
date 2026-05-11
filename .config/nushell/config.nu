@@ -12,15 +12,12 @@ $env.PATH = (
 
 $env.editor = "zed"
 
-use ~/.config/nushell/scripts/docker.nu *
-use ~/.config/nushell/scripts/python.nu *
-use ~/.config/nushell/scripts/dotnet.nu *
-use ~/.config/nushell/scripts/npm.nu *
-use ~/.config/nushell/scripts/misc.nu *
+use scripts *
 
-source ~/.config/nushell/scripts/hooks.nu
+source ($nu.config-path | path dirname | path join "hooks" "py_env-hook.nu")
 
-source ~/.zoxide.nu
+const ZOXIDE_PATH = ($nu.home-dir | path join ".zoxide.nu")
+source $ZOXIDE_PATH
 
 alias deactivate = hide-env VIRTUAL_ENV; $env.PATH = ($env.PATH | drop)
 
