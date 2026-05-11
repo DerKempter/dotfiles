@@ -1,4 +1,7 @@
+auto-update = check
+
 # --- Window & Decorations ---
+window-decoration = client
 window-theme = dark
 background-opacity = 0.95
 background-blur = true
