@@ -10,7 +10,7 @@ cursor-style = block
 cursor-style-blink = false
 cursor-color = cell-foreground
 cursor-text = cell-background
-unfocused-split-opacity = 0.55
+unfocused-split-opacity = 0.75
 split-divider-color = #524f67
 
 mouse-hide-while-typing = true
