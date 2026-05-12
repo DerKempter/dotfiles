@@ -23,7 +23,7 @@ format = "[](lavender)[$symbol$path]($style)[](lavender) "
 "Downloads" = "󱑢 "
 "Music" = "󰝚 "
 "Pictures" = "󰉏 "
-"dotfiles" = "⚙️ "
+"dotfiles" = "󰒓 "
 
 [character]
 success_symbol = "[󰄾](bold blue)"
