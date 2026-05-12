@@ -13,6 +13,7 @@ $env.PATH = (
 $env.editor = "zed"
 
 use scripts *
+$env.config.color_config = (catppuccin_mocha)
 
 source ($nu.config-path | path dirname | path join "hooks" "py_env-hook.nu")
 
