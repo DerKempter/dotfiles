@@ -10,12 +10,12 @@ palette = "catppuccin_mocha"
 [fill]
 symbol = " "
 style = "cyan"
-
 [directory]
 style = "bold fg:base bg:lavender"
-truncation_length = 2
+truncation_length = 3
 truncation_symbol = "…/"
-format = "[](lavender)[$symbol$path]($style)[](lavender)"
+truncate_to_repo = true
+format = "[](lavender)[$symbol$path]($style)[](lavender) "
 
 [character]
 success_symbol = "[󰄾](bold blue)"
@@ -23,76 +23,89 @@ error_symbol = "[󰄾](bold red)"
 
 [os]
 disabled = false
-style = "bold purple"
+style = "bg:mauve fg:base"
+format = "[](mauve)[ $symbol ]($style)[](mauve) "
 
 [os.symbols]
-CachyOS = " "
-Arch = "󰣇 "
-Ubuntu = "󰕈 "
-Windows = "󰍲 "
+Linux = ""
+CachyOS = ""
+Arch = "󰣇"
+Ubuntu = "󰕈"
+Windows = "󰍲"
 
 [git_branch]
-symbol = "[](base) "
-style = "fg:lavender bg:base"
+symbol = " "
+style = "bg:base fg:lavender"
 truncation_length = 35
 truncation_symbol = "…"
-format = "[$symbol$branch]($style)[](base) "
+format = "[](base)[$symbol$branch]($style)[](base) "
 
 [git_status]
-format = "[](dirtypink)[$untracked$staged$modified$renamed$conflicted$ahead_behind](bg:dirtypink)[ ](dirtypink)"
+format = "[](dirtypink)[ $staged$modified$deleted$renamed$untracked$stashed$conflicted$ahead_behind ](bg:dirtypink)[](dirtypink) "
 style = "bg:dirtypink"
-# options available for format
-staged     = "[+](fg:green bg:dirtypink)"
-modified   = "[!](fg:yellow bg:dirtypink)"
-renamed    = "[»](fg:blue bg:dirtypink)"
-deleted    = "[-](fg:red bg:dirtypink)"
-untracked  = "[?](fg:red bg:dirtypink)"
-stashed    = "[≡](fg:lavender bg:dirtypink)"
-conflicted = "[✖](red fg:bold bg:dirtypink)"
+staged     = "[󱅃](fg:green bg:dirtypink)"
+modified   = "[󰏭](fg:yellow bg:dirtypink)"
+deleted    = "[󱅂](fg:red bg:dirtypink)"
+renamed    = "[󰜶](fg:blue bg:dirtypink)"
+untracked  = "[󰞋](fg:red bg:dirtypink)"
+stashed    = "[󰼽](fg:lavender bg:dirtypink)"
+conflicted = "[󰞇](fg:red bg:dirtypink)"
+ahead      = "[󰶣${count}](fg:teal bg:dirtypink)"
+behind     = "[󰶡${count}](fg:peach bg:dirtypink)"
+diverged   = "[󰶤󰶣${ahead_count}󰶡${behind_count}](fg:mauve bg:dirtypink)"
 
-ahead      = "[⇡${count} ](fg:teal bg:dirtypink)"
-behind     = "[⇣${count} ](fg:peach bg:dirtypink)"
-diverged   = "[⇕⇡${ahead_count}⇣${behind_count} ](fg:mauve bg:dirtypink)"
 
 [nodejs]
 symbol = " "
-style = "bold green"
-format = "via [$symbol($version )]($style)"
+style = "bg:green fg:base"
+format = "[](green)[$symbol($version)]($style)[](green) "
 
 [docker_context]
 disabled = false
 symbol = " "
-style = "bold blue"
+style = "bg:blue fg:base"
 only_with_files = false
-format = "at [$symbol$context]($style) "
+format = "[](blue)[$symbol$context]($style)[](blue) "
 
 [kubernetes]
 symbol = "☸ "
-style = "bold blue"
+style = "bg:blue fg:base"
 disabled = false
-format = 'in [$symbol$context]($style) '
+format = "[](blue)[$symbol$context]($style)[](blue) "
 
 [cmd_duration]
 min_time = 500
-style = "bold yellow"
-format = "took [$duration]($style)"
+style = "bg:yellow fg:base"
+format = "[](yellow)[󱎫 $duration]($style)[](yellow) "
 
 [dotnet]
-symbol = "󰪮 " # The .NET logo/icon
-style = "bold blue"
-format = "via [$symbol($version )]($style)"
+symbol = "󰪮 "
+style = "bg:blue fg:base"
+format = "[](blue)[$symbol($version)]($style)[](blue) "
 
 [python]
 symbol = " "
-style = "yellow"
-format = 'via [${symbol}${pyenv_prefix}(${version} )($virtualenv )]($style)'
+style = "bg:yellow fg:base"
+format = "[](yellow)[$symbol${pyenv_prefix}($version )($virtualenv)]($style)[](yellow) "
 
+[status]
+disabled = false
+style = "bg:red fg:base"
+symbol = "✘"
+format = "[](red)[ $symbol ]($style)[](red) "
+map_symbol = true
+
+[sudo]
+disabled = false
+symbol = "󰞀"
+style = "bg:red fg:base"
+format = "[](red)[ $symbol ]($style)[](red) "
 
 [palettes.catppuccin_mocha]
 # --- background ---
 crust = "#11111b"
 mantle = "#181825"
-base = "#1e1e2e" # git branch bg
+base = "#1e1e2e"
 
 overlay2 = "#9399b2"
 overlay1 = "#7f849c"
@@ -107,7 +120,7 @@ text = "#cdd6f4"
 subtext1 = "#bac2de"
 subtext0 = "#a6adc8"
 
-# --- accents (catppuccin_mocha) ---
+# --- accents ---
 rosewater = "#f5e0dc"
 flamingo = "#f2cdcd"
 pink = "#f5c2e7"
@@ -121,12 +134,6 @@ teal = "#94e2d5"
 sky = "#89dceb"
 sapphire = "#74c7ec"
 blue = "#89b4fa"
-lavender = "#b4befe" # git branch fg
+lavender = "#b4befe"
 
-dirtypink = "#240f33" # git status bg
-
-[sudo]
-disabled = false
-
-[status]
-disabled = false
+dirtypink = "#240f33"
