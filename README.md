@@ -13,20 +13,15 @@ My personal configuration suite for a productive development environment on Linu
 
 After cloning this repository to `~/dotfiles`, run the following steps to link the configurations to your system.
 
-### 1. Create Symlinks
-Applications expect these files in `~/.config`. Use these commands to link them to the repository:
+### 1. Create Symlinks (using GNU Stow)
+This repository is structured to be used with GNU Stow. Run `stow` from the root of the repository to link the `.config` directory to your home folder:
 
-```nu
-# Link Nushell Directory
-ln -s ~/dotfiles/nushell ~/.config/nushell
-
-# Link Ghostty Config (ensure dir exists first)
-mkdir -p ~/.config/ghostty
-ln -s ~/dotfiles/ghostty/config ~/.config/ghostty/config
-
-# Link Starship
-ln -s ~/dotfiles/starship/starship.toml ~/.config/starship.toml
+```bash
+# From ~/dotfiles
+stow .
 ```
+
+This will create a symlink for `~/.config` (or its contents) pointing back to this repository.
 
 ### 2. Install Dependencies
 Ensure the following tools are installed on the host machine:
