@@ -1,8 +1,8 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-$directory$status$fill$cmd_duration$os$sudo$docker_context
-$git_branch$git_status$nodejs$dotnet$python$kubernetes
+$directory$shlvl$jobs$status$fill$cmd_duration$battery$memory_usage$os$sudo$docker_context
+$git_branch$git_commit$git_state$git_status$nodejs$dotnet$python$kubernetes
 $character"""
 
 palette = "catppuccin_mocha"
@@ -10,12 +10,20 @@ palette = "catppuccin_mocha"
 [fill]
 symbol = " "
 style = "cyan"
+
 [directory]
 style = "bold fg:base bg:lavender"
 truncation_length = 3
 truncation_symbol = "…/"
 truncate_to_repo = true
 format = "[](lavender)[$symbol$path]($style)[](lavender) "
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = "󱑢 "
+"Music" = "󰝚 "
+"Pictures" = "󰉏 "
+"dotfiles" = "⚙️ "
 
 [character]
 success_symbol = "[󰄾](bold blue)"
@@ -33,12 +41,34 @@ Arch = "󰣇"
 Ubuntu = "󰕈"
 Windows = "󰍲"
 
+[shlvl]
+disabled = false
+symbol = "󰔚 "
+style = "bg:sky fg:base"
+format = "[](sky)[$symbol$shlvl]($style)[](sky) "
+threshold = 2
+
+[jobs]
+symbol = " "
+style = "bg:peach fg:base"
+format = "[](peach)[$symbol$number]($style)[](peach) "
+
 [git_branch]
 symbol = " "
 style = "bg:base fg:lavender"
 truncation_length = 35
 truncation_symbol = "…"
 format = "[](base)[$symbol$branch]($style)[](base) "
+
+[git_commit]
+commit_hash_length = 4
+tag_symbol = " "
+style = "bg:base fg:subtext1"
+format = "[](base)[$symbol$hash]($style)[](base) "
+
+[git_state]
+style = "bg:base fg:red"
+format = "[](base)[$state($progress_current/$progress_total)]($style)[](base) "
 
 [git_status]
 format = "[](dirtypink)[ $staged$modified$deleted$renamed$untracked$stashed$conflicted$ahead_behind ](bg:dirtypink)[](dirtypink) "
@@ -53,7 +83,6 @@ conflicted = "[󰞇](fg:red bg:dirtypink)"
 ahead      = "[󰶣${count}](fg:teal bg:dirtypink)"
 behind     = "[󰶡${count}](fg:peach bg:dirtypink)"
 diverged   = "[󰶤󰶣${ahead_count}󰶡${behind_count}](fg:mauve bg:dirtypink)"
-
 
 [nodejs]
 symbol = " "
@@ -77,6 +106,28 @@ format = "[](blue)[$symbol$context]($style)[](blue) "
 min_time = 500
 style = "bg:yellow fg:base"
 format = "[](yellow)[󱎫 $duration]($style)[](yellow) "
+
+[battery]
+full_symbol = "󰁹 "
+charging_symbol = "󰂄 "
+discharging_symbol = "󰂃 "
+format = "[$style](fg:$style)[$symbol$percentage](bg:$style fg:base)[ $style](fg:$style) "
+
+[[battery.display]]
+threshold = 20
+style = "red"
+
+[[battery.display]]
+threshold = 50
+style = "yellow"
+
+
+[memory_usage]
+disabled = true
+threshold = 75
+symbol = "󰍛 "
+style = "bg:pink fg:base"
+format = "[](pink)[$symbol$ram_pct]($style)[](pink) "
 
 [dotnet]
 symbol = "󰪮 "
