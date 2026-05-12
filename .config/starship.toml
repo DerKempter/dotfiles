@@ -71,8 +71,9 @@ style = "bg:base fg:red"
 format = "[](base)[$state($progress_current/$progress_total)]($style)[](base) "
 
 [git_status]
-format = "[](dirtypink)[ $staged$modified$deleted$renamed$untracked$stashed$conflicted$ahead_behind](bg:dirtypink)[](dirtypink) "
+format = "([](dirtypink)[ $staged$modified$deleted$renamed$untracked$stashed$conflicted$ahead_behind](bg:dirtypink)[](dirtypink) )"
 style = "bg:dirtypink"
+
 staged     = "[󱅃 ](fg:green bg:dirtypink)"
 modified   = "[󰏭 ](fg:yellow bg:dirtypink)"
 deleted    = "[󱅂 ](fg:red bg:dirtypink)"
