@@ -1,8 +1,8 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-$directory$shlvl$jobs$status$fill$cmd_duration$battery$memory_usage$os$sudo$docker_context
-$git_branch$git_commit$git_state$git_status$nodejs$dotnet$python$kubernetes
+$directory$shlvl$jobs$status$fill$cmd_duration$battery$memory_usage${custom.disk_usage}$os$sudo$docker_context
+$git_branch$git_commit$git_state${custom.git_identity}$git_status$nodejs$dotnet$python$kubernetes
 $character"""
 
 palette = "catppuccin_mocha"
@@ -127,6 +127,20 @@ threshold = 75
 symbol = "󰍛 "
 style = "bg:pink fg:base"
 format = "[](pink)[$symbol$ram_pct]($style)[](pink) "
+
+[custom.disk_usage]
+command = "usage=$(df $HOME --output=pcent | tail -1 | tr -dc '0-9'); if [ \"$usage\" -gt 85 ]; then echo $usage; fi"
+shell = ["sh"]
+style = "bg:maroon fg:base"
+format = "([](maroon)[󰋊 $output%]($style)[](maroon) )"
+when = "true"
+
+[custom.git_identity]
+command = "local=$(git config --local user.email); global=$(git config --global user.email); if [ -n \"$local\" ] && [ \"$local\" != \"$global\" ]; then echo \"$local\"; fi"
+when = "git rev-parse --is-inside-work-tree 2> /dev/null"
+shell = ["sh"]
+style = "bg:lavender fg:base"
+format = "([](lavender)[ $output]($style)[](lavender) )"
 
 [dotnet]
 symbol = "󰪮 "
