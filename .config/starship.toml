@@ -26,8 +26,8 @@ format = "[](lavender)[$symbol$path]($style)[](lavender) "
 "dotfiles" = "󰒓 "
 
 [character]
-success_symbol = "[󰄾](bold blue)"
-error_symbol = "[󰄾](bold red)"
+success_symbol = "[󰄾](bold sky)"
+error_symbol = "[󰄾](bold maroon)"
 
 [os]
 disabled = false
