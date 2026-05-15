@@ -1,4 +1,9 @@
 {
+	"terminal": {
+		"shell": {
+			"program": "/usr/bin/nu"
+		}
+	},
 	"icon_theme": {
 		"mode": "system",
 		"light": "Catppuccin Frappé",
@@ -14,7 +19,6 @@
 	"collaboration_panel": {
 		"dock": "left"
 	},
-	"audio": {},
 	"calls": {
 		"mute_on_join": true
 	},
@@ -192,7 +196,6 @@
 	"profiles": {
 		"angular": {
 			"settings": {
-				"lsp": {},
 				"languages": {
 					"HTML": {
 						"language_servers": [
@@ -213,7 +216,6 @@
 		},
 		"angular-ews-dashboard": {
 			"settings": {
-				"lsp": {},
 				"languages": {
 					"HTML": {
 						"language_servers": [
