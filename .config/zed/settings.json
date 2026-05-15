@@ -1,0 +1,236 @@
+{
+	"icon_theme": {
+		"mode": "system",
+		"light": "Catppuccin Frappé",
+		"dark": "Catppuccin Mocha"
+	},
+	"cli_default_open_behavior": "new_window",
+	"project_panel": {
+		"dock": "left"
+	},
+	"outline_panel": {
+		"dock": "left"
+	},
+	"collaboration_panel": {
+		"dock": "left"
+	},
+	"audio": {},
+	"calls": {
+		"mute_on_join": true
+	},
+	"window_decorations": "client",
+	"tab_bar": {
+		"show_pinned_tabs_in_separate_row": true
+	},
+	"tabs": {
+		"show_close_button": "hover",
+		"show_diagnostics": "all",
+		"close_position": "right",
+		"file_icons": false,
+		"git_status": true
+	},
+	"title_bar": {
+		"show_branch_status_icon": true,
+		"show_menus": false
+	},
+	"git": {
+		"inline_blame": {
+			"show_commit_summary": true
+		}
+	},
+	"selection_highlight": true,
+	"rounded_selection": true,
+	"unnecessary_code_fade": 0.5,
+	"cursor_shape": "block",
+	"redact_private_values": true,
+	"git_panel": {
+		"dock": "left",
+		"tree_view": true
+	},
+	"gutter": {
+		"min_line_number_digits": 4
+	},
+	"relative_line_numbers": "enabled",
+	"buffer_line_height": "comfortable",
+	"minimap": {
+		"show": "auto"
+	},
+	"agent_servers": {
+		"gemini": {
+			"type": "registry"
+		}
+	},
+	"edit_predictions": {
+		"provider": "open_ai_compatible_api",
+		"open_ai_compatible_api": {
+			"api_url": "http://localhost:8000/v1",
+			"model": "qwen3-tk-4b-FLM",
+			"prompt_format": "qwen",
+			"max_output_tokens": 128
+		},
+		"mode": "subtle"
+	},
+	"agent": {
+		"dock": "right",
+		"default_model": {
+			"provider": "lemonade",
+			"model": "Qwen3-Coder-30B-A3B-Instruct-GGUF"
+		},
+		"commit_message_model": {
+			"provider": "lemonade",
+			"model": "Devstral-Small-2507-GGUF"
+		},
+		"show_turn_stats": true
+	},
+	"language_models": {
+		"openai_compatible": {
+			"lemonade": {
+				"api_url": "http://localhost:8000/api/v1",
+				"available_models": [
+					{
+						"name": "Devstral-Small-2507-GGUF",
+						"max_tokens": 32768
+					},
+					{
+						"name": "Qwen3-Coder-30B-A3B-Instruct-GGUF",
+						"max_tokens": 32768
+					},
+					{
+						"name": "Qwen3-Coder-Next-GGUF",
+						"max_tokens": 32768
+					},
+					{
+						"name": "gpt-oss-20b-mxfp4-GGUF",
+						"max_tokens": 32768
+					},
+					{
+						"name": "user.QwenCoder2.5-1.5B",
+						"max_tokens": 32768
+					},
+					{
+						"name": "YOUR_CUSTOM_MODEL_NAME",
+						"display_name": "Custom Model Template",
+						"max_tokens": 32768
+					}
+				]
+			}
+		}
+	},
+	"indent_guides": {
+		"enabled": false
+	},
+	"soft_wrap": "none",
+	"base_keymap": "JetBrains",
+	"ui_font_size": 16,
+	"buffer_font_size": 15.0,
+	"ui_font_family": "JetBrainsMono Nerd Font Mono",
+	"buffer_font_family": "JetBrainsMono Nerd Font Mono",
+	"theme": {
+		"mode": "dark",
+		"light": "Catppuccin Latte",
+		"dark": "Catppuccin Mocha"
+	},
+	"languages": {
+		"JavaScript": {
+			"formatter": {
+				"language_server": {
+					"name": "biome"
+				}
+			}
+		},
+		"TypeScript": {
+			"formatter": {
+				"language_server": {
+					"name": "biome"
+				}
+			}
+		},
+		"TSX": {
+			"formatter": {
+				"language_server": {
+					"name": "biome"
+				}
+			}
+		},
+		"JSON": {
+			"formatter": {
+				"language_server": {
+					"name": "biome"
+				}
+			}
+		},
+		"JSONC": {
+			"formatter": {
+				"language_server": {
+					"name": "biome"
+				}
+			}
+		},
+		"CSS": {
+			"formatter": {
+				"language_server": {
+					"name": "biome"
+				}
+			}
+		},
+		"GraphQL": {
+			"formatter": {
+				"language_server": {
+					"name": "biome"
+				}
+			}
+		}
+	},
+	"lsp": {},
+	"git_hosting_providers": [
+		{
+			"provider": "gitlab",
+			"name": "m-Result Gitlab",
+			"base_url": "https://gitlab.m-result.de"
+		}
+	],
+	"profiles": {
+		"angular": {
+			"settings": {
+				"lsp": {},
+				"languages": {
+					"HTML": {
+						"language_servers": [
+							"angular",
+							"vscode-html-language-server",
+							"tailwindcss-language-server"
+						]
+					},
+					"TypeScript": {
+						"language_servers": ["angular", "vtsls"],
+						"formatter": null
+					},
+					"JavaScript": {
+						"formatter": null
+					}
+				}
+			}
+		},
+		"angular-ews-dashboard": {
+			"settings": {
+				"lsp": {},
+				"languages": {
+					"HTML": {
+						"language_servers": [
+							"angular",
+							"vscode-html-language-server",
+							"tailwindcss-language-server"
+						]
+					},
+					"TypeScript": {
+						"language_servers": ["angular", "vtsls"],
+						"formatter": null
+					},
+					"JavaScript": {
+						"formatter": null
+					}
+				}
+			}
+		}
+	}
+}
