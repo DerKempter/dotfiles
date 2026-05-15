@@ -82,7 +82,7 @@
 		},
 		"commit_message_model": {
 			"provider": "lemonade",
-			"model": "Devstral-Small-2507-GGUF"
+			"model": "Qwen3-Coder-30B-A3B-Instruct-GGUF"
 		},
 		"show_turn_stats": true
 	},
