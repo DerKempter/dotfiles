@@ -1,15 +1,28 @@
 # Dotfiles Gemini Instructions
 
-This repository contains personal configuration files for Linux development environments (primarily CachyOS/Tuxedo OS), optimized for Nushell, Ghostty, and Starship.
+This repository contains personal configuration files for Linux development environments (primarily CachyOS/Tuxedo OS), optimized for Nushell, Ghostty, Atuin, Zed, and Starship.
 
 ## Project Structure
 
 - `.config/`: Contains application-specific configurations.
-  - `nushell/`: Nushell configuration and custom scripts.
-    - `scripts/`: Modular Nushell scripts.
-    - `hooks/`: Shell hooks (e.g., environment auto-activation).
-  - `ghostty/`: Ghostty terminal emulator configuration.
-  - `starship.toml`: Starship prompt configuration.
+  - `nushell/`: Nushell configuration and custom modular scripts.
+    - `config.nu` / `env.nu`: Core shell environment and initialization.
+    - `scripts/`: Modular Nushell scripts (loaded via `mod.nu`).
+      - `docker.nu`: Extensive completions for Docker/Compose and helpers (`dps`, `dx`).
+      - `python.nu`: `py` command helper for `uv` virtual environments.
+      - `dotnet.nu`: `dn` command helper for .NET development.
+      - `node.nu`: Completions for `npm` and `npm run` scripts using Nushell's SQLite storage (`stor`).
+      - `misc.nu`: System helpers like `fix-anims` (KWin Aura Glow), `git histogram`, and `parse-scraper`.
+      - `test-speed.nu`: Streaming native download performance test.
+      - `catppuccin_mocha.nu`: Catppuccin color configuration.
+    - `hooks/`: Shell hooks.
+      - `py_env-hook.nu`: Automatic activation/deactivation of python `.venv` on directory change.
+      - `atuin.nu`: Atuin hook registration.
+    - `completions/`: Custom completer definitions (e.g., `git-completions.nu`).
+  - `ghostty/`: Ghostty terminal configuration, including custom split window bindings and Catppuccin Mocha styling.
+  - `atuin/`: Custom compact shell history config utilizing a refined custom pastel Catppuccin theme.
+  - `zed/`: Advanced high-performance editor config with Biome code formatters and local AI agent workspace profiles.
+  - `starship.toml`: Starship cross-shell prompt configuration.
 
 ## Development Workflow
 
@@ -20,7 +33,12 @@ This repository contains personal configuration files for Linux development envi
 
 ### Environment Management
 - This project uses `uv` for Python environment management.
-- Custom hooks (like `hooks/py_env-hook.nu`) handle automatic environment detection or specific shell behaviors.
+- Custom hooks (`hooks/py_env-hook.nu`) handle automatic environment detection and activation of `.venv` when changing directories.
+- Shell integrates with `keychain` (SSH keys loader), `zoxide` (smart directory switcher via `z`), and `atuin` (shell history).
+
+### Local AI Agent Integration
+- Zed editor integrates with local LLM environments (via the `lemonade` provider on `localhost:8000`).
+- To understand the AI configuration and GGUF model support details, see the dedicated [Agents.md](file:///home/joshkempter/dotfiles/Agents.md).
 
 ## Conventions
 
