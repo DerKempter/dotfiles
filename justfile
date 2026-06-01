@@ -15,3 +15,7 @@ adopt:
 # Force link configurations by adopting conflicts and then restoring repository tracked files
 force-link: adopt
     git restore .
+
+# Install external package dependencies (like Yazi plugins/flavors)
+install:
+    ya pkg install
