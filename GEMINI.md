@@ -15,6 +15,7 @@ This repository contains personal configuration files for Linux development envi
       - `misc.nu`: System helpers like `fix-anims` (KWin Aura Glow), `git histogram`, `parse-scraper`, and `update-aerion` (automated installer).
       - `test-speed.nu`: Streaming native download performance test.
       - `catppuccin_mocha.nu`: Catppuccin color configuration.
+      - `yazi.nu`: Yazi file manager integration with automatic exit cd syncing.
     - `hooks/`: Shell hooks.
       - `py_env-hook.nu`: Automatic activation/deactivation of python `.venv` on directory change.
       - `atuin.nu`: Atuin hook registration.

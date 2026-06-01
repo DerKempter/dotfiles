@@ -6,3 +6,4 @@ export use node.nu *
 export use python.nu *
 export use ssh-completions.nu *
 export use test-speed.nu *
+export use yazi.nu *
