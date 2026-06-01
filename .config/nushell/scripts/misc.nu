@@ -65,15 +65,19 @@ export def update-aerion [] {
     let installer = ($installer_paths | first)
     let install_dir = ($installer | path dirname)
 
-    print $"(ansi green)Running installer script (requires sudo)...(ansi reset)"
-    # Change context and execute the installer
-    with-env { PWD: $install_dir } {
-        sudo bash ./install.sh
-    }
+    print $"(ansi green)Running installer script... (ansi reset)"
+    # Save current directory to change back to before cleanup
+    let old_pwd = $env.PWD
+    cd $install_dir
+    
+    # Run the installer interactively (simply type 1 or 2 at the prompt)
+    bash ./install.sh
+    
+    # Return to original directory so we are not inside the temp folder during cleanup
+    cd $old_pwd
 
     print $"(ansi green)Cleaning up temporary files...(ansi reset)"
     rm -rf $temp_dir
     
     print $"(ansi green)🎉 Aerion has been upgraded successfully!(ansi reset)"
 }
-
