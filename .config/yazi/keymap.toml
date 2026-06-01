@@ -1,0 +1,6 @@
+# Yazi Custom Keymap Configuration
+
+[[manager.prepend_keymap]]
+on   = [ "f" ]
+run  = "plugin yafg"
+desc = "Fuzzy find and grep (fzf + ripgrep)"
