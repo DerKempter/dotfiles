@@ -32,11 +32,16 @@ git clone https://github.com/DerKempter/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
-Using GNU Stow, link the `.config` directory into your system:
+Using the task automator **`just`**, link the configurations to your system home directory:
 ```bash
-stow .
+# If there are no pre-existing config directory conflicts:
+just link
+
+# If you have pre-existing system config folders (e.g., auto-generated lazygit/bat directories)
+# and want to cleanly force-link and overwrite them with your tracked repository files:
+just force-link
 ```
-This automatically symlinks the config sub-directories (like `~/.config/nushell`, `~/.config/zed`, etc.) to the respective locations in `~/dotfiles/.config`.
+This automatically symlinks the config directories (like `~/.config/nushell`, `~/.config/zed`, etc.) pointing directly back to your repository files.
 
 ### 2. Install Host Dependencies
 Ensure the following packages are installed on your host system:
@@ -67,6 +72,7 @@ I have modularized and written several custom command scripts (located in `.conf
 | `fix-anims` | [misc.nu](file:///.config/nushell/scripts/misc.nu) | System level dbus handler that resets/unloads stuck Aura Glow KWin window animations. |
 | `parse-scraper <file>` | [misc.nu](file:///.config/nushell/scripts/misc.nu) | Parses structured date/time logs, extracts dealer IDs and maps them to clean tabular datasets. |
 | `test-speed [url]` | [test-speed.nu](file:///.config/nushell/scripts/test-speed.nu) | Measures real-time network download speed natively using Nushell stream payloads. |
+| `update-aerion` | [misc.nu](file:///.config/nushell/scripts/misc.nu) | Fully automated, interactive GitHub release installer and upgrader for the Aerion email client. |
 
 ### 🤖 Automatic `.venv` Activation
 Whenever you change directories (`cd` / `z`) to a folder containing a `.venv` folder, the shell automatically triggers `py_env-hook.nu` to prepend the virtual environment's bin folder to your `PATH` and exports `VIRTUAL_ENV`. Leaving the directory automatically deactivates it.

@@ -12,17 +12,20 @@ This repository contains personal configuration files for Linux development envi
       - `python.nu`: `py` command helper for `uv` virtual environments.
       - `dotnet.nu`: `dn` command helper for .NET development.
       - `node.nu`: Completions for `npm` and `npm run` scripts using Nushell's SQLite storage (`stor`).
-      - `misc.nu`: System helpers like `fix-anims` (KWin Aura Glow), `git histogram`, and `parse-scraper`.
+      - `misc.nu`: System helpers like `fix-anims` (KWin Aura Glow), `git histogram`, `parse-scraper`, and `update-aerion` (automated installer).
       - `test-speed.nu`: Streaming native download performance test.
       - `catppuccin_mocha.nu`: Catppuccin color configuration.
     - `hooks/`: Shell hooks.
       - `py_env-hook.nu`: Automatic activation/deactivation of python `.venv` on directory change.
       - `atuin.nu`: Atuin hook registration.
-    - `completions/`: Custom completer definitions (e.g., `git-completions.nu`).
+    - `completions/`: Custom completer definitions (e.g., `git-completions.nu`, `just-completions.nu`).
   - `ghostty/`: Ghostty terminal configuration, including custom split window bindings and Catppuccin Mocha styling.
   - `atuin/`: Custom compact shell history config utilizing a refined custom pastel Catppuccin theme.
   - `zed/`: Advanced high-performance editor config with Biome code formatters and local AI agent workspace profiles.
+  - `bat/`: Terminal viewer previewer config, styled with terminal ANSI Catppuccin.
+  - `lazygit/`: Git TUI theme config applying Catppuccin Mocha layouts.
   - `starship.toml`: Starship cross-shell prompt configuration.
+- `justfile`: Project-level workflow runner (defines link, unlink, adopt, force-link recipes).
 
 ## Development Workflow
 
@@ -50,4 +53,7 @@ This repository contains personal configuration files for Linux development envi
 
 - **Secrets**: NEVER commit API keys, tokens, or personal information. Use `.env` files (which are git-ignored) or system-level secret management.
 - **History**: Command history (`history.txt`) is ignored and should remain so.
-- **Symlinks**: This project uses **GNU Stow** for symlink management. The repository structure mirrors the user's home directory (e.g., `.config/` in the repo should be linked to `~/.config/`). To apply changes, run `stow .` from the root of the repository. Update the `README.md` if the installation process changes.
+- **Symlinks**: This project uses **GNU Stow** managed via a top-level **`justfile`**. The repository structure mirrors the user's home directory (e.g., `.config/` in the repo links to `~/.config/`). To apply configurations:
+  - Run **`just link`** for standard linking.
+  - Run **`just force-link`** if pre-existing system folders cause conflicts. This automatically adopts system files and reverts them using Git to force the overwrite cleanly.
+  - To undo links, run **`just unlink`**. Always update the `README.md` if the installation process changes.
