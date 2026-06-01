@@ -26,3 +26,6 @@ starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.n
 
 # Git completions
 use completions/git-completions.nu *
+
+# Just completions
+use completions/just-completions.nu *
