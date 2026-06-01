@@ -5,6 +5,7 @@ $env.PATH = (
     | prepend ($env.HOME | path join ".opencode" "bin") # Where 'opencode' lives
     | prepend ($env.HOME | path join ".local" "bin")    # Where 'n' lives
     | prepend ($env.N_PREFIX | path join "bin")         # Where 'node' lives
+    | prepend ($env.HOME | path join ".atuin" "bin")    # Where 'atuin' lives
 )
 
 $env.EDITOR = "zed"

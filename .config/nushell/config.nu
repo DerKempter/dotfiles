@@ -8,6 +8,9 @@ source ($nu.config-path | path dirname | path join "hooks" "py_env-hook.nu")
 const ZOXIDE_PATH = ($nu.home-dir | path join ".zoxide.nu")
 source $ZOXIDE_PATH
 
+const ATUIN_PATH = ($nu.config-path | path dirname | path join "hooks" "atuin.nu")
+source $ATUIN_PATH
+
 alias deactivate = hide-env VIRTUAL_ENV; $env.PATH = ($env.PATH | drop)
 
 alias cd = z
