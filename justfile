@@ -7,3 +7,11 @@ link:
 # Unlink configurations from the system safely
 unlink:
     stow -D . --verbose
+
+# Adopt existing system configurations into the dotfiles repository (careful: commits must be clean)
+adopt:
+    stow --adopt . --verbose
+
+# Force link configurations by adopting conflicts and then restoring repository tracked files
+force-link: adopt
+    git restore .
