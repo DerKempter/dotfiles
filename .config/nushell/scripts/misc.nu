@@ -38,3 +38,42 @@ export def fix-anims [] {
 
     print "Aura Glow state reset."
 }
+
+# Download, extract, and execute the installation script for Aerion Email Client automatically
+export def update-aerion [] {
+    let url = "https://github.com/hkdb/aerion/releases/latest/download/aerion-linux-amd64.tar.gz"
+    let temp_dir = (mktemp -d -t "aerion-upgrade.XXXXXX")
+    let archive_path = ($temp_dir | path join "aerion.tar.gz")
+    
+    print $"(ansi green)Downloading latest Aerion release from GitHub...(ansi reset)"
+    try {
+        http get $url | save -f $archive_path
+    } catch {
+        rm -rf $temp_dir
+        error make {msg: "Failed to download Aerion archive. Verify your internet connection."}
+    }
+
+    print $"(ansi green)Extracting archive...(ansi reset)"
+    tar -xzf $archive_path -C $temp_dir
+
+    # Find the install.sh script anywhere inside the extracted files
+    let installer_paths = (glob $"($temp_dir)/**/install.sh")
+    if ($installer_paths | is-empty) {
+        rm -rf $temp_dir
+        error make {msg: "install.sh not found in the extracted archive."}
+    }
+    let installer = ($installer_paths | first)
+    let install_dir = ($installer | path dirname)
+
+    print $"(ansi green)Running installer script (requires sudo)...(ansi reset)"
+    # Change context and execute the installer
+    with-env { PWD: $install_dir } {
+        sudo bash ./install.sh
+    }
+
+    print $"(ansi green)Cleaning up temporary files...(ansi reset)"
+    rm -rf $temp_dir
+    
+    print $"(ansi green)🎉 Aerion has been upgraded successfully!(ansi reset)"
+}
+
