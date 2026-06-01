@@ -1,0 +1,16 @@
+# Refined Custom Pastel Catppuccin Mocha Theme for Atuin
+
+[theme]
+name = "catppuccin"
+parent = "default"
+
+[colors]
+AlertInfo = "#94e2d5"     # Mocha Teal (Gorgeous pastel mint - succeeded commands)
+AlertWarn = "#f5e0dc"     # Mocha Rosewater (Very soft warm pastel cream)
+AlertError = "#b2675a"    # Mocha Terracotta (Medium warm brick-red - recognizable but soft error indicator)
+Annotation = "#a6adc8"    # Mocha Subtext0 (Soft muted lavender-gray)
+Base = "#cdd6f4"          # Mocha Text (Soft off-white)
+Guidance = "#b4befe"      # Mocha Lavender (Soft pastel bluish-purple - readable, colorful timestamps!)
+Important = "#cba6f7"     # Mocha Mauve (Soft lilac/lavender - active highlight)
+Title = "#b4befe"         # Mocha Lavender (Soft pastel purple-blue - header titles)
+Muted = "#7f849c"         # Mocha Overlay1 (Muted slate gray)

@@ -1,0 +1,80 @@
+## Base directory for Atuin data files
+# data_dir = "~/.local/share/atuin"
+# db_path = "~/.history.db"
+# key_path = "~/.key"
+# session_path = "~/.session"
+
+## Date and time settings
+dialect = "us"
+timezone = "local"
+
+## Synchronization and updates
+auto_sync = true
+update_check = true
+sync_address = "https://api.atuin.sh"
+sync_frequency = "10m"
+
+## Search Behavior & Dual-Mode bindings
+# Default mode for Ctrl-R
+search_mode = "daemon-fuzzy"
+filter_mode = "global"
+
+# Context-aware Up-Key bindings (Prefix search restricted to directory)
+search_mode_shell_up_key_binding = "prefix"
+filter_mode_shell_up_key_binding = "workspace"
+
+# Git repository tree history grouping
+workspaces = true
+
+## Layout & Aesthetics
+style = "compact"
+inline_height = 22
+inline_height_shell_up_key_binding = 22
+invert = false
+show_preview = true
+max_preview_height = 4
+show_help = true
+show_tabs = true
+
+## Command Handling & Privacy
+enter_accept = true
+strip_trailing_whitespace = true
+secrets_filter = true
+command_chaining = true
+
+# Exclude trivial directory hopping from stats
+[stats]
+common_subcommands = [
+  "apt", "cargo", "composer", "dnf", "docker", "dotnet", "git", "go",
+  "ip", "jj", "kubectl", "nix", "nmcli", "npm", "pecl", "pnpm", "podman",
+  "port", "systemctl", "tmux", "yarn"
+]
+common_prefix = ["sudo"]
+ignored_commands = ["cd", "ls", "vi"]
+
+# Keyboard behaviors
+[keys]
+scroll_exits = false
+exit_past_line_start = true
+accept_past_line_end = true
+
+# Modern Sync V2
+[sync]
+records = true
+
+# Daemon settings
+[daemon]
+enabled = true
+autostart = true
+sync_frequency = 300
+
+# UI Columns (Exit code, Duration, Relative time, Command)
+[ui]
+columns = ["exit", "duration", "time", "command"]
+
+# Search filter evaluation order (Prioritize workspace and local directory first)
+[search]
+filters = [ "workspace", "directory", "global", "host", "session" ]
+
+[theme]
+name = "catppuccin"
