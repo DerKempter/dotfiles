@@ -15,6 +15,11 @@ alias deactivate = hide-env VIRTUAL_ENV; $env.PATH = ($env.PATH | drop)
 
 alias cd = z
 
+# Daily CLI utility aliases
+alias cat = ^bat
+alias lg = ^lazygit
+alias ld = ^lazydocker
+
 # Starship init
 mkdir ($nu.data-dir | path join "vendor/autoload")
 starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")

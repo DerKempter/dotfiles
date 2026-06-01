@@ -1,0 +1,8 @@
+# Set the theme to "ansi" to cleanly inherit terminal emulator (Ghostty) Catppuccin Mocha colors
+--theme="ansi"
+
+# Use italic text for comments/keywords if supported
+--italic-text=always
+
+# Show line numbers, git status markers, filename headers, and grid borders
+--style="numbers,changes,header-filename,grid"

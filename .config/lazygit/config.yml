@@ -1,0 +1,23 @@
+gui:
+  theme:
+    activeBorderColor:
+      - '#cba6f7' # Mocha Mauve (Lilac/active highlight)
+      - 'bold'
+    inactiveBorderColor:
+      - '#a6adc8' # Mocha Subtext0 (Lavender-gray)
+    optionsTextColor:
+      - '#b4befe' # Mocha Lavender
+    selectedLineBgColor:
+      - '#313244' # Mocha Surface0 (Subtle list selection)
+    selectedRangeBgColor:
+      - '#313244'
+    cherryPickedCommitFgColor:
+      - '#94e2d5' # Mocha Teal (Pastel mint)
+    cherryPickedCommitBgColor:
+      - '#45475a'
+    markedBaseCommitColor:
+      - '#f9e2af' # Mocha Yellow
+    unstagedChangesColor:
+      - '#f38ba8' # Mocha Red
+    defaultFgColor:
+      - '#cdd6f4' # Mocha Text
