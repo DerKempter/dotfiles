@@ -104,6 +104,11 @@ fi
 
 # Atuin shell history
 [ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
+
+# Declare hook arrays first for Starship + bash-preexec compatibility
+preexec_functions=()
+precmd_functions=()
+
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 if command -v atuin >/dev/null 2>&1; then
   eval "$(atuin init bash)"
