@@ -1,4 +1,13 @@
+# ==============================================================================
+# Environment Variables
+# ==============================================================================
+
+$env.EDITOR = "zed"
 $env.N_PREFIX = ($env.HOME | path join ".n")
+
+# ==============================================================================
+# Path Customization
+# ==============================================================================
 
 $env.PATH = (
     $env.PATH
@@ -9,10 +18,14 @@ $env.PATH = (
     | prepend ($env.HOME | path join ".cargo" "bin")    # Where 'cargo' lives
 )
 
-$env.EDITOR = "zed"
+# ==============================================================================
+# External Tool Initializations & SSH Agents
+# ==============================================================================
 
+# Zoxide smart directory jumping initializer
 zoxide init nushell | save -f ~/.zoxide.nu
 
+# Keychain SSH Key Management
 let keychain_output = (^keychain --eval --quiet id_ed25519
     | lines
     | where $it =~ "setenv"

@@ -1,32 +1,52 @@
+# ==============================================================================
+# Nushell Core Configuration & Theme
+# ==============================================================================
+
 $env.config.show_banner = false
 
+# Import modular helper scripts and apply Catppuccin theme
 use scripts *
 $env.config.color_config = (catppuccin_mocha)
 
+# ==============================================================================
+# Shell Hooks & Integrations
+# ==============================================================================
+
+# Python Virtual Environment hook
 source ($nu.config-path | path dirname | path join "hooks" "py_env-hook.nu")
 
+# Zoxide smart directory switching
 const ZOXIDE_PATH = ($nu.home-dir | path join ".zoxide.nu")
 source $ZOXIDE_PATH
 
+# Atuin shell history hook
 const ATUIN_PATH = ($nu.config-path | path dirname | path join "hooks" "atuin.nu")
 source $ATUIN_PATH
 
+# ==============================================================================
+# Custom Aliases
+# ==============================================================================
+
+# Navigation & Environments
+alias cd = z
 alias deactivate = hide-env VIRTUAL_ENV; $env.PATH = ($env.PATH | drop)
 
-alias cd = z
-
-# Daily CLI utility aliases
+# Daily developer TUI & CLI utilities
 alias cat = ^bat
 alias lg = ^lazygit
 alias ld = ^lazydocker
 
-# Starship init
+# ==============================================================================
+# Autoloads & Prompt Setup
+# ==============================================================================
+
+# Initialize Starship prompt using the Nushell autoload directory
 mkdir ($nu.data-dir | path join "vendor/autoload")
 starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 
-# Git completions
-use completions/git-completions.nu *
+# ==============================================================================
+# Custom Completions
+# ==============================================================================
 
-# Just completions
-use completions/just-completions.nu *
-
+# Import all autocompletion scripts via the completions module
+use completions *
