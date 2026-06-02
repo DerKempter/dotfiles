@@ -1,6 +1,6 @@
 # Dotfiles Gemini Instructions
 
-This repository contains personal configuration files for Linux development environments (primarily CachyOS/Tuxedo OS), optimized for Nushell, Ghostty, Atuin, Zed, and Starship.
+This repository contains personal configuration files for Linux development environments (primarily CachyOS/Tuxedo OS), optimized for Nushell, Zsh, Bash, Ghostty, Atuin, Zed, Yazi, Bat, Lazygit, and Starship.
 
 ## Project Structure
 
@@ -25,6 +25,8 @@ This repository contains personal configuration files for Linux development envi
   - `zed/`: Advanced high-performance editor config with Biome code formatters and local AI agent workspace profiles.
   - `bat/`: Terminal viewer previewer config, styled with terminal ANSI Catppuccin.
   - `lazygit/`: Git TUI theme config applying Catppuccin Mocha layouts.
+  - `yazi/`: Yazi GPU-accelerated terminal file manager config with Catppuccin flavor and fuzzy find plugin.
+  - `fish/`: Fully structured, stowed Fish environment with complete muscle-memory and alias parity (inactive on host, but fully tracked).
   - `starship.toml`: Starship cross-shell prompt configuration.
 - `justfile`: Project-level workflow runner (defines link, unlink, adopt, force-link recipes).
 
@@ -42,7 +44,7 @@ This repository contains personal configuration files for Linux development envi
 
 ### Local AI Agent Integration
 - Zed editor integrates with local LLM environments (via the `lemonade` provider on `localhost:8000`).
-- To understand the AI configuration and GGUF model support details, see the dedicated [Agents.md](file:///home/joshkempter/dotfiles/Agents.md).
+- To understand the AI configuration and GGUF model support details, see the dedicated [Agents.md](Agents.md).
 
 ## Conventions
 
