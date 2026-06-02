@@ -4,6 +4,6 @@ export use dotnet.nu *
 export use misc.nu *
 export use node.nu *
 export use python.nu *
-export use ssh-completions.nu *
+export use ssh.nu *
 export use test-speed.nu *
 export use yazi.nu *

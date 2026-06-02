@@ -81,3 +81,4 @@ export def update-aerion [] {
     
     print $"(ansi green)🎉 Aerion has been upgraded successfully!(ansi reset)"
 }
+
