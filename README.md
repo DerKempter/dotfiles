@@ -15,8 +15,8 @@ Welcome to my personal, high-performance configuration suite optimized for produ
 This suite contains highly tailored configurations for the following core applications:
 
 *   **🐚 Shells (Nushell, Zsh, Bash)**: 
-    *   **Nushell** (`/bin/nu`): The primary shell featuring automatic Python virtual environment switching, database-backed `npm` completion hooks, and custom development scripts.
-    *   **Zsh & Bash** (`/bin/zsh`, `/bin/bash`): Full shell environments optimized for complete muscle-memory and prompt parity with Nushell. Both initialize **Starship**, **Zoxide** (`z`), **Atuin**, and share all core CLI aliases. Zsh is set up as the default JetBrains IDE shell to bypass trap conflicts while preserving history.
+    *   **Nushell** (`/bin/nu`): The primary shell featuring automatic Python virtual environment switching, database-backed `npm` completion hooks, custom SSH connection/injection tools, and Docker helpers.
+    *   **Zsh & Bash** (`/bin/zsh`, `/bin/bash`): Full shell environments optimized for complete muscle-memory and prompt parity with Nushell. Both initialize **Starship**, **Zoxide** (`z`), **Atuin**, and share all core CLI aliases. Bash acts as our portable dynamic configuration, automatically injected on the fly into remote servers via `sshi` and running Docker containers via `dockeri`. Zsh is configured as the default JetBrains IDE shell to bypass trap conflicts while preserving history.
 *   **💻 Ghostty**: GPU-accelerated terminal emulator configured with Catppuccin Mocha colors, blur opacity, ligatures, and custom intuitive layout/split controls.
 *   **🕰️ Atuin**: SQLite-powered shell history with a custom refined pastel Catppuccin theme, custom key bindings, directory-specific search filters, and automatic workspace history fallbacks.
 *   **🛸 Starship**: Cross-shell prompt engine with quick-loading components, git awareness, and responsive background job pill detection.
@@ -81,7 +81,8 @@ I have modularized and written several custom command scripts (located in `.conf
 | `py <action> [target]` | [python.nu](.config/nushell/scripts/python.nu) | Runs local scripts using `uv` (if `uv.lock` is present) or fallback to system python/pip. Automatically syncs/adds packages. |
 | `dn <action> [proj]` | [dotnet.nu](.config/nushell/scripts/dotnet.nu) | Fast wrapper for `.csproj` management supporting `run`, `watch`, `build`, `test`. |
 | `npm run [script]` | [node.nu](.config/nushell/scripts/node.nu) | Enhanced `npm` completion helper using Nushell SQLite storage (`stor`) to parse scripts directly from `package.json`. |
-| `dps`, `dx` | [docker.nu](.config/nushell/scripts/docker.nu) | Advanced Docker completion and context management commands. `dx` offers interactive context switching with active container display. |
+| `dps`, `dx`, `dockeri` | [docker.nu](.config/nushell/scripts/docker.nu) | Advanced Docker completion, context switching, and container profile injection. `dx` switches contexts, while `dockeri` dynamically base64-injects your local `.bashrc` into any running container via `docker exec`. |
+| `sshi`, `sshc`, `sync-starship` | [ssh.nu](.config/nushell/scripts/ssh.nu) | Portable SSH command suite. `sshc` connects with hostname autocomplete, `sshi` dynamically base64-injects your local `.bashrc` on the fly over SSH, and `sync-starship` pushes your Starship theme config. |
 | `git histogram` | [misc.nu](.config/nushell/scripts/misc.nu) | Beautiful CLI visualizer showing a commit contribution graph per author. |
 | `fix-anims` | [misc.nu](.config/nushell/scripts/misc.nu) | System level dbus handler that resets/unloads stuck Aura Glow KWin window animations. |
 | `parse-scraper <file>` | [misc.nu](.config/nushell/scripts/misc.nu) | Parses structured date/time logs, extracts dealer IDs and maps them to clean tabular datasets. |

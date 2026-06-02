@@ -8,7 +8,8 @@ This repository contains personal configuration files for Linux development envi
   - `nushell/`: Nushell configuration and custom modular scripts.
     - `config.nu` / `env.nu`: Core shell environment and initialization.
     - `scripts/`: Modular Nushell scripts (loaded via `mod.nu`).
-      - `docker.nu`: Extensive completions for Docker/Compose and helpers (`dps`, `dx`).
+      - `docker.nu`: Extensive completions for Docker/Compose and helpers (`dps`, `dx`, `dockeri`).
+      - `ssh.nu`: Modular SSH command suite and autocomplete helpers (`sshi`, `sshc`, `sync-starship`).
       - `python.nu`: `py` command helper for `uv` virtual environments.
       - `dotnet.nu`: `dn` command helper for .NET development.
       - `node.nu`: Completions for `npm` and `npm run` scripts using Nushell's SQLite storage (`stor`).
