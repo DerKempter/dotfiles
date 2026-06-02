@@ -49,7 +49,7 @@ style = "bg:rosewater fg:base"
 [jobs]
 symbol = " "
 style = "bg:peach fg:base"
-format = "[](peach)[$symbol$number]($style)[](peach) "
+format = "[[](peach)[$symbol$number]($style)[](peach) ](peach) "
 
 [git_branch]
 symbol = " "
