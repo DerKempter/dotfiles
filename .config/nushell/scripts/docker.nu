@@ -83,6 +83,20 @@ export def --env dx [
     }
 }
 
+# Execute bash inside a running container while dynamically injecting your actual stowed ~/.bashrc configuration
+export def dockeri [
+    container: string@"nu-complete docker containers" # Autocomplete with running containers
+] {
+    # Read the actual content of your local stowed .bashrc file
+    let bashrc_content = (open ~/.bashrc)
+
+    # Base64 encode it and strip all newlines/returns locally to ensure a single clean line
+    let encoded_bashrc = ($bashrc_content | encode base64 | str replace -a "\n" "" | str replace -a "\r" "" | str trim)
+
+    # Execute docker exec interactively, decoding and evaluating your .bashrc on the fly using printf
+    ^docker exec -it $container bash -c $"bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d\)"
+}
+
 # --- Docker extern definitions for completions ---
 
 # Log in to a Docker registry
