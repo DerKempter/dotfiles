@@ -6,6 +6,7 @@ $env.PATH = (
     | prepend ($env.HOME | path join ".local" "bin")    # Where 'n' lives
     | prepend ($env.N_PREFIX | path join "bin")         # Where 'node' lives
     | prepend ($env.HOME | path join ".atuin" "bin")    # Where 'atuin' lives
+    | prepend ($env.HOME | path join ".cargo" "bin")    # Where 'cargo' lives
 )
 
 $env.EDITOR = "zed"

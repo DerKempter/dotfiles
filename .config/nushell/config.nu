@@ -29,4 +29,4 @@ use completions/git-completions.nu *
 
 # Just completions
 use completions/just-completions.nu *
-source "~/.cargo/env.nu"
+
