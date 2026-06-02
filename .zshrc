@@ -1,5 +1,11 @@
 # ~/.zshrc: executed by zsh(1) for non-login and interactive shells.
 
+# Load CachyOS Zsh configuration if available
+if [ -f /usr/share/cachyos-zsh-config/cachyos-config.zsh ]; then
+  source /usr/share/cachyos-zsh-config/cachyos-config.zsh
+fi
+
+
 # ==========================================
 # Portable Toolchain & Environment Variables
 # ==========================================

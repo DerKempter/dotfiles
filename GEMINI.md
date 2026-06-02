@@ -29,6 +29,7 @@ This repository contains personal configuration files for Linux development envi
   - `yazi/`: Yazi GPU-accelerated terminal file manager config with Catppuccin flavor and fuzzy find plugin.
   - `fish/`: Fully structured, stowed Fish environment with complete muscle-memory and alias parity (inactive on host, but fully tracked).
   - `starship.toml`: Starship cross-shell prompt configuration.
+- `.bashrc` / `.zshrc`: Shell initialization configurations.
 - `justfile`: Project-level workflow runner (defines link, unlink, adopt, force-link recipes).
 
 ## Development Workflow
