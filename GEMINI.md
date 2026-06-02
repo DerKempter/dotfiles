@@ -5,6 +5,7 @@ This repository contains personal configuration files for Linux development envi
 ## Project Structure
 
 - `.config/`: Contains application-specific configurations.
+  - `antigravity/`: Persistent global instructions and persona directives.
   - `nushell/`: Nushell configuration and custom modular scripts.
     - `config.nu` / `env.nu`: Core shell environment and initialization.
     - `scripts/`: Modular Nushell scripts (loaded via `mod.nu`).
