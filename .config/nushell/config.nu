@@ -26,6 +26,10 @@ starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.n
 
 # Git completions
 use completions/git-completions.nu *
+<<<<<<< HEAD
 
 # Just completions
 use completions/just-completions.nu *
+=======
+source "~/.cargo/env.nu"
+>>>>>>> a6e2d57 (feat: add cargo to nu env)
