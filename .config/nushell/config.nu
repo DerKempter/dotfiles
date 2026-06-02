@@ -40,9 +40,12 @@ alias ld = ^lazydocker
 # Autoloads & Prompt Setup
 # ==============================================================================
 
-# Initialize Starship prompt using the Nushell autoload directory
-mkdir ($nu.data-dir | path join "vendor/autoload")
-starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
+# Initialize Starship prompt using the Nushell autoload directory if not already cached
+let starship_path = ($nu.data-dir | path join "vendor/autoload/starship.nu")
+if not ($starship_path | path exists) {
+    mkdir ($nu.data-dir | path join "vendor/autoload")
+    starship init nu | save -f $starship_path
+}
 
 # ==============================================================================
 # Custom Completions
