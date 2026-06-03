@@ -19,10 +19,11 @@ jobs:
         with:
           version: '0.113.0' # Matches your local shell version
 
-      - name: Set up Dry Link
+      - name: Link Configurations
         run: |
-          # Dry run GNU Stow to ensure no file collisions
-          stow --simulate --verbose .
+          # Remove default runner shell files to avoid stow collisions
+          rm -f ~/.bashrc ~/.bash_logout ~/.profile ~/.zshrc
+          stow . --verbose
 
       - name: Execute Validations
         run: |

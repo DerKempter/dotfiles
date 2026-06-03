@@ -65,17 +65,29 @@ if ($fnm_path | path exists) {
 
 # Zoxide smart directory jumping initializer (cached for startup performance)
 let zoxide_cache = ($env.HOME | path join ".zoxide.nu")
-if not ($zoxide_cache | path exists) {
-    zoxide init nushell | save -f $zoxide_cache
+if not (which zoxide | is-empty) {
+    if not ($zoxide_cache | path exists) or (open $zoxide_cache | is-empty) {
+        zoxide init nushell | save -f $zoxide_cache
+    }
+} else {
+    print -e $"(ansi yellow)Warning: zoxide is not installed. Directory jumping has not been initialized.(ansi reset)"
+    if not ($zoxide_cache | path exists) {
+        # Create a dummy empty file to prevent parse-time source error in config.nu
+        "" | save -f $zoxide_cache
+    }
 }
 
 # Keychain SSH Key Management
-let keychain_output = (^keychain --eval --quiet id_ed25519
-    | lines
-    | where $it =~ "setenv"
-    | parse "setenv {name} {value};"
-    | transpose -rd)
+if not (which keychain | is-empty) {
+    let keychain_output = (^keychain --eval --quiet id_ed25519
+        | lines
+        | where $it =~ "setenv"
+        | parse "setenv {name} {value};"
+        | transpose -rd)
 
-if not ($keychain_output | is-empty) {
-    load-env $keychain_output
+    if not ($keychain_output | is-empty) {
+        load-env $keychain_output
+    }
+} else {
+    print -e $"(ansi yellow)Warning: keychain is not installed. SSH key management has not been initialized.(ansi reset)"
 }

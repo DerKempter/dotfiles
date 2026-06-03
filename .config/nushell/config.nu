@@ -45,9 +45,16 @@ alias ld = ^lazydocker
 
 # Initialize Starship prompt using the Nushell autoload directory if not already cached
 let starship_path = ($nu.data-dir | path join "vendor/autoload/starship.nu")
-if not ($starship_path | path exists) {
-    mkdir ($nu.data-dir | path join "vendor/autoload")
-    starship init nu | save -f $starship_path
+if not (which starship | is-empty) {
+    if not ($starship_path | path exists) {
+        mkdir ($nu.data-dir | path join "vendor/autoload")
+        starship init nu | save -f $starship_path
+    }
+} else {
+    print -e $"(ansi yellow)Warning: starship is not installed. Custom prompt has not been initialized.(ansi reset)"
+    if ($starship_path | path exists) {
+        rm $starship_path
+    }
 }
 
 # ==============================================================================
