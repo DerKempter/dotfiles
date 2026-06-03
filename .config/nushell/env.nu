@@ -85,6 +85,7 @@ if not (which keychain | is-empty) {
         | lines
         | where $it =~ "setenv"
         | parse "setenv {name} {value};"
+        | update value { |row| $row.value | str trim -c '"' }
         | transpose -rd)
 
     if not ($keychain_output | is-empty) {
