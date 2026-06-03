@@ -15,7 +15,7 @@ jobs:
           sudo apt-get install -y zsh fish stow just
           
       - name: Install Nushell
-        uses: anton-yurchenko/setup-nushell@v1
+        uses: hustcer/setup-nu@v3
         with:
           version: '0.113.0' # Matches your local shell version
 
