@@ -1,0 +1,29 @@
+name: Validate Dotfiles
+
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Shells & Workflow Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh fish stow just
+          
+      - name: Install Nushell
+        uses: anton-yurchenko/setup-nushell@v1
+        with:
+          version: '0.113.0' # Matches your local shell version
+
+      - name: Set up Dry Link
+        run: |
+          # Dry run GNU Stow to ensure no file collisions
+          stow --simulate --verbose .
+
+      - name: Execute Validations
+        run: |
+          just check
