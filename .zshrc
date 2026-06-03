@@ -34,6 +34,11 @@ export PATH="$HOME/.local/bin:$PATH"
 # Sourcing Cargo
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
+# Keychain SSH Agent setup
+if command -v keychain >/dev/null 2>&1; then
+  eval $(SHELL=/bin/zsh keychain --eval --quiet --noask)
+fi
+
 # ==========================================
 # Muscle-Memory Parity Aliases
 # ==========================================

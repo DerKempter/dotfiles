@@ -22,6 +22,12 @@ set -Ux WEBKIT_DISABLE_DMABUF_RENDERER 1
 set -Ux LIBGL_ALWAYS_SOFTWARE 1
 set -Ux QT_XCB_FORCE_SOFTWARE_OPENGL 1
 
+# Keychain SSH Agent setup
+if command -v keychain >/dev/null 2>&1
+  env SHELL=fish keychain --eval --quiet --noask | source
+end
+
+
 # Fast Node Manager (fnm)
 if command -v fnm >/dev/null 2>&1
   fnm env --error-on-no-node | source

@@ -92,6 +92,11 @@ if command -v ng >/dev/null 2>&1; then
   source <(ng completion script)
 fi
 
+# Keychain SSH Agent setup
+if command -v keychain >/dev/null 2>&1; then
+  eval $(SHELL=/bin/bash keychain --eval --quiet --noask)
+fi
+
 # ==========================================
 # Modern CLI Tool Initializers
 # ==========================================

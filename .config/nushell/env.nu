@@ -79,7 +79,9 @@ if not (which zoxide | is-empty) {
 
 # Keychain SSH Key Management
 if not (which keychain | is-empty) {
-    let keychain_output = (^keychain --eval --quiet id_ed25519
+    let keychain_output = (with-env { SHELL: csh } {
+        ^keychain --eval --quiet --noask
+    }
         | lines
         | where $it =~ "setenv"
         | parse "setenv {name} {value};"
