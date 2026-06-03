@@ -18,6 +18,47 @@ $env.PATH = (
     | prepend ($env.HOME | path join ".cargo" "bin")    # Where 'cargo' lives
 )
 
+# Bun
+let bun_bin = ($env.HOME | path join ".bun" "bin")
+if ($bun_bin | path exists) {
+    $env.PATH = ($env.PATH | prepend $bun_bin)
+}
+
+# Deno
+let deno_bin = ($env.HOME | path join ".deno" "bin")
+if ($deno_bin | path exists) {
+    $env.PATH = ($env.PATH | prepend $deno_bin)
+}
+
+# SQL Server Command Line Tools
+let mssql_bin = "/opt/mssql-tools18/bin"
+if ($mssql_bin | path exists) {
+    $env.PATH = ($env.PATH | append $mssql_bin)
+}
+
+# fnm (Fast Node Manager)
+let fnm_path = ($env.HOME | path join ".local" "share" "fnm")
+if ($fnm_path | path exists) {
+    $env.PATH = ($env.PATH | prepend $fnm_path)
+    
+    # Load fnm environment variables dynamically
+    let fnm_env = (fnm env --shell bash
+        | lines
+        | str replace "export " ""
+        | str replace -a "\"" ""
+        | split column "="
+        | rename name value
+        | where name != "PATH"
+        | reduce -f {} {|it, acc| $acc | upsert $it.name $it.value })
+        
+    load-env $fnm_env
+    
+    # Add active node version path from FNM
+    if ($env.FNM_MULTISHELL_PATH? | is-not-empty) {
+        $env.PATH = ($env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join "bin"))
+    }
+}
+
 # ==============================================================================
 # External Tool Initializations & SSH Agents
 # ==============================================================================

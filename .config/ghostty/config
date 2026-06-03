@@ -30,7 +30,7 @@ auto-update-channel = stable
 shell-integration-features = ssh-env,ssh-terminfo,no-cursor
 copy-on-select = clipboard
 
-command = /usr/bin/nu --login
+command = nu --login
 
 # Create Splits in all directions
 keybind = ctrl+alt+i=new_split:up
