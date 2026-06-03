@@ -2,7 +2,7 @@ export def py [
     action: string@nu-complete-py-actions,
     target?: string@nu-complete-py-targets
 ] {
-    let is_uv_project = (ls | any { |it| $it.name == "uv.lock" })
+    let is_uv_project = ("uv.lock" | path exists)
 
     match $action {
         "run" => {
@@ -29,5 +29,5 @@ export def nu-complete-py-actions [] {
 
 # Completer for local .py files
 export def nu-complete-py-targets [] {
-    ls **/*.py | get name
+    glob *.py
 }

@@ -12,8 +12,10 @@ unlink:
 adopt:
     stow --adopt . --verbose
 
-# Force link configurations by adopting conflicts and then restoring repository tracked files
-force-link: adopt
+# Force link configurations by adopting conflicts and then restoring repository tracked files (safeguarded against uncommitted changes)
+force-link:
+    @git diff --quiet || (echo "Error: You have uncommitted changes in your dotfiles repository. Commit or stash them first!" && exit 1)
+    just adopt
     git restore .
 
 # Install external package dependencies (like Yazi plugins/flavors)

@@ -22,8 +22,11 @@ $env.PATH = (
 # External Tool Initializations & SSH Agents
 # ==============================================================================
 
-# Zoxide smart directory jumping initializer
-zoxide init nushell | save -f ~/.zoxide.nu
+# Zoxide smart directory jumping initializer (cached for startup performance)
+let zoxide_cache = ($env.HOME | path join ".zoxide.nu")
+if not ($zoxide_cache | path exists) {
+    zoxide init nushell | save -f $zoxide_cache
+}
 
 # Keychain SSH Key Management
 let keychain_output = (^keychain --eval --quiet id_ed25519

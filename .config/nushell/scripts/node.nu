@@ -1,21 +1,18 @@
 def "nu-complete npm" [] {
-  let db = stor open
-
-  try {
-    # query commanders from in-mem db
-    $db | query db "SELECT * FROM npm_commanders_table"
-  } catch {
-    # if catched error, create table and insert all data
-    stor create --table-name npm_commanders_table --columns { value: str, description: str }
-
-    let npm_commanders = ^npm -l
-      | lines
-      | where $it =~ '\s{4}[a-z\-]+.*\s{4,}'
-      | parse -r '\s*(?P<value>[^ ]+)\s*(?P<description>\w.*)'
-
-    $npm_commanders | stor insert --table-name npm_commanders_table
-
-    $npm_commanders
+  let cache_file = ($nu.data-dir | path join "npm_completions.json")
+  if ($cache_file | path exists) {
+    open $cache_file
+  } else {
+    try {
+      let npm_commanders = ^npm -l
+        | lines
+        | where $it =~ '\s{4}[a-z\-]+.*\s{4,}'
+        | parse -r '\s*(?P<value>[^ ]+)\s*(?P<description>\w.*)'
+      $npm_commanders | save -f $cache_file
+      $npm_commanders
+    } catch {
+      []
+    }
   }
 }
 
