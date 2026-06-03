@@ -35,7 +35,24 @@ def --env deactivate [] {
 }
 
 # Daily developer TUI & CLI utilities
-alias cat = ^bat
+def --wrapped bat [...args] {
+    if not (which batcat | is-empty) {
+        ^batcat ...$args
+    } else {
+        ^bat ...$args
+    }
+}
+
+def --wrapped cat [...args] {
+    if not (which ^bat | is-empty) {
+        ^bat ...$args
+    } else if not (which batcat | is-empty) {
+        ^batcat ...$args
+    } else {
+        ^cat ...$args
+    }
+}
+
 alias lg = ^lazygit
 alias ld = ^lazydocker
 
