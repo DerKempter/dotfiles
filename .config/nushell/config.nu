@@ -29,7 +29,10 @@ source $ATUIN_PATH
 
 # Navigation & Environments
 alias cd = z
-alias deactivate = hide-env VIRTUAL_ENV; $env.PATH = ($env.PATH | drop)
+def --env deactivate [] {
+    hide-env -i VIRTUAL_ENV
+    $env.PATH = ($env.PATH | drop)
+}
 
 # Daily developer TUI & CLI utilities
 alias cat = ^bat
