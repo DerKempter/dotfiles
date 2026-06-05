@@ -1,3 +1,5 @@
+use misc.nu get-term
+
 # Completion helpers for Docker and Docker Compose
 def "nu-complete docker containers" [] {
     ^docker ps -a --format "{{.ID}} {{.Names}}" | lines 
@@ -94,7 +96,9 @@ export def dockeri [
     let encoded_bashrc = ($bashrc_content | encode base64 | str replace -a "\n" "" | str replace -a "\r" "" | str trim)
 
     # Execute docker exec interactively, decoding and evaluating your .bashrc on the fly using printf
-    ^docker exec -it $container bash -c $"bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d\)"
+    with-env { TERM: (get-term) } {
+        ^docker exec -it $container bash -c $"bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d\)"
+    }
 }
 
 # --- Docker extern definitions for completions ---

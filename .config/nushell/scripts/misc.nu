@@ -82,3 +82,12 @@ export def update-aerion [] {
     print $"(ansi green)🎉 Aerion has been upgraded successfully!(ansi reset)"
 }
 
+# Helper to determine fallback TERM when running in Ghostty to avoid remote/container terminfo missing issues
+export def get-term [] {
+    if "TERM" in $env and $env.TERM == "xterm-ghostty" {
+        "xterm-256color"
+    } else {
+        $env.TERM? | default "xterm-256color"
+    }
+}
+

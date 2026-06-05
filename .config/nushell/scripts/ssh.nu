@@ -1,3 +1,5 @@
+use misc.nu get-term
+
 # List hosts from SSH config for autocompletion
 export def "ssh-hosts" [] {
     let config_file = ($env.HOME | path join ".ssh" "config")
@@ -35,7 +37,9 @@ export def sshc [
     host: string@"ssh-hosts" # Use the custom host completer
     ...args: string          # Pass-through for other arguments
 ] {
-    ^ssh $host ...$args
+    with-env { TERM: (get-term) } {
+        ^ssh $host ...$args
+    }
 }
 
 # SSH into a remote host while dynamically injecting your actual stowed ~/.bashrc configuration
@@ -50,5 +54,7 @@ export def sshi [
     let encoded_bashrc = ($bashrc_content | encode base64 | str replace -a "\n" "" | str replace -a "\r" "" | str trim)
 
     # Execute SSH interactively, decoding your local .bashrc AND sourcing the remote one
-    ^ssh -t ...$ssh_args $host $"bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d; echo 'source ~/.bashrc'\)"
+    with-env { TERM: (get-term) } {
+        ^ssh -t ...$ssh_args $host $"bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d; echo 'source ~/.bashrc'\)"
+    }
 }
