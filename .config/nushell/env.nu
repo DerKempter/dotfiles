@@ -77,6 +77,16 @@ if not (which zoxide | is-empty) {
     }
 }
 
+# Ensure ~/.cargo/env.nu exists to prevent parse-time source error in config.nu
+let cargo_env = ($env.HOME | path join ".cargo" "env.nu")
+if not ($cargo_env | path exists) {
+    let cargo_dir = ($env.HOME | path join ".cargo")
+    if not ($cargo_dir | path exists) {
+        mkdir $cargo_dir
+    }
+    "" | save -f $cargo_env
+}
+
 # Keychain SSH Key Management
 if not (which keychain | is-empty) {
     let keychain_output = (with-env { SHELL: csh } {

@@ -58,3 +58,19 @@ export def sshi [
         ^ssh -t ...$ssh_args $host $"bash -c \"if command -v nu >/dev/null 2>&1; then exec nu; else exec bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d; echo 'source ~/.bashrc'\); fi\""
     }
 }
+
+# Sync local Nushell configuration recursively to a remote host via SSH
+export def sync-nushell [
+    host: string@"ssh-hosts" # Use the custom host completer
+] {
+    let local_nu_dir = ($nu.config-path | path dirname)
+
+    print $"Ensuring remote ~/.config exists on ($host)..."
+    ssh $host "mkdir -p ~/.config"
+
+    print $"Syncing Nushell configurations to ($host)..."
+    # Use scp -r to copy the entire local nushell configuration folder recursively
+    scp -r $local_nu_dir $"($host):~/.config/"
+
+    print "Sync complete! (Note: Nushell must be installed on the remote host)"
+}

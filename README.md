@@ -60,7 +60,7 @@ Custom commands in `.config/nushell/scripts/`:
 | `dn <action>` | [dotnet.nu](.config/nushell/scripts/dotnet.nu) | Wrapper for `.csproj` tasks (`run`, `watch`, `build`, `test`). |
 | `npm run [script]` | [node.nu](.config/nushell/scripts/node.nu) | Auto-completes scripts directly from `package.json` utilizing Nushell's SQLite storage. |
 | `dps`, `dx`, `dockeri` | [docker.nu](.config/nushell/scripts/docker.nu) | Docker autocompletion. `dockeri` base64-injects your local `.bashrc` into running containers. |
-| `sshi`, `sshc` | [ssh.nu](.config/nushell/scripts/ssh.nu) | SSH wrappers. `sshi` base64-injects your `.bashrc` dynamically on remote servers. |
+| `sshi`, `sshc`, `sync-starship`, `sync-nushell` | [ssh.nu](.config/nushell/scripts/ssh.nu) | SSH helper suite. `sshi` dynamically boots Nushell (if available) or falls back to Bash with local `.bashrc` injection. `sync-starship` and `sync-nushell` sync your prompt and Nushell configurations respectively. |
 | `git histogram` | [misc.nu](.config/nushell/scripts/misc.nu) | Visual contribution graph per author in the terminal. |
 | `fix-anims` | [misc.nu](.config/nushell/scripts/misc.nu) | Resets frozen Aura Glow window animations. |
 | `parse-scraper` | [misc.nu](.config/nushell/scripts/misc.nu) | Parses scrape logs into tabular formats. |
