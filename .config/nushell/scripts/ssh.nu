@@ -53,8 +53,8 @@ export def sshi [
     # Base64 encode it and strip all newlines/returns locally to ensure a single clean line
     let encoded_bashrc = ($bashrc_content | encode base64 | str replace -a "\n" "" | str replace -a "\r" "" | str trim)
 
-    # Execute SSH interactively, decoding your local .bashrc AND sourcing the remote one
+    # Execute SSH interactively, booting nu if available, else decoding and evaluating your local .bashrc using bash
     with-env { TERM: (get-term) } {
-        ^ssh -t ...$ssh_args $host $"bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d; echo 'source ~/.bashrc'\)"
+        ^ssh -t ...$ssh_args $host $"bash -c \"if command -v nu >/dev/null 2>&1; then exec nu; else exec bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d; echo 'source ~/.bashrc'\); fi\""
     }
 }
