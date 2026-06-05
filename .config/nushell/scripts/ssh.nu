@@ -49,6 +49,6 @@ export def sshi [
     # Base64 encode it and strip all newlines/returns locally to ensure a single clean line
     let encoded_bashrc = ($bashrc_content | encode base64 | str replace -a "\n" "" | str replace -a "\r" "" | str trim)
 
-    # Execute SSH interactively, decoding and evaluating your .bashrc on the fly using printf
-    ^ssh -t ...$ssh_args $host $"bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d\)"
+    # Execute SSH interactively, decoding your local .bashrc AND sourcing the remote one
+    ^ssh -t ...$ssh_args $host $"bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d; echo 'source ~/.bashrc'\)"
 }
