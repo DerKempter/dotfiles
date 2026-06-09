@@ -53,15 +53,80 @@ export def "nu-complete docker-contexts" [] {
 
 # Quick container list with key details
 export def dps [
-    --all (-a)
+    --all (-a)          # Show all containers (default shows only running)
+    --full (-f)         # Show full, untruncated Names and Image names
+    --wide (-w)         # Show wide output with ID, Command, and Ports columns
 ] {
     let args = if $all { ["ps", "-a", "--format", "json"] } else { ["ps", "--format", "json"] }
+    let cols = if $wide {
+        [
+            "ID", "Names", "Image", "Status", "State", "HealthStatus", 
+            "Ports", "RunningFor", "CreatedAt", "Command", "Networks", 
+            "LocalVolumes", "Mounts", "Size", "Labels"
+        ]
+    } else {
+        ["Names", "Image", "Status"]
+    }
 
-    ^docker ...$args
-    | lines
-    | each { from json }
-    | select Names Image Status
-    | collect
+    let raw = (^docker ...$args
+        | lines
+        | each { from json }
+    )
+
+    if ($raw | is-empty) {
+        return []
+    }
+
+    let processed = if $full {
+        $raw
+    } else {
+        $raw | update Names {|row|
+            if ($row.Names | is-empty) {
+                ""
+            } else if ($row.Names | str length) > 25 {
+                ($row.Names | str substring 0..22) + "..."
+            } else {
+                $row.Names
+            }
+        } | update Image {|row|
+            if ($row.Image | is-empty) {
+                ""
+            } else {
+                let img = ($row.Image | split row '/' | last)
+                if ($img | str length) > 25 {
+                    ($img | str substring 0..22) + "..."
+                } else {
+                    $img
+                }
+            }
+        } | update Command {|row|
+            if ($row.Command | is-empty) {
+                ""
+            } else if ($row.Command | str length) > 30 {
+                ($row.Command | str substring 0..27) + "..."
+            } else {
+                $row.Command
+            }
+        } | update Labels {|row|
+            if ($row.Labels | is-empty) {
+                ""
+            } else if ($row.Labels | str length) > 30 {
+                ($row.Labels | str substring 0..27) + "..."
+            } else {
+                $row.Labels
+            }
+        } | update Mounts {|row|
+            if ($row.Mounts | is-empty) {
+                ""
+            } else if ($row.Mounts | str length) > 30 {
+                ($row.Mounts | str substring 0..27) + "..."
+            } else {
+                $row.Mounts
+            }
+        }
+    }
+
+    $processed | select ...$cols | collect
 }
 
 # Interactive docker context switcher and status display
