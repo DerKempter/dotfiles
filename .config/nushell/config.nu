@@ -8,6 +8,18 @@ $env.config.show_banner = false
 use scripts *
 $env.config.color_config = (catppuccin_mocha)
 
+$env.config.table.index_mode = "auto"
+$env.config.table.trim = {
+    methodology: "truncating"
+    wrapping_try_keep_words: false
+    truncating_suffix: "..."
+}
+$env.config.datetime_format = {
+    normal: '%a, %d %b %Y %H:%M:%S %z'    # shows up in displays of variables or other datetime's outside of tables
+    # table: '%d.%m.%y %I:%M:%S%p'          # generally shows up in tabular outputs such as ls. commenting this out will change it to the default human readable datetime format
+}
+
+
 # ==============================================================================
 # Shell Hooks & Integrations
 # ==============================================================================
