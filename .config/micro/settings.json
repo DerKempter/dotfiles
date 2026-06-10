@@ -1,0 +1,13 @@
+{
+    "colorscheme": "catppuccin-mocha",
+    "diffgutter": true,
+    "hlsearch": true,
+    "keepautoindent": true,
+    "rmtrailingws": true,
+    "savecursor": true,
+    "saveundo": true,
+    "scrollmargin": 4,
+    "softwrap": true,
+    "tabstospaces": true,
+    "wordwrap": true
+}

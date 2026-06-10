@@ -10,6 +10,8 @@ fi
 # Portable Toolchain & Environment Variables
 # ==========================================
 
+export MICRO_TRUECOLOR=1
+
 # fnm (Fast Node Manager)
 FNM_PATH="$HOME/.local/share/fnm"
 if [ -d "$FNM_PATH" ]; then
