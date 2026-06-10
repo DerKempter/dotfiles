@@ -30,6 +30,10 @@ auto-update-channel = stable
 shell-integration-features = ssh-env,ssh-terminfo,no-cursor
 copy-on-select = clipboard
 
+# Quick Terminal
+quick-terminal-position = top
+keybind = global:ctrl+shift+p=toggle_quick_terminal
+
 command = nu --login
 
 # Create Splits in all directions
