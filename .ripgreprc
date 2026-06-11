@@ -1,0 +1,9 @@
+# Search hidden files and directories by default (excluding .git)
+--hidden
+--glob=!.git/*
+
+# Case-insensitive unless query contains uppercase
+--smart-case
+
+# Follow symlinks
+--follow

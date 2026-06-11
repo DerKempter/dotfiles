@@ -11,6 +11,7 @@ fi
 # ==========================================
 
 export MICRO_TRUECOLOR=1
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
 # fnm (Fast Node Manager)
 FNM_PATH="$HOME/.local/share/fnm"

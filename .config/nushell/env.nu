@@ -4,6 +4,7 @@
 
 $env.EDITOR = "zed"
 $env.MICRO_TRUECOLOR = "1"
+$env.RIPGREP_CONFIG_PATH = ($env.HOME | path join ".ripgreprc")
 $env.N_PREFIX = ($env.HOME | path join ".n")
 
 # ==============================================================================
