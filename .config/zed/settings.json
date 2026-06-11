@@ -67,7 +67,7 @@
 	"edit_predictions": {
 		"provider": "open_ai_compatible_api",
 		"open_ai_compatible_api": {
-			"api_url": "http://localhost:8000/v1",
+			"api_url": "http://localhost:13305/v1",
 			"model": "qwen3-tk-4b-FLM",
 			"prompt_format": "qwen",
 			"max_output_tokens": 128
@@ -89,7 +89,7 @@
 	"language_models": {
 		"openai_compatible": {
 			"lemonade": {
-				"api_url": "http://localhost:8000/api/v1",
+				"api_url": "http://localhost:13305/api/v1",
 				"available_models": [
 					{
 						"name": "Devstral-Small-2507-GGUF",
