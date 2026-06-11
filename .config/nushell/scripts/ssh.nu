@@ -55,7 +55,7 @@ export def sshi [
 
     # Execute SSH interactively, booting nu if available, else decoding and evaluating your local .bashrc using bash
     with-env { TERM: (get-term) } {
-        ^ssh -t ...$ssh_args $host $"bash -c \"if command -v nu >/dev/null 2>&1; then exec nu; else exec bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d; echo 'source ~/.bashrc'\); fi\""
+        ^ssh -t ...$ssh_args $host $"bash -c \"if command -v nu >/dev/null 2>&1; then exec nu; else exec bash --rcfile <\(printf '%s' '($encoded_bashrc)' | base64 -d; echo 'source ~/.bashrc'; echo 'stty echo 2>/dev/null'\); fi\""
     }
 }
 
