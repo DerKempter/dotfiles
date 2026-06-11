@@ -32,6 +32,7 @@ copy-on-select = clipboard
 
 # Quick Terminal
 quick-terminal-position = top
+quick-terminal-size = 40%,50%
 keybind = global:ctrl+alt+p=toggle_quick_terminal
 
 command = nu --login
