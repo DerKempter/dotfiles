@@ -91,3 +91,41 @@ export def get-term [] {
     }
 }
 
+# Search files using ripgrep and output matches in a structured table.
+export def rgt [
+    pattern: string,       # The pattern to search for
+    ...args: string        # Additional arguments to pass to ripgrep (e.g. file paths or globs)
+] {
+    let config_args = (if ($env.RIPGREP_CONFIG_PATH? | is-not-empty) { [] } else { ["--hidden"] })
+    let run = (rg --json ...$config_args $pattern ...$args | complete)
+    
+    if $run.exit_code == 1 and $run.stdout == "" {
+        return []
+    }
+    
+    if $run.exit_code != 0 {
+        error make { msg: $run.stderr }
+    }
+
+    $run.stdout
+    | from json -o
+    | where type == "match"
+    | each { |row|
+        mut line = ($row.data.lines.text | str replace --regex '\r?\n$' '')
+        let submatches = ($row.data.submatches | reverse)
+        for sub in $submatches {
+            let start = $sub.start
+            let end = $sub.end
+            let prefix = ($line | str substring 0..<$start)
+            let matched = ($line | str substring $start..<$end)
+            let suffix = ($line | str substring $end..)
+            $line = $"($prefix)(ansi { fg: '#cba6f7', attr: 'b' })($matched)(ansi reset)($suffix)"
+        }
+        {
+            file: $row.data.path.text,
+            line: $row.data.line_number,
+            content: $line
+        }
+    }
+}
+
