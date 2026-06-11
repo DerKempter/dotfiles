@@ -41,14 +41,38 @@ just force-link
 ```
 This symlinks the configs (e.g. `~/.config/nushell`) pointing back to the repository files.
 
-### 2. Dependencies
-Ensure you have the following installed:
-*   `nu` (0.113.0+)
-*   `zsh` & `bash`
-*   `stow` & `just` (for installation)
-*   `starship`, `ghostty`, `atuin`, `yazi`, `bat`, `lazygit`, `lazydocker`, `micro`, `zoxide`, `keychain`, `git-delta`
-*   `uv` (for Python environment management)
-*   `fzf` & `ripgrep` (required by Yazi fuzzy search)
+### 2. Dependencies & Installation
+
+Ensure you have the following packages installed:
+*   **Shells**: `nu` (0.113.0+), `zsh`, `bash`
+*   **Setup**: `stow`, `just`
+*   **Prompt & Multiplexer**: `starship`, `ghostty`, `atuin`
+*   **TUI Utilities**: `yazi`, `bat`, `lazygit`, `lazydocker`, `micro`
+*   **Helpers**: `zoxide`, `keychain`
+*   **Search & Diffing**: `fzf`, `ripgrep`, `git-delta`
+*   **Package Managers**: `uv`
+
+#### Arch Linux (CachyOS)
+All packages are available in the official repositories and can be installed in one command:
+```bash
+sudo pacman -S nushell zsh bash stow just starship ghostty atuin yazi bat lazygit lazydocker micro zoxide keychain git-delta fzf ripgrep uv
+```
+
+#### Debian / Ubuntu (Tuxedo OS)
+Install the core packages from the standard repositories:
+```bash
+sudo apt update
+sudo apt install zsh bash stow just bat micro zoxide keychain git-delta fzf ripgrep
+```
+
+*Note for Debian/Ubuntu*:
+- The remaining packages (`nushell`, `starship`, `lazygit`, `lazydocker`, `yazi`, `atuin`, `ghostty`, `uv`) are either missing from default repositories or are outdated. It is recommended to install them via their official sources:
+  - **Starship**: `curl -sS https://starship.rs/install.sh | sh`
+  - **Lazygit**: Install via official GitHub pre-built release binary.
+  - **Nushell / Yazi / Atuin**: Best installed via `cargo` or official pre-built releases.
+  - **Ghostty**: Download and install the `.deb` package from the official repository releases.
+  - **uv**: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+  - **lazydocker**: `curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash`
 
 ---
 
