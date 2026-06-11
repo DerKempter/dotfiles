@@ -14,7 +14,7 @@ This repository contains personal configuration files for Linux development envi
       - `python.nu`: `py` command helper for `uv` virtual environments.
       - `dotnet.nu`: `dn` command helper for .NET development.
       - `node.nu`: Completions for `npm` and `npm run` scripts using Nushell's SQLite storage (`stor`).
-      - `misc.nu`: System helpers like `fix-anims` (KWin Aura Glow), `git histogram`, `parse-scraper`, and `update-aerion` (automated installer).
+      - `misc.nu`: System helpers like `fix-anims` (KWin Aura Glow), `git histogram`, `parse-scraper`, `rgt` (ripgrep table), and `update-aerion` (automated installer).
       - `test-speed.nu`: Streaming native download performance test.
       - `catppuccin_mocha.nu`: Catppuccin color configuration.
       - `yazi.nu`: Yazi file manager integration with automatic exit cd syncing.
@@ -27,10 +27,14 @@ This repository contains personal configuration files for Linux development envi
   - `zed/`: Advanced high-performance editor config with Biome code formatters and local AI agent workspace profiles.
   - `bat/`: Terminal viewer previewer config, styled with terminal ANSI Catppuccin.
   - `lazygit/`: Git TUI theme config applying Catppuccin Mocha layouts.
+  - `lazydocker/`: Docker TUI config applying Catppuccin Mocha theme.
   - `yazi/`: Yazi GPU-accelerated terminal file manager config with Catppuccin flavor and fuzzy find plugin.
+  - `micro/`: Terminal editor config featuring Catppuccin Mocha theme, custom bindings, and UTF-16 BOM auto-detection.
   - `fish/`: Fully structured, stowed Fish environment with complete muscle-memory and alias parity (inactive on host, but fully tracked).
   - `starship.toml`: Starship cross-shell prompt configuration.
 - `.bashrc` / `.zshrc`: Shell initialization configurations.
+- `.gitconfig`: Git configuration with Catppuccin-themed Delta diff pager.
+- `.ripgreprc`: Ripgrep config for default smart searches.
 - `justfile`: Project-level workflow runner (defines link, unlink, adopt, force-link recipes).
 
 ## Development Workflow

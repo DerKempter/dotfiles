@@ -13,6 +13,8 @@ Personal configuration files for Linux (Tuxedo OS / CachyOS), optimized for Nush
 *   **Yazi**: GPU-accelerated terminal file manager with automatic exit directory syncing and fuzzy search (`yafg`).
 *   **Bat**: Catppuccin-styled `cat` replacement with Git diff integration.
 *   **Lazygit**: Git TUI styled with Mocha mauve and lavender.
+*   **Lazydocker**: Docker TUI matching the Lazygit styling using the Catppuccin Mocha theme.
+*   **Micro**: Terminal text editor customized with Catppuccin Mocha theme, custom bindings, and encoding auto-detection.
 *   **Zed**: Code editor configured with Biome linters, JetBrains keymaps, and local AI agent integration.
 *   **Justfile**: Automation runner for managing symlinks.
 
@@ -44,7 +46,7 @@ Ensure you have the following installed:
 *   `nu` (0.113.0+)
 *   `zsh` & `bash`
 *   `stow` & `just` (for installation)
-*   `starship`, `ghostty`, `atuin`, `yazi`, `bat`, `lazygit`, `zoxide`, `keychain`
+*   `starship`, `ghostty`, `atuin`, `yazi`, `bat`, `lazygit`, `lazydocker`, `micro`, `zoxide`, `keychain`, `git-delta`
 *   `uv` (for Python environment management)
 *   `fzf` & `ripgrep` (required by Yazi fuzzy search)
 
@@ -64,6 +66,7 @@ Custom commands in `.config/nushell/scripts/`:
 | `git histogram` | [misc.nu](.config/nushell/scripts/misc.nu) | Visual contribution graph per author in the terminal. |
 | `fix-anims` | [misc.nu](.config/nushell/scripts/misc.nu) | Resets frozen Aura Glow window animations. |
 | `parse-scraper` | [misc.nu](.config/nushell/scripts/misc.nu) | Parses scrape logs into tabular formats. |
+| `rgt <pattern>` | [misc.nu](.config/nushell/scripts/misc.nu) | Searches files recursively using `ripgrep` and outputs matches in a beautiful, pastel-highlighted Nushell table. |
 | `test-speed` | [test-speed.nu](.config/nushell/scripts/test-speed.nu) | Runs a native network download speed test in Nushell. |
 | `update-aerion` | [misc.nu](.config/nushell/scripts/misc.nu) | Installs/upgrades the Aerion email client from GitHub releases. |
 
