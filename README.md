@@ -69,7 +69,8 @@ sudo apt install zsh bash stow just bat micro zoxide keychain git-delta fzf ripg
 - The remaining packages (`nushell`, `starship`, `lazygit`, `lazydocker`, `yazi`, `atuin`, `ghostty`, `uv`) are either missing from default repositories or are outdated. It is recommended to install them via their official sources:
   - **Starship**: `curl -sS https://starship.rs/install.sh | sh`
   - **Lazygit**: Install via official GitHub pre-built release binary.
-  - **Nushell / Yazi / Atuin**: Best installed via `cargo` or official pre-built releases.
+  - **Nushell**: Best installed by downloading pre-built binaries or following the official [Nushell Installation Guide](https://www.nushell.sh/book/installation.html).
+  - **Yazi / Atuin**: Best installed via `cargo` or official pre-built releases.
   - **Ghostty**: Download and install the `.deb` package from the official repository releases.
   - **uv**: `curl -LsSf https://astral.sh/uv/install.sh | sh`
   - **lazydocker**: `curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash`
