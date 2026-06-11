@@ -1,0 +1,41 @@
+[user]
+	email = joshua.kempter@m-result.de
+	name = Joshua Kempter
+[init]
+	defaultBranch = main
+
+[pager]
+	diff = delta
+	log = delta
+	reflog = delta
+	show = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	features = catppuccin-mocha
+	side-by-side = true
+	line-numbers = true
+	navigate = true
+
+[delta "catppuccin-mocha"]
+	dark = true
+	minus-style = syntax "#37222c"
+	minus-non-emph-style = syntax "#37222c"
+	minus-emph-style = syntax "#522634"
+	minus-empty-line-marker-style = syntax "#37222c"
+	line-numbers-minus-style = "#f38ba8"
+	plus-style = syntax "#20302b"
+	plus-non-emph-style = syntax "#20302b"
+	plus-emph-style = syntax "#2c4f3e"
+	plus-empty-line-marker-style = syntax "#20302b"
+	line-numbers-plus-style = "#a6e3a1"
+	line-numbers-zero-style = "#45475a"
+	line-numbers-left-style = "#45475a"
+	line-numbers-right-style = "#45475a"
+	map-styles = \
+		bold purple => syntax "#493b67", \
+		bold blue => syntax "#3b4d67", \
+		bold cyan => syntax "#3b5c67", \
+		bold yellow => syntax "#574f38"
