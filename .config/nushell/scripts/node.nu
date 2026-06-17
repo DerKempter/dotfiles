@@ -27,3 +27,13 @@ export def "nu-complete npm scripts" [] {
 export extern "npm run" [
     script: string@"nu-complete npm scripts" # Suggests scripts from YOUR package.json
 ]
+
+# Update active Node.js version using fnm
+export def node-update [
+    --latest (-l) # Use the general latest Node version instead of the LTS version
+] {
+    let target = if $latest { "latest" } else { "lts-latest" }
+    print $"(ansi green)Updating Node.js to ($target)...(ansi reset)"
+    fnm install $target
+    fnm use $target
+}
