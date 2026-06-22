@@ -1,23 +1,23 @@
 {
-   "font": {
-      "normal": {
-         "family": "JetBrainsMono Nerd Font"
-      }
-   },
-   "theme": {
-      "dark": {
-         "name": "catppuccin-mocha-mauve"
-      }
-   },
-   "telemetry": {
-      "system_info": false
-   },
-   "launcher_window": {
-      "client_side_decorations": {
-         "enabled": false
-      },
-      "layer_shell": {
-         "enabled": true
-      }
-   }
+	"font": {
+		"normal": {
+			"family": "JetBrainsMono Nerd Font"
+		}
+	},
+	"theme": {
+		"dark": {
+			"name": "catppuccin-macchiato-mauve"
+		}
+	},
+	"telemetry": {
+		"system_info": false
+	},
+	"launcher_window": {
+		"client_side_decorations": {
+			"enabled": false
+		},
+		"layer_shell": {
+			"enabled": true
+		}
+	}
 }

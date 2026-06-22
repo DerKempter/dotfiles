@@ -1,0 +1,16 @@
+# Catppuccin Macchiato Mauve - Custom Accent
+# Inherits the built-in catppuccin-macchiato theme and overrides the accent and list selection colors.
+
+[meta]
+version = 1
+name = "catppuccin-macchiato-mauve"
+description = "Custom Catppuccin Macchiato theme with a Mauve accent inherited from the built-in Macchiato theme."
+variant = "dark"
+inherits = "catppuccin-macchiato"
+
+[colors.core]
+accent = { name = "colors.accents.purple" }
+
+[colors.list.item.selection]
+background = "#363A4F"             # Surface0 (Matches selection background for Macchiato)
+secondary_background = "#494D64"   # Surface1
