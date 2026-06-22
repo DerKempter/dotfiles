@@ -7,3 +7,4 @@ export use python.nu *
 export use ssh.nu *
 export use test-speed.nu *
 export use yazi.nu *
+export use setup_mpv.nu setup-mpv
