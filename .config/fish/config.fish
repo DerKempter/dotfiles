@@ -133,3 +133,8 @@ end
 if test -f ~/.config/fish/config.local.fish
   source ~/.config/fish/config.local.fish
 end
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH $HOME/.lmstudio/bin
+# End of LM Studio CLI section
+
