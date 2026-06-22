@@ -1,0 +1,30 @@
+# Catppuccin Mocha Mauve - Custom Accent
+# A custom theme designed to fit the rest of the dotfiles setup, featuring Mocha base and Mauve accents.
+
+[meta]
+version = 1
+name = "catppuccin-mocha-mauve"
+description = "Custom Catppuccin Mocha theme with a Mauve accent to match the Ghostty and Lazygit environment."
+variant = "dark"
+icon = "icons/catppuccin.png"
+
+[colors.core]
+background = "#1E1E2E"             # Base
+foreground = "#CDD6F4"             # Text
+secondary_background = "#181825"   # Mantle
+border = "#313244"                 # Surface0
+accent = "#CBA6F7"                 # Mauve (Custom Accent)
+
+[colors.accents]
+blue = "#89B4FA"
+green = "#A6E3A1"
+magenta = "#F5C2E7"
+orange = "#FAB387"
+purple = "#CBA6F7"
+red = "#F38BA8"
+yellow = "#F9E2AF"
+cyan = "#94E2D5"
+
+[colors.list.item.selection]
+background = "#313244"             # Surface0 (Matches selected line in lazygit)
+secondary_background = "#45475A"   # Surface1
