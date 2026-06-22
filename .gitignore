@@ -5,3 +5,8 @@
 .config/yazi/flavors/
 .config/yazi/plugins/
 .config/ghostty/shaders/ghostty-shaders
+
+# Ignore all dynamic/bootstrapped assets in the mpv directory except tracked configurations
+.config/mpv/*
+!.config/mpv/mpv.conf
+!.config/mpv/input.conf
