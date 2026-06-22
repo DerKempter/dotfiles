@@ -30,6 +30,7 @@ This repository contains personal configuration files for Linux development envi
   - `lazydocker/`: Docker TUI config applying Catppuccin Mocha theme.
   - `yazi/`: Yazi GPU-accelerated terminal file manager config with Catppuccin flavor and fuzzy find plugin.
   - `micro/`: Terminal editor config featuring Catppuccin Mocha theme, custom bindings, and UTF-16 BOM auto-detection.
+  - `vicinae/`: Vicinae app launcher config using JetBrainsMono and Catppuccin Macchiato.
   - `fish/`: Fully structured, stowed Fish environment with complete muscle-memory and alias parity (inactive on host, but fully tracked).
   - `starship.toml`: Starship cross-shell prompt configuration.
 - `.bashrc` / `.zshrc`: Shell initialization configurations.

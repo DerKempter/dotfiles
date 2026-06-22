@@ -16,6 +16,7 @@ Personal configuration files for Linux (Tuxedo OS / CachyOS), optimized for Nush
 *   **Lazydocker**: Docker TUI matching the Lazygit styling using the Catppuccin Mocha theme.
 *   **Micro**: Terminal text editor customized with Catppuccin Mocha theme, custom bindings, and encoding auto-detection.
 *   **Zed**: Code editor configured with Biome linters, JetBrains keymaps, and local AI agent integration.
+*   **Vicinae**: C++ & Qt app launcher configured with Catppuccin Macchiato theme, JetBrainsMono font, and favorite applications.
 *   **Justfile**: Automation runner for managing symlinks.
 
 ---

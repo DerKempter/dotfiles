@@ -1,0 +1,33 @@
+{
+   "$schema": "https://vicinae.com/schemas/config.json",
+   "font": {
+      "normal": {
+         "family": "JetBrainsMono Nerd Font"
+      }
+   },
+   "theme": {
+      "dark": {
+         "name": "catppuccin-macchiato"
+      }
+   },
+   "telemetry": {
+      "system_info": false
+   },
+   "launcher_window": {
+      "client_side_decorations": {
+         "enabled": false
+      },
+      "layer_shell": {
+         "enabled": true
+      }
+   },
+   "favorites": [
+      "applications:com.mitchellh.ghostty",
+      "applications:sourcegit",
+      "@FurkanTRN/store.vicinae.jetbrains-recent-projects:jetbrains-projects",
+      "applications:teams-for-linux",
+      "applications:zen",
+      "applications:dev.zed.Zed",
+      "clipboard:history"
+   ]
+}
