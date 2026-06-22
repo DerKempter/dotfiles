@@ -17,6 +17,7 @@ Personal configuration files for Linux (Tuxedo OS / CachyOS), optimized for Nush
 *   **Micro**: Terminal text editor customized with Catppuccin Mocha theme, custom bindings, and encoding auto-detection.
 *   **Zed**: Code editor configured with Biome linters, JetBrains keymaps, and local AI agent integration.
 *   **Vicinae**: C++ & Qt app launcher configured with Catppuccin Macchiato theme, JetBrainsMono font, and favorite applications.
+*   **mpv & uosc**: Minimalist, high-performance media consumption stack with native Wayland, native PipeWire, and VA-API hardware decoding. Integrated with `uosc` overlay controls and custom chapter-based `sponsorblock` skipping.
 *   **Justfile**: Automation runner for managing symlinks.
 
 ---
@@ -94,6 +95,7 @@ Custom commands in `.config/nushell/scripts/`:
 | `parse-scraper` | [misc.nu](.config/nushell/scripts/misc.nu) | Parses scrape logs into tabular formats. |
 | `rgt <pattern>` | [misc.nu](.config/nushell/scripts/misc.nu) | Searches files recursively using `ripgrep` and outputs matches in a beautiful, pastel-highlighted Nushell table. |
 | `test-speed` | [test-speed.nu](.config/nushell/scripts/test-speed.nu) | Runs a native network download speed test in Nushell. |
+| `setup-mpv` | [setup_mpv.nu](.config/nushell/scripts/setup_mpv.nu) | Bootstraps the MPV stack: provisions isolated `yt-dlp`, deploys `uosc` overlays and `sponsorblock` scripts, and configures the `ff2mpv` Firefox native messaging host bridge. |
 | `update-aerion` | [misc.nu](.config/nushell/scripts/misc.nu) | Installs/upgrades the Aerion email client from GitHub releases. |
 
 ### Auto .venv Detection
