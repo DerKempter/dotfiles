@@ -1,0 +1,168 @@
+# Configuration for the 'store' dotfile manager (github.com/cushycush/store)
+
+stores:
+  # =========================================================================
+  # Shell Configurations (Linux Only)
+  # =========================================================================
+  ".bashrc":
+    target: "~/.bashrc"
+    when:
+      os: linux
+
+  ".zshrc":
+    target: "~/.zshrc"
+    when:
+      os: linux
+
+  ".zshenv":
+    target: "~/.zshenv"
+    when:
+      os: linux
+
+  ".config/nushell":
+    targets:
+      - target: ~/.config/nushell
+        when:
+          os: linux
+      - target: "%APPDATA%/nushell"
+        when:
+          os: windows
+
+  ".config/fish":
+    target: ~/.config/fish
+    when:
+      os: linux
+
+  ".config/starship.toml":
+    targets:
+      - target: ~/.config/starship.toml
+        when:
+          os: linux
+      - target: "%USERPROFILE%/.config/starship.toml"
+        when:
+          os: windows
+
+  # =========================================================================
+  # CLI Utilities
+  # =========================================================================
+  ".gitconfig":
+    targets:
+      - target: "~/.gitconfig"
+        when:
+          os: linux
+      - target: "%USERPROFILE%/.gitconfig"
+        when:
+          os: windows
+
+  ".ripgreprc":
+    target: "~/.ripgreprc"
+    when:
+      os: linux
+
+  ".config/antigravity":
+    targets:
+      - target: ~/.config/antigravity
+        when:
+          os: linux
+      - target: "%APPDATA%/antigravity"
+        when:
+          os: windows
+
+  ".config/atuin":
+    target: ~/.config/atuin
+    when:
+      os: linux
+
+  ".config/bat":
+    target: ~/.config/bat
+    when:
+      os: linux
+
+  ".config/lazydocker":
+    target: ~/.config/lazydocker
+    when:
+      os: linux
+
+  ".config/lazygit":
+    target: ~/.config/lazygit
+    when:
+      os: linux
+
+  ".config/micro":
+    target: ~/.config/micro
+    when:
+      os: linux
+
+  ".config/yazi":
+    targets:
+      - target: ~/.config/yazi
+        when:
+          os: linux
+      - target: "%APPDATA%/yazi"
+        when:
+          os: windows
+
+  ".local/bin":
+    target: ~/.local/bin
+    files:
+      - ff2mpv.py
+    when:
+      os: linux
+
+  # =========================================================================
+  # GUI / Applications (Linux & Windows targets)
+  # =========================================================================
+  ".config/ghostty":
+    target: ~/.config/ghostty
+    when:
+      os: linux
+
+  ".config/zed":
+    targets:
+      - target: ~/.config/zed
+        when:
+          os: linux
+      - target: "%APPDATA%/Zed"
+        when:
+          os: windows
+
+  ".config/mpv":
+    target: ~/.config/mpv
+    when:
+      os: linux
+
+  ".config/vicinae":
+    target: ~/.config/vicinae
+    when:
+      os: linux
+
+  # =========================================================================
+  # Conditional / Hostname Specific Configurations (Linux Only)
+  # =========================================================================
+
+  # KDE-specific desktop configurations
+  # (Enable these if you migrate libinput-gestures or custom window rules)
+  # ".config/libinput-gestures.conf":
+  #   target: ~/.config/libinput-gestures.conf
+  #   when:
+  #     os: linux
+
+  # Personal CachyOS desktop-only configurations
+  # (Skipped on your Tuxedo OS work laptop and colleagues' machines unless PERSONAL_HOSTNAME matches)
+  ".config/niri":
+    target: ~/.config/niri
+    when:
+      os: linux
+      hostname: '{{ env "PERSONAL_HOSTNAME" }}'
+
+  ".config/vesktop":
+    target: ~/.config/vesktop
+    when:
+      os: linux
+      hostname: '{{ env "PERSONAL_HOSTNAME" }}'
+
+  ".config/OpenRGB":
+    target: ~/.config/OpenRGB
+    when:
+      os: linux
+      hostname: '{{ env "PERSONAL_HOSTNAME" }}'
