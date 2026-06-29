@@ -70,6 +70,9 @@ stores:
 
   ".config/atuin":
     target: ~/.config/atuin
+    files:
+      - config.toml
+      - themes/catppuccin.toml
     when:
       os: linux
 
@@ -90,6 +93,15 @@ stores:
 
   ".config/micro":
     target: ~/.config/micro
+    files:
+      - bindings.json
+      - init.lua
+      - settings.json
+    when:
+      os: linux
+
+  ".config/micro/colorschemes":
+    target: ~/.config/micro/colorschemes
     when:
       os: linux
 
@@ -120,9 +132,15 @@ stores:
   ".config/zed":
     targets:
       - target: ~/.config/zed
+        files:
+          - settings.json
+          - keymap.json
         when:
           os: linux
       - target: "%APPDATA%/Zed"
+        files:
+          - settings.json
+          - keymap.json
         when:
           os: windows
 
