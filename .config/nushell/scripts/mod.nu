@@ -1,6 +1,7 @@
 export use catppuccin_mocha.nu *
 export use docker.nu *
 export use dotnet.nu *
+export use git.nu *
 export use misc.nu *
 export use node.nu *
 export use python.nu *
