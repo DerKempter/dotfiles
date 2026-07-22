@@ -1,15 +1,22 @@
+use misc.nu nu-fail
+
 export def dn [
     action: string@nu-complete-dn-actions,
     project?: string@nu-complete-dn-projects
 ] {
-    let proj_arg = if ($project | is-empty) { "" } else { $project }
+    if (which dotnet | is-empty) {
+        nu-fail ".NET SDK (dotnet) is not installed or not in PATH." -c "MISSING_DEPS"
+        return
+    }
+
+    let proj_arg = if ($project | is-empty) { [] } else { ["--project", $project] }
 
     match $action {
-        "run" => { ^dotnet run --project $proj_arg }
-        "watch" => { ^dotnet watch run --project $proj_arg }
-        "build" => { ^dotnet build $proj_arg }
-        "test" => { ^dotnet test $proj_arg }
-        _ => { ^dotnet $action $proj_arg }
+        "run" => { ^dotnet run ...$proj_arg }
+        "watch" => { ^dotnet watch run ...$proj_arg }
+        "build" => { ^dotnet build (if ($project | is-not-empty) { $project } else { "" }) }
+        "test" => { ^dotnet test (if ($project | is-not-empty) { $project } else { "" }) }
+        _ => { ^dotnet $action (if ($project | is-not-empty) { $project } else { "" }) }
     }
 }
 

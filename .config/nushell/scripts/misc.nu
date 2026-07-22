@@ -1,3 +1,20 @@
+# Prints a standardized error message to stderr.
+# Default (interactive): Prints a clean single-line error message without double-logging or terminating the shell session.
+# Script/Automation (--code or --fatal): Raises a Nushell error exception with a specific error/status code for CI/scripts.
+export def nu-fail [
+    msg: string,
+    --code (-c): string = "", # Optional custom error code (e.g., "1", "127", or "ERR_GIT_DIRTY")
+    --fatal (-f)              # Shortcut to throw a fatal exception (equivalent to --code "1")
+] {
+    let err_code = if ($code | is-not-empty) { $code } else if $fatal { "1" } else { "" }
+
+    if ($err_code | is-empty) {
+        print -e $"(ansi red_bold)Error:(ansi reset) (ansi red)($msg)(ansi reset)"
+    } else {
+        error make { msg: $msg, code: $err_code }
+    }
+}
+
 export def "git histogram" [
     --limit: int = -1 # Number of recent commits to analyze
 ] {
@@ -14,7 +31,8 @@ export def "git histogram" [
 
 export def parse-scraper [path: path] {
     if not ($path | path exists) {
-        error make {msg: $"File not found: ($path)"}
+        nu-fail $"File not found: ($path)" -c "ENOENT"
+        return
     }
 
     # Using the 'slurp' Perl method to handle the multi-line merging
@@ -50,7 +68,8 @@ export def update-aerion [] {
         http get $url | save -f $archive_path
     } catch {
         rm -rf $temp_dir
-        error make {msg: "Failed to download Aerion archive. Verify your internet connection."}
+        nu-fail "Failed to download Aerion archive. Verify your internet connection." --fatal
+        return
     }
 
     print $"(ansi green)Extracting archive...(ansi reset)"
@@ -60,7 +79,8 @@ export def update-aerion [] {
     let installer_paths = (glob $"($temp_dir)/**/install.sh")
     if ($installer_paths | is-empty) {
         rm -rf $temp_dir
-        error make {msg: "install.sh not found in the extracted archive."}
+        nu-fail "install.sh not found in the extracted archive." --fatal
+        return
     }
     let installer = ($installer_paths | first)
     let install_dir = ($installer | path dirname)
@@ -104,7 +124,10 @@ export def rgt [
     }
     
     if $run.exit_code != 0 {
-        error make { msg: $run.stderr }
+        let err_msg = ($run.stderr | str trim)
+        let display_err = if ($err_msg | is-empty) { "ripgrep search failed" } else { $err_msg }
+        nu-fail $display_err -c "RG_EXEC_ERROR"
+        return []
     }
 
     $run.stdout
@@ -128,4 +151,3 @@ export def rgt [
         }
     }
 }
-

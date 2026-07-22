@@ -1,4 +1,4 @@
-use misc.nu get-term
+use misc.nu [get-term nu-fail]
 
 # List hosts from SSH config for autocompletion
 export def "ssh-hosts" [] {
@@ -20,14 +20,24 @@ export def "ssh-hosts" [] {
 # Sync local starship configuration to a remote host via SSH
 export def sync-starship [
     host: string@"ssh-hosts" # The SSH host (e.g., user@remote-server)
- ] {
+] {
+    if ($host | is-empty) {
+        nu-fail "Target SSH host must be specified."
+        return
+    }
+
     let config_path = ($nu.config-path | path dirname | path dirname | path join "starship.toml")
 
+    if not ($config_path | path exists) {
+        nu-fail $"Local starship configuration not found at ($config_path)."
+        return
+    }
+
     print $"Ensuring remote ~/.config exists on ($host)..."
-    ssh $host "mkdir -p ~/.config"
+    ^ssh $host "mkdir -p ~/.config"
 
     print $"Syncing starship.toml to ($host)..."
-    scp $config_path $"($host):~/.config/starship.toml"
+    ^scp $config_path $"($host):~/.config/starship.toml"
 
     print "Sync complete! (Note: Starship must be installed on the remote and added to .bashrc/config.nu)"
 }
@@ -37,6 +47,10 @@ export def sshc [
     host: string@"ssh-hosts" # Use the custom host completer
     ...args: string          # Pass-through for other arguments
 ] {
+    if ($host | is-empty) {
+        nu-fail "Target SSH host must be specified."
+        return
+    }
     with-env { TERM: (get-term) } {
         ^ssh $host ...$args
     }
@@ -47,8 +61,19 @@ export def sshi [
     host: string@"ssh-hosts"  # Use the custom host completer
     ...ssh_args               # Additional standard SSH arguments (e.g. -p 22)
 ] {
+    if ($host | is-empty) {
+        nu-fail "Target SSH host must be specified."
+        return
+    }
+
+    let bashrc_file = ($env.HOME | path join ".bashrc")
+    if not ($bashrc_file | path exists) {
+        nu-fail "Local ~/.bashrc not found."
+        return
+    }
+
     # Read the actual content of your local stowed .bashrc file
-    let bashrc_content = (open ~/.bashrc)
+    let bashrc_content = (open $bashrc_file)
 
     # Base64 encode it and strip all newlines/returns locally to ensure a single clean line
     let encoded_bashrc = ($bashrc_content | encode base64 | str replace -a "\n" "" | str replace -a "\r" "" | str trim)
@@ -63,14 +88,19 @@ export def sshi [
 export def sync-nushell [
     host: string@"ssh-hosts" # Use the custom host completer
 ] {
+    if ($host | is-empty) {
+        nu-fail "Target SSH host must be specified."
+        return
+    }
+
     let local_nu_dir = ($nu.config-path | path dirname)
 
     print $"Ensuring remote ~/.config exists on ($host)..."
-    ssh $host "mkdir -p ~/.config"
+    ^ssh $host "mkdir -p ~/.config"
 
     print $"Syncing Nushell configurations to ($host)..."
     # Use scp -r to copy the entire local nushell configuration folder recursively
-    scp -r $local_nu_dir $"($host):~/.config/"
+    ^scp -r $local_nu_dir $"($host):~/.config/"
 
     print "Sync complete! (Note: Nushell must be installed on the remote host)"
 }
