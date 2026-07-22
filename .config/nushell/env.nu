@@ -18,6 +18,7 @@ $env.PATH = (
     | prepend ($env.N_PREFIX | path join "bin")         # Where 'node' lives
     | prepend ($env.HOME | path join ".atuin" "bin")    # Where 'atuin' lives
     | prepend ($env.HOME | path join ".cargo" "bin")    # Where 'cargo' lives
+    | prepend ($env.HOME | path join ".nub" "bin")    # Where 'cargo' lives
 )
 
 # Bun
@@ -42,7 +43,7 @@ if ($mssql_bin | path exists) {
 let fnm_path = ($env.HOME | path join ".local" "share" "fnm")
 if ($fnm_path | path exists) {
     $env.PATH = ($env.PATH | prepend $fnm_path)
-    
+
     # Load fnm environment variables dynamically
     let fnm_env = (fnm env --shell bash
         | lines
@@ -52,9 +53,9 @@ if ($fnm_path | path exists) {
         | rename name value
         | where name != "PATH"
         | reduce -f {} {|it, acc| $acc | upsert $it.name $it.value })
-        
+
     load-env $fnm_env
-    
+
     # Add active node version path from FNM
     if ($env.FNM_MULTISHELL_PATH? | is-not-empty) {
         $env.PATH = ($env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join "bin"))

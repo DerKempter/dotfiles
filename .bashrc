@@ -131,3 +131,6 @@ fi
 export PATH="$PATH:$HOME/.lmstudio/bin"
 # End of LM Studio CLI section
 
+
+# nub
+export PATH="$HOME/.nub/bin:$PATH"
