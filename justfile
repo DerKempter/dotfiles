@@ -1,21 +1,25 @@
-# Dotfiles workspace automation tasks
+set shell := ["nu", "-c"]
 
-# Sync all configurations to the system using the 'store' dotfile manager
+# Sync all configurations to the system using GNU Stow packages
 link:
-    store apply
+    stow -R common --verbose
+    if (sys host | get hostname) == "joshs-cachy-box" { \
+        stow -R desktop --verbose \
+    }
+
+# Unlink configurations from the system safely
+unlink:
+    stow -D common --verbose
+    if (sys host | get hostname) == "joshs-cachy-box" { \
+        stow -D desktop --verbose \
+    }
 
 # Preview link changes (dry-run)
 diff:
-    store diff
-
-# Check configuration health, broken links, and missing secrets
-doctor:
-    store doctor
-
-# Unlink configurations from the system safely (Legacy recipe for GNU Stow cleanup)
-unlink-stow:
-    stow -D . --verbose
-
+    stow -n -v -R common
+    if (sys host | get hostname) == "joshs-cachy-box" { \
+        stow -n -v -R desktop \
+    }
 
 # Install external package dependencies (like Yazi plugins/flavors)
 install:
@@ -23,18 +27,27 @@ install:
 
 # Run static syntax validation and path parity tests across all shell configurations
 check:
-    @echo "=== Validating Bash ==="
-    bash -n .bashrc && echo "✓ Bash syntax OK"
-    @echo "=== Validating Zsh ==="
-    zsh -n .zshrc && echo "✓ Zsh syntax OK"
-    @echo "=== Validating Nushell ==="
-    @find .config/nushell -name "*.nu" -type f -exec sh -c 'nu --ide-check 10 "{}" > /dev/null || (echo "✗ Syntax error in {}" && exit 1)' \;
-    @echo "✓ Nushell syntax OK"
-    @echo "=== Validating Fish ==="
-    @if command -v fish >/dev/null 2>&1; then \
-        fish -n .config/fish/config.fish && echo "✓ Fish syntax OK"; \
-    else \
-        echo "⚠ Fish is not installed on host. Static check skipped."; \
-    fi
-    @echo "=== Validating PATH Parity ==="
-    nu --config .config/nushell/config.nu --env-config .config/nushell/env.nu tests/verify_paths.nu
+    print "=== Validating Bash ==="
+    bash -n common/.bashrc
+    print "✓ Bash syntax OK"
+    
+    print "=== Validating Zsh ==="
+    zsh -n common/.zshrc
+    print "✓ Zsh syntax OK"
+    
+    print "=== Validating Nushell ==="
+    glob common/.config/nushell/**/*.nu | each { |file| \
+        nu --ide-check 10 $file \
+    }
+    print "✓ Nushell syntax OK"
+    
+    print "=== Validating Fish ==="
+    if (which fish | is-empty) == false { \
+        fish -n common/.config/fish/config.fish; \
+        print "✓ Fish syntax OK" \
+    } else { \
+        print "⚠ Fish is not installed on host. Static check skipped." \
+    }
+    
+    print "=== Validating PATH Parity ==="
+    nu --config common/.config/nushell/config.nu --env-config common/.config/nushell/env.nu tests/verify_paths.nu

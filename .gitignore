@@ -2,11 +2,12 @@
 */**/.env
 **/themes/noctalia
 .antigravitycli/
-.config/yazi/flavors/
-.config/yazi/plugins/
-.config/ghostty/shaders/ghostty-shaders
+**/yazi/flavors/
+**/yazi/plugins/
+**/ghostty/shaders/ghostty-shaders
+**/fish/fish_variables
 
 # Ignore all dynamic/bootstrapped assets in the mpv directory except tracked configurations
-.config/mpv/*
-!.config/mpv/mpv.conf
-!.config/mpv/input.conf
+**/mpv/*
+!**/mpv/mpv.conf
+!**/mpv/input.conf
