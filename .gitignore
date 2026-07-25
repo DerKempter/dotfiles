@@ -6,6 +6,7 @@
 **/yazi/plugins/
 **/ghostty/shaders/ghostty-shaders
 **/fish/fish_variables
+**/OpenRGB/logs/
 
 # Ignore all dynamic/bootstrapped assets in the mpv directory except tracked configurations
 **/mpv/*
