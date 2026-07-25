@@ -1,0 +1,36 @@
+// DankMaterialShell & User Modular Niri Configuration
+
+config-notification {
+    disable-failed
+}
+
+gestures {
+    hot-corners {
+        off
+    }
+}
+
+// ─── DankMaterialShell Base Includes ───
+// These are loaded first so user customizations can override defaults where desired.
+include optional=true "dms/colors.kdl"
+include optional=true "dms/layout.kdl"
+include optional=true "dms/alttab.kdl"
+include optional=true "dms/outputs.kdl"
+include optional=true "dms/cursor.kdl"
+
+// ─── User Custom Modular Configuration ───
+include "./cfg/animation.kdl"
+include "./cfg/autostart.kdl"
+include "./cfg/input.kdl"
+include "./cfg/display.kdl"
+include "./cfg/layout.kdl"
+include "./cfg/rules.kdl"
+include "./cfg/misc.kdl"
+
+// ─── User Keybinds (Merged with DMS commands) ───
+include "./cfg/keybinds.kdl"
+
+// ─── Noctalia Styling ───
+// Uncomment the line below if you wish to restore Noctalia's orange/peach colors (#ffb780):
+// include "./noctalia.kdl"
+include "dms/binds.kdl"
