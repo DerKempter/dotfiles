@@ -108,18 +108,12 @@ install_debian() {
 
     # 4. Nushell
     if ! has_cmd nu; then
-        log_info "Installing Nushell..."
-        local NU_VERSION
-        NU_VERSION=$(curl -s https://api.github.com/repos/nushell/nushell/releases/latest | grep -oP '"tag_name": "\K[^"]+')
-        local ARCH
-        ARCH=$(uname -m)
-        local NU_TAR="nu-${NU_VERSION}-${ARCH}-unknown-linux-gnu.tar.gz"
-        local TEMP_DIR
-        TEMP_DIR=$(mktemp -d)
-        curl -sSL "https://github.com/nushell/nushell/releases/download/${NU_VERSION}/${NU_TAR}" -o "${TEMP_DIR}/${NU_TAR}"
-        tar -xzf "${TEMP_DIR}/${NU_TAR}" -C "${TEMP_DIR}"
-        cp "${TEMP_DIR}"/nu-*/nu* "$HOME/.local/bin/"
-        rm -rf "${TEMP_DIR}"
+        log_info "Installing Nushell via Fury APT repository..."
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://apt.fury.io/nushell/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/fury-nushell.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/fury-nushell.gpg] https://apt.fury.io/nushell/ /" | sudo tee /etc/apt/sources.list.d/fury-nushell.list >/dev/null
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq nushell
     fi
 
     # 5. Lazygit

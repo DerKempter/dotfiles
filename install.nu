@@ -104,6 +104,15 @@ def install-missing-tools [missing: list<string>] {
                 ^curl -LsSf https://astral.sh/uv/install.sh | ^sh
             }
 
+            if "nu" in $missing and (which nu | is-empty) {
+                print "Installing Nushell via Fury APT repository..."
+                ^sudo mkdir -p /etc/apt/keyrings
+                ^curl -fsSL https://apt.fury.io/nushell/gpg.key | ^sudo gpg --dearmor -o /etc/apt/keyrings/fury-nushell.gpg
+                "deb [signed-by=/etc/apt/keyrings/fury-nushell.gpg] https://apt.fury.io/nushell/ /" | ^sudo tee /etc/apt/sources.list.d/fury-nushell.list
+                ^sudo apt-get update -qq
+                ^sudo apt-get install -y -qq nushell
+            }
+
             if "lazygit" in $missing and (which lazygit | is-empty) {
                 print "Installing lazygit..."
                 let version = (^curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | ^grep -oP '"tag_name": "v\K[^"]+' | str trim)
