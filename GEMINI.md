@@ -10,11 +10,12 @@ This repository contains personal configuration files for Linux development envi
     - `config.nu` / `env.nu`: Core shell environment and initialization.
     - `scripts/`: Modular Nushell scripts (loaded via `mod.nu`).
       - `docker.nu`: Extensive completions for Docker/Compose and helpers (`dps`, `dx`, `dockeri`).
+      - `git.nu`: Custom Git subcommands (`git feature`, `git catchup`, `git publish`, `git history`, `git uncommit`, `git clean-merged`, `git gone`, `git nuke`).
       - `ssh.nu`: Modular SSH command suite and autocomplete helpers (`sshi`, `sshc`, `sync-starship`, `sync-nushell`).
       - `python.nu`: `py` command helper for `uv` virtual environments.
       - `dotnet.nu`: `dn` command helper for .NET development.
       - `node.nu`: Completions for `npm` and `npm run` scripts using Nushell's SQLite storage (`stor`).
-      - `misc.nu`: System helpers like `fix-anims` (KWin Aura Glow), `git histogram`, `parse-scraper`, `rgt` (ripgrep table), and `update-aerion` (automated installer).
+      - `misc.nu`: Standardized error handler (`nu-fail`), system helpers (`fix-anims`, `parse-scraper`, `rgt`, `update-aerion`), and `git histogram`.
       - `test-speed.nu`: Streaming native download performance test.
       - `catppuccin_mocha.nu`: Catppuccin color configuration.
       - `yazi.nu`: Yazi file manager integration with automatic exit cd syncing.

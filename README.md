@@ -85,6 +85,8 @@ Custom commands in `.config/nushell/scripts/`:
 
 | Command | Script | Description |
 |:---|:---|:---|
+| `git feature`, `git catchup`, `git publish`, `git history`, `git uncommit`, `git clean-merged`, `git gone`, `git nuke` | [git.nu](.config/nushell/scripts/git.nu) | Custom Git workflow subcommands (safe branching, rebasing, publishing, tabular history, uncommitting, and cleanup/nuking). |
+| `nu-fail <msg>` | [misc.nu](.config/nushell/scripts/misc.nu) | Standardized error output helper supporting interactive stderr printing or non-zero exit codes (`--code` / `--fatal`) for automation. |
 | `py <action>` | [python.nu](.config/nushell/scripts/python.nu) | Runs scripts using `uv` virtualenv when available, falling back to system Python. |
 | `dn <action>` | [dotnet.nu](.config/nushell/scripts/dotnet.nu) | Wrapper for `.csproj` tasks (`run`, `watch`, `build`, `test`). |
 | `npm run [script]` | [node.nu](.config/nushell/scripts/node.nu) | Auto-completes scripts directly from `package.json` utilizing Nushell's SQLite storage. |
