@@ -11,11 +11,11 @@ use misc.nu nu-fail
 def "nu-complete git branches" [] {
     let local = (^git branch --format='%(refname:short)' | lines)
     let remote = (
-        ^git branch -r --format='%(refname:short)' 
-        | lines 
+        ^git branch -r --format='%(refname:short)'
+        | lines
         | str replace -r '^[a-zA-Z0-9_-]+/' ''
     )
-    
+
     $local | append $remote | uniq
 }
 
@@ -96,7 +96,7 @@ export def "git history" [
 ] {
     let sep = "␟"
     let format = $"%h($sep)%an($sep)%ad($sep)%s"
-    
+
     ^git log -n $limit --format=$format --date=short
     | lines
     | parse $"{{hash}}($sep){{author}}($sep){{date}}($sep){{message}}"
@@ -109,7 +109,7 @@ export def "git uncommit" [] {
         nu-fail "No commits to undo."
         return
     }
-    
+
     print "Undoing last commit (changes remain in staging)..."
     ^git reset --soft HEAD~1
     ^git status -s
@@ -122,12 +122,12 @@ export def "git uncommit" [] {
 # Deletes local branches that have been merged into the current HEAD.
 export def "git clean-merged" [] {
     let protected_branches = ["main", "master", "dev", "develop"]
-    
+
     let merged_branches = (
-        ^git branch --merged 
-        | lines 
-        | str trim 
-        | where { |b| not ($b | str starts-with "*") } 
+        ^git branch --merged
+        | lines
+        | str trim
+        | where { |b| not ($b | str starts-with "*") }
         | where { |b| $b not-in $protected_branches }
     )
 
@@ -140,8 +140,8 @@ export def "git clean-merged" [] {
     $merged_branches | each { |b| print $"  - ($b)" }
     print ""
 
-    let confirmation = (input "Do you want to delete these branches? [y/N]: ")
-    
+    let confirmation = (input "Do you want to delete these branches? [y/N]: " | into string | str trim)
+
     if ($confirmation | str lowercase) != "y" {
         print "Aborted. No branches were deleted."
         return
@@ -175,8 +175,8 @@ export def "git gone" [] {
     print ""
     print "(ansi red)Note: This uses a force-delete (-D) because the upstream is missing.(ansi reset)"
 
-    let confirmation = (input "Do you want to FORCE DELETE these local branches? [y/N]: ")
-    
+    let confirmation = (input "Do you want to FORCE DELETE these local branches? [y/N]: " | into string | str trim)
+
     if ($confirmation | str lowercase) != "y" {
         print "Aborted. No branches were deleted."
         return
@@ -196,8 +196,8 @@ export def "git nuke" [] {
     }
 
     print $"Fetching latest state for origin/($current_branch)..."
-    try { 
-        ^git fetch origin $current_branch | ignore 
+    try {
+        ^git fetch origin $current_branch | ignore
     } catch {
         nu-fail $"No upstream branch found for ($current_branch) on origin."
         return
@@ -226,8 +226,8 @@ export def "git nuke" [] {
         print ""
     }
 
-    let confirmation = (input "Are you absolutely sure you want to nuke these changes? [y/N]: ")
-    
+    let confirmation = (input "Are you absolutely sure you want to nuke these changes? [y/N]: " | into string | str trim)
+
     if ($confirmation | str lowercase) != "y" {
         print "Aborted. Your working tree is safe."
         return
