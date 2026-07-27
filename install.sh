@@ -8,18 +8,18 @@
 
 set -euo pipefail
 
-# Color palette & styling
-BOLD="\033[1m"
-GREEN="\033[32m"
-CYAN="\033[36m"
-YELLOW="\033[33m"
-RED="\033[31m"
-RESET="\033[0m"
+# Color palette & styling (ANSI-C string literals)
+BOLD=$'\033[1m'
+GREEN=$'\033[32m'
+CYAN=$'\033[36m'
+YELLOW=$'\033[33m'
+RED=$'\033[31m'
+RESET=$'\033[0m'
 
-log_info() { printf "%b[INFO]%b %s\n" "${CYAN}${BOLD}" "${RESET}" "$1"; }
-log_success() { printf "%b[OK]%b %s\n" "${GREEN}${BOLD}" "${RESET}" "$1"; }
-log_warn() { printf "%b[WARN]%b %s\n" "${YELLOW}${BOLD}" "${RESET}" "$1"; }
-log_error() { printf "%b[ERROR]%b %s\n" "${RED}${BOLD}" "${RESET}" "$1"; }
+log_info() { printf "%s[INFO]%s %b\n" "${CYAN}${BOLD}" "${RESET}" "$1"; }
+log_success() { printf "%s[OK]%s %b\n" "${GREEN}${BOLD}" "${RESET}" "$1"; }
+log_warn() { printf "%s[WARN]%s %b\n" "${YELLOW}${BOLD}" "${RESET}" "$1"; }
+log_error() { printf "%s[ERROR]%s %b\n" "${RED}${BOLD}" "${RESET}" "$1"; }
 
 has_cmd() {
     for cmd in "$@"; do
