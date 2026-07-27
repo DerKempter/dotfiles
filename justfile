@@ -47,6 +47,10 @@ unlink-windows:
 install:
     ya pkg install
 
+# Audit and install essential CLI dependencies and apply symlinks
+setup:
+    nu install.nu
+
 # Run static syntax validation and path parity tests across all shell configurations
 check:
     print "=== Validating Bash ==="
