@@ -149,6 +149,12 @@ install_debian() {
         cp "${TEMP_DIR}"/yazi-*/yazi "${TEMP_DIR}"/yazi-*/ya "$HOME/.local/bin/"
         rm -rf "${TEMP_DIR}"
     fi
+
+    # 9. fnm (Fast Node Manager)
+    if ! has_cmd fnm; then
+        log_info "Installing fnm..."
+        curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.local/bin" --skip-shell
+    fi
 }
 
 # -----------------------------------------------------------------------------

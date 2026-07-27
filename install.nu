@@ -28,7 +28,8 @@ export def main [] {
         { name: "delta", binaries: ["delta", "git-delta"] },
         { name: "fzf", binaries: ["fzf"] },
         { name: "rg", binaries: ["rg", "ripgrep"] },
-        { name: "uv", binaries: ["uv"] }
+        { name: "uv", binaries: ["uv"] },
+        { name: "fnm", binaries: ["fnm"] }
     ]
 
     # Audit current availability of essential binaries
@@ -132,6 +133,11 @@ def install-missing-tools [missing: list<string>] {
             if "atuin" in $missing and (which atuin | is-empty) {
                 print "Installing atuin..."
                 ^curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | ^bash
+            }
+
+            if "fnm" in $missing and (which fnm | is-empty) {
+                print "Installing fnm..."
+                ^curl -fsSL https://fnm.vercel.app/install | ^bash -s -- --install-dir $"($env.HOME)/.local/bin" --skip-shell
             }
         }
         _ => {
