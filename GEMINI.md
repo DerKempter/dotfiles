@@ -65,7 +65,7 @@ This repository contains personal configuration files for Linux development envi
 
 - **Secrets**: NEVER commit API keys, tokens, or personal information. Use `.env` files (which are git-ignored) or system-level secret management.
 - **History**: Command history (`history.txt`) is ignored and should remain so.
-- **Symlinks**: This project uses **GNU Stow** managed via a top-level **`justfile`**. The repository structure mirrors the user's home directory (e.g., `.config/` in the repo links to `~/.config/`). To apply configurations:
-  - Run **`just link`** for standard linking.
-  - Run **`just force-link`** if pre-existing system folders cause conflicts. This automatically adopts system files and reverts them using Git to force the overwrite cleanly.
+- **Symlinks**: This project uses **GNU Stow** managed via a top-level **`justfile`**. The repository structure mirrors the user's home directory (e.g., `common/.config/` in the repo links to `~/.config/`). To apply configurations:
+  - Run **`./install.sh`** (Bash) or **`nu install.nu`** / **`just setup`** (Nushell) for automated dependency installation and symlinking.
+  - Run **`just link`** for standard GNU Stow linking.
   - To undo links, run **`just unlink`**. Always update the `README.md` if the installation process changes.

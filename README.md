@@ -22,26 +22,35 @@ Personal configuration files for Linux (Tuxedo OS / CachyOS), optimized for Nush
 
 ---
 
-## Installation
+## Quick Start & Installation
 
-Configurations are managed using GNU Stow via `just`.
+### Automated Installer (Recommended)
 
-### 1. Clone & Link
-Clone the repository:
+Clone the repository and run the bootstrapper:
+
 ```bash
 git clone https://github.com/DerKempter/dotfiles.git ~/dotfiles
 cd ~/dotfiles
+
+# On a fresh machine (Bash bootstrapper):
+./install.sh
+
+# Or inside Nushell (interactive dependency audit & installer):
+nu install.nu  # or: just setup
 ```
 
-Apply symlinks to your home directory:
+The bootstrapper automatically detects your OS distribution (CachyOS / Arch or Debian / Ubuntu / Tuxedo OS), installs missing essential dependencies, applies GNU Stow symlinks, and deploys Yazi plugins.
+
+---
+
+### Manual Linking
+
+If you already have all packages installed and only want to apply symlinks:
+
 ```bash
-# Standard link:
+# Apply Stow symlinks:
 just link
-
-# Overwrite pre-existing conflicting configs:
-just force-link
 ```
-This symlinks the configs (e.g. `~/.config/nushell`) pointing back to the repository files.
 
 ### 2. Dependencies & Installation
 
