@@ -97,8 +97,8 @@ return {
     kbNormalizeWindow          = "CTRL + SUPER + ALT + Backslash",
     kbWindowPip                = "SUPER + ALT + Backslash",
     kbPinWindow                = "SUPER + P",
-    kbWindowFullscreen         = "SUPER + F",
-    kbWindowBorderedFullscreen = "SUPER + ALT + F",
+    kbWindowFullscreen         = "SUPER + ALT + F",
+    kbWindowBorderedFullscreen = "SUPER + F",
     kbToggleWindowFloating     = "SUPER + ALT + Space",
     kbCloseWindow              = "SUPER + Q",
 
