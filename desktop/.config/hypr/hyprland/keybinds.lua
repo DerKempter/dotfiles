@@ -89,16 +89,16 @@ for i = 1, 10 do
 end
 
 -- Go to workspace -1/+1
-create_bind(vars.kbPrevWs, hl.dsp.focus({ workspace = "-1" }), repeating_unless_mouse)
-create_bind(vars.kbNextWs, hl.dsp.focus({ workspace = "+1" }), repeating_unless_mouse)
+create_bind(vars.kbPrevWs, hl.dsp.focus({ workspace = "r-1" }), repeating_unless_mouse)
+create_bind(vars.kbNextWs, hl.dsp.focus({ workspace = "r+1" }), repeating_unless_mouse)
 
 -- Go to workspace group -1/+1
 create_bind(vars.kbPrevWsGroup, hl.dsp.focus({ workspace = "-10" }), repeating_unless_mouse)
 create_bind(vars.kbNextWsGroup, hl.dsp.focus({ workspace = "+10" }), repeating_unless_mouse)
 
 -- Move window to workspace -1/+1
-create_bind(vars.kbMoveWinToWsNext, hl.dsp.window.move({ workspace = "+1" }), repeating_unless_mouse)
-create_bind(vars.kbMoveWinToWsPrev, hl.dsp.window.move({ workspace = "-1" }), repeating_unless_mouse)
+create_bind(vars.kbMoveWinToWsNext, hl.dsp.window.move({ workspace = "r+1" }), repeating_unless_mouse)
+create_bind(vars.kbMoveWinToWsPrev, hl.dsp.window.move({ workspace = "r-1" }), repeating_unless_mouse)
 
 -- Move window to/from special workspace
 create_bind(vars.kbMoveWinToWsSpecial, hl.dsp.window.move({ workspace = "special:special" }))
