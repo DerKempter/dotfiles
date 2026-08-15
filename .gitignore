@@ -8,6 +8,10 @@
 **/fish/fish_variables
 **/OpenRGB/logs/
 **/niri/dms/
+**/hypr/scheme/current.conf
+**/hypr/scheme/current.lua
+**/hypr/hyprland-gui.lua
+**/hypr/dms/colors.lua
 
 # Ignore all dynamic/bootstrapped assets in the mpv directory except tracked configurations
 **/mpv/*
