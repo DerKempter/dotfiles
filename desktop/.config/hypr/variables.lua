@@ -7,8 +7,8 @@ return {
 
     -- Apps
     terminal                   = "ghostty",
-    browser                    = "firefox",
-    editor                     = "codium",
+    browser                    = "zen-browser",
+    editor                     = "zed",
     fileExplorer               = "thunar",
     audioSettings              = "pwvucontrol",
 
@@ -48,10 +48,10 @@ return {
     inactiveWindowBorderColour = "rgba(" .. scheme.onSurfaceVariant .. "11)",
 
     -- Misc
-    volumeStep                 = 10,
+    volumeStep                 = 2,
     volumeMax                  = 100,
-    cursorTheme                = "sweet-cursors",
-    cursorSize                 = 24,
+    cursorTheme                = "Bibata-Modern-Ice",
+    cursorSize                 = 22,
     sleepGestureCmd            = "systemctl suspend-then-hibernate",
 
     ------------------
