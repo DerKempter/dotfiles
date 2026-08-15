@@ -13,12 +13,16 @@ $env.N_PREFIX = ($env.HOME | path join ".n")
 
 $env.PATH = (
     $env.PATH
-    | prepend ($env.HOME | path join ".opencode" "bin") # Where 'opencode' lives
-    | prepend ($env.HOME | path join ".local" "bin")    # Where 'n' lives
-    | prepend ($env.N_PREFIX | path join "bin")         # Where 'node' lives
-    | prepend ($env.HOME | path join ".atuin" "bin")    # Where 'atuin' lives
-    | prepend ($env.HOME | path join ".cargo" "bin")    # Where 'cargo' lives
-    | prepend ($env.HOME | path join ".nub" "bin")    # Where 'cargo' lives
+    | split row (char esep)
+    | prepend [
+        ($env.HOME | path join ".opencode" "bin")
+        ($env.HOME | path join ".local" "bin")
+        (if ($env.N_PREFIX? | is-not-empty) { $env.N_PREFIX | path join "bin" } else { null })
+        ($env.HOME | path join ".cargo" "bin")
+        ($env.HOME | path join ".nub" "bin")
+    ]
+    | compact
+    | uniq
 )
 
 # Bun
