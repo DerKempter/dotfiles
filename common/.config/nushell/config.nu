@@ -32,7 +32,10 @@ const ZOXIDE_PATH = ($nu.home-dir | path join ".zoxide.nu")
 source $ZOXIDE_PATH
 
 # Atuin shell history hook
-const ATUIN_PATH = ($nu.config-path | path dirname | path join "hooks" "atuin.nu")
+const ATUIN_PTY_PROXY_PATH = ($nu.home-dir | path join ".local" "share" "atuin" "pty-proxy-init.nu")
+const ATUIN_PATH = ($nu.home-dir | path join ".local" "share" "atuin" "init.nu")
+const ATUIN_COMPLETIONS_PATH = ($nu.config-path | path dirname | path join "hooks" "atuin.nu")
+source $ATUIN_PTY_PROXY_PATH
 source $ATUIN_PATH
 
 # ==============================================================================

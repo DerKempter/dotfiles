@@ -78,3 +78,6 @@ filters = [ "workspace", "directory", "global", "host", "session" ]
 
 [theme]
 name = "catppuccin"
+
+[ai]
+enabled = true

@@ -20,6 +20,7 @@ $env.PATH = (
         (if ($env.N_PREFIX? | is-not-empty) { $env.N_PREFIX | path join "bin" } else { null })
         ($env.HOME | path join ".cargo" "bin")
         ($env.HOME | path join ".nub" "bin")
+        ($env.HOME | path join ".atuin" "bin")
     ]
     | compact
     | uniq
