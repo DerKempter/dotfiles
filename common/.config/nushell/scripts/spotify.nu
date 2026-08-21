@@ -41,6 +41,16 @@ export def search [query: string, --limit (-l): int = 10] {
     }
 }
 
+def spotify_types [] {
+    [
+        { value: "track", description: "Tracks / Songs" }
+        { value: "album", description: "Full Albums" }
+        { value: "artist", description: "Artist Top Tracks / Context" }
+        { value: "playlist", description: "Playlists" }
+    ]
+}
+
+# Interactive fuzzy picker with defensive null handling
 export def pick [
     query: string,
     --type (-t): string@spotify_types = "track",
@@ -76,7 +86,7 @@ export def pick [
                 $item.name
             },
             "playlist" => {
-                let owner = ($item | get -o owner | get -o display_name | default ($item | get -o owner | get -o id | default ""))
+                let owner = (try { $item | get owner | get display_name } catch { "" })
                 if ($owner | is-empty) {
                     $item.name
                 } else {
@@ -101,6 +111,31 @@ export def pick [
         }
         print $"▶ Playing ($type): ($selected.display)"
     }
+}
+
+# Play Liked Songs
+export def liked [--shuffle (-s)] {
+    if $shuffle {
+        spotify_player playback start liked --shuffle
+    } else {
+        spotify_player playback start liked
+    }
+    print "▶ Playing Liked Songs"
+}
+
+# Start Radio based on a track search
+export def radio [query: string] {
+    let res = (do { spotify_player search $query } | complete)
+    if $res.exit_code != 0 { return }
+
+    let track = ($res.stdout | from json | get -o tracks | get -o 0)
+    if ($track | is-empty) {
+        print $"No track found to seed radio from '($query)'"
+        return
+    }
+
+    spotify_player playback start radio --id $track.id track
+    print $"▶ Playing Radio seeded from: ($track.name)"
 }
 
 # Play top match directly or pass -i to pick from results
