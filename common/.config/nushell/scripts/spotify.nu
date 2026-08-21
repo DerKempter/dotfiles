@@ -7,6 +7,92 @@ def spotify_types [] {
     ]
 }
 
+def get-spotify-preset-file [] {
+    "~/.config/spotify_player/presets.json" | path expand
+}
+
+def get-spotify-presets [] {
+    let file = (get-spotify-preset-file)
+    if ($file | path exists) {
+        try {
+            let data = (open $file)
+            if ($data | describe) =~ "record" {
+                $data | transpose name id
+            } else {
+                $data
+            }
+        } catch { [] }
+    } else {
+        []
+    }
+}
+
+# Autocompletion provider that quotes names containing spaces
+def spotify_preset_names [] {
+    get-spotify-presets | each {|it|
+        let n = ($it | get -o name | default "")
+        if ($n | str contains " ") {
+            $"\"($n)\""
+        } else {
+            $n
+        }
+    }
+}
+
+# Play a preset playlist from the local store
+export def "play preset" [
+    name: string@spotify_preset_names,
+    ...rest: string # Catches unquoted trailing words if entered manually
+] {
+    let raw_name = ([$name] | append $rest | str join " ")
+    let target_name = ($raw_name | str trim -c '"' | str trim -c "'" | str lowercase)
+
+    let presets = (get-spotify-presets)
+    let match_item = ($presets | where {|it| ($it.name | str lowercase) == $target_name } | get -o 0)
+
+    if ($match_item | is-empty) {
+        let avail = ($presets | get -o name | default [])
+        if ($avail | is-empty) {
+            print -e "No presets found. Add some with: spotify preset save <name> <id_or_url>"
+        } else {
+            print -e $"Preset '($raw_name)' not found. Available: ($avail | str join ', ')"
+        }
+        return
+    }
+
+    spotify_player playback start context --id $match_item.id playlist
+    print $"▶ Playing preset playlist: ($match_item.name)"
+}
+
+# Helper to save or update preset IDs
+export def "spotify preset save" [
+    name: string,
+    target: string # Accepts raw ID or full Spotify share URL
+] {
+    let file = (get-spotify-preset-file)
+    let parent = ($file | path dirname)
+    if not ($parent | path exists) { mkdir $parent }
+
+    let clean_name = ($name | str trim -c '"' | str trim -c "'")
+    let clean_id = ($target
+        | str replace -r '^.*playlist/' ''
+        | str replace -r '\?.*$' '')
+
+    let current = (get-spotify-presets)
+    let updated = ($current
+        | where name != $clean_name
+        | append { name: $clean_name, id: $clean_id }
+        | sort-by name)
+
+    $updated | to json | save -f $file
+    print $"✓ Saved preset '($clean_name)' -> ($clean_id)"
+}
+
+# Helper to list all saved presets
+export def "spotify preset list" [] {
+    get-spotify-presets
+}
+
 # Search Spotify and return results as a structured Nushell table
 export def search [query: string, --limit (-l): int = 10] {
     let res = (do { spotify_player search $query } | complete)
@@ -54,7 +140,7 @@ export def pick [
 
     let data = ($res.stdout | from json)
     let key = if $type == "track" { "tracks" } else { $"($type)s" }
-    let items = ($data | get -o $key | default [])
+    let items = (try { $data | get $key } catch { [] })
 
     if ($items | is-empty) {
         print $"No ($type)s found for '($query)'"
@@ -64,24 +150,41 @@ export def pick [
     let choices = ($items | first $limit | each {|item|
         let display_str = match $type {
             "track" => {
-                let artists = ($item.artists? | default [] | each {|a| $a.name? | default "" } | str join ", ")
-                let album = ($item.album?.name? | default "-")
+                let artists = (try {
+                    $item | get artists | each {|a| try { $a | get name } catch { "" } } | str join ", "
+                } catch { "" })
+                let album = (try { $item | get album.name } catch { "-" })
                 $"($item.name) — ($artists) [($album)]"
             },
             "album" => {
-                let artists = ($item.artists? | default [] | each {|a| $a.name? | default "" } | str join ", ")
+                let artists = (try {
+                    $item | get artists | each {|a| try { $a | get name } catch { "" } } | str join ", "
+                } catch { "" })
                 $"($item.name) — ($artists)"
             },
             "artist" => {
                 $item.name
             },
             "playlist" => {
-                let owner = ($item.owner?.display_name? | default ($item.owner?.id? | default ""))
-                if ($owner | is-empty) {
-                    $item.name
+                let owner_obj = (try { $item | get owner } catch { {} })
+                let d_name = (try { $owner_obj | get display_name } catch { "" })
+                let o_id = (try { $owner_obj | get id } catch { "" })
+                let owner = (if ($d_name | is-not-empty) { $d_name } else if ($o_id | is-not-empty) { $o_id } else { "" })
+
+                let total = (try { $item | get tracks.total } catch { 0 })
+                let desc = (try { $item | get description } catch { "" }) | str trim
+
+                let owner_part = if ($owner | is-not-empty) { $" (by ($owner))" } else { "" }
+                let count_part = if ($total | into int) > 0 { $" [($total) tracks]" } else { "" }
+                let desc_part = if ($desc | is-not-empty) {
+                    # Strip any HTML anchor/formatting tags returned by Spotify
+                    let clean = ($desc | str replace -a -r '<[^>]*>' '')
+                    $" — \"($clean)\""
                 } else {
-                    $"($item.name) (by ($owner))"
+                    ""
                 }
+
+                $"($item.name)($owner_part)($count_part)($desc_part)"
             },
             _ => $item.name
         }
