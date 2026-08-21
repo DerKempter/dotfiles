@@ -41,15 +41,6 @@ export def search [query: string, --limit (-l): int = 10] {
     }
 }
 
-def spotify_types [] {
-    [
-        { value: "track", description: "Tracks / Songs" }
-        { value: "album", description: "Full Albums" }
-        { value: "artist", description: "Artist Top Tracks / Context" }
-        { value: "playlist", description: "Playlists" }
-    ]
-}
-
 # Interactive fuzzy picker with defensive null handling
 export def pick [
     query: string,
