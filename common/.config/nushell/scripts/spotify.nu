@@ -1,47 +1,10 @@
-# Instant playback of the top search match across tracks, albums, artists, or playlists
-export def play [
-    query: string,
-    --type (-t): string = "track" # track, album, artist, playlist
-] {
-    let res = (do { spotify_player search $query } | complete)
-    if $res.exit_code != 0 {
-        print -e $"Error querying Spotify API"
-        return
-    }
-
-    let data = ($res.stdout | from json)
-
-    match $type {
-        "track" => {
-            let item = ($data | get -o tracks | get -o 0)
-            if ($item | is-empty) { print $"No track found for '($query)'"; return }
-            let artist = ($item.artists | each {|a| $a.name } | str join ", ")
-            spotify_player playback start track --id $item.id
-            print $"▶ Playing track: ($item.name) — ($artist)"
-        },
-        "album" => {
-            let item = ($data | get -o albums | get -o 0)
-            if ($item | is-empty) { print $"No album found for '($query)'"; return }
-            let artist = ($item.artists | each {|a| $a.name } | str join ", ")
-            spotify_player playback start album --id $item.id
-            print $"▶ Playing album: ($item.name) — ($artist)"
-        },
-        "artist" => {
-            let item = ($data | get -o artists | get -o 0)
-            if ($item | is-empty) { print $"No artist found for '($query)'"; return }
-            spotify_player playback start artist --id $item.id
-            print $"▶ Playing artist: ($item.name)"
-        },
-        "playlist" => {
-            let item = ($data | get -o playlists | get -o 0)
-            if ($item | is-empty) { print $"No playlist found for '($query)'"; return }
-            spotify_player playback start playlist --id $item.id
-            print $"▶ Playing playlist: ($item.name)"
-        },
-        _ => {
-            print -e $"Invalid type '($type)'. Choose from: track, album, artist, playlist"
-        }
-    }
+def spotify_types [] {
+    [
+        { value: "track", description: "Search and play a single track" }
+        { value: "album", description: "Play an entire album" }
+        { value: "artist", description: "Play top tracks by an artist" }
+        { value: "playlist", description: "Search and play a playlist" }
+    ]
 }
 
 # Search Spotify and return results as a structured Nushell table
@@ -78,28 +41,113 @@ export def search [query: string, --limit (-l): int = 10] {
     }
 }
 
-# Interactive terminal picker using Nushell's built-in interactive list
-export def pick [query: string] {
+export def pick [
+    query: string,
+    --type (-t): string@spotify_types = "track",
+    --limit (-l): int = 25
+] {
     let res = (do { spotify_player search $query } | complete)
-    if $res.exit_code != 0 { return }
-
-    let tracks = ($res.stdout | from json | get -o tracks | default [])
-    if ($tracks | is-empty) {
-        print $"No tracks found for '($query)'"
+    if $res.exit_code != 0 {
+        print -e "Error querying Spotify API"
         return
     }
 
-    let choices = ($tracks | each {|t|
-        let art = ($t.artists | each {|a| $a.name } | str join ", ")
+    let data = ($res.stdout | from json)
+    let key = if $type == "track" { "tracks" } else { $"($type)s" }
+    let items = ($data | get -o $key | default [])
+
+    if ($items | is-empty) {
+        print $"No ($type)s found for '($query)'"
+        return
+    }
+
+    let choices = ($items | first $limit | each {|item|
+        let display_str = match $type {
+            "track" => {
+                let artist = ($item | get -o artists | default [] | each {|a| $a.name } | str join ", ")
+                let album = ($item | get -o album | get -o name | default "-")
+                $"($item.name) — ($artist) [($album)]"
+            },
+            "album" => {
+                let artist = ($item | get -o artists | default [] | each {|a| $a.name } | str join ", ")
+                $"($item.name) — ($artist)"
+            },
+            "artist" => {
+                $item.name
+            },
+            "playlist" => {
+                let owner = ($item | get -o owner | get -o display_name | default ($item | get -o owner | get -o id | default ""))
+                if ($owner | is-empty) {
+                    $item.name
+                } else {
+                    $"($item.name) (by ($owner))"
+                }
+            },
+            _ => $item.name
+        }
+
         {
-            value: $t.id,
-            display: $"($t.name) — ($art) [($t.album.name)]"
+            value: $item.id,
+            display: $display_str
         }
     })
 
-    let selected = ($choices | input list --display display "Select track to play:")
+    let selected = ($choices | input list --display display $"Select ($type) to play:")
     if ($selected | is-not-empty) {
-        spotify_player playback start track --id $selected.value
+        if $type == "track" {
+            spotify_player playback start track --id $selected.value
+        } else {
+            spotify_player playback start context --id $selected.value $type
+        }
+        print $"▶ Playing ($type): ($selected.display)"
+    }
+}
+
+# Play top match directly or pass -i to pick from results
+export def play [
+    query: string,
+    --type (-t): string@spotify_types = "track",
+    --interactive (-i)
+] {
+    if $interactive {
+        pick $query -t $type
+        return
+    }
+
+    let res = (do { spotify_player search $query } | complete)
+    if $res.exit_code != 0 {
+        print -e "Error querying Spotify API"
+        return
+    }
+
+    let data = ($res.stdout | from json)
+
+    match $type {
+        "track" => {
+            let item = ($data | get -o tracks | get -o 0)
+            if ($item | is-empty) { print $"No track found for '($query)'"; return }
+            let artist = ($item.artists | each {|a| $a.name } | str join ", ")
+            spotify_player playback start track --id $item.id
+            print $"▶ Playing track: ($item.name) — ($artist)"
+        },
+        "album" | "artist" | "playlist" => {
+            let key = $"($type)s"
+            let item = ($data | get -o $key | get -o 0)
+            if ($item | is-empty) { print $"No ($type) found for '($query)'"; return }
+
+            let label = if $type == "album" {
+                let artist = ($item.artists | each {|a| $a.name } | str join ", ")
+                $"($item.name) — ($artist)"
+            } else {
+                $item.name
+            }
+
+            spotify_player playback start context --id $item.id $type
+            print $"▶ Playing ($type): ($label)"
+        },
+        _ => {
+            print -e $"Invalid type '($type)'. Choose from: track, album, artist, playlist"
+        }
     }
 }
 
