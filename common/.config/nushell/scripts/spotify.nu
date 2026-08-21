@@ -79,8 +79,9 @@ export def "spotify preset save" [
         | str replace -r '\?.*$' '')
 
     let current = (get-spotify-presets)
+    let clean_lower = ($clean_name | str lowercase)
     let updated = ($current
-        | where name != $clean_name
+        | where {|it| ($it.name | str lowercase) != $clean_lower }
         | append { name: $clean_name, id: $clean_id }
         | sort-by name)
 
