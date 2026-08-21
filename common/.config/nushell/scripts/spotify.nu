@@ -41,7 +41,6 @@ export def search [query: string, --limit (-l): int = 10] {
     }
 }
 
-# Interactive fuzzy picker with defensive null handling
 export def pick [
     query: string,
     --type (-t): string@spotify_types = "track",
@@ -65,19 +64,19 @@ export def pick [
     let choices = ($items | first $limit | each {|item|
         let display_str = match $type {
             "track" => {
-                let artist = ($item | get -o artists | default [] | each {|a| $a.name } | str join ", ")
-                let album = ($item | get -o album | get -o name | default "-")
-                $"($item.name) — ($artist) [($album)]"
+                let artists = ($item.artists? | default [] | each {|a| $a.name? | default "" } | str join ", ")
+                let album = ($item.album?.name? | default "-")
+                $"($item.name) — ($artists) [($album)]"
             },
             "album" => {
-                let artist = ($item | get -o artists | default [] | each {|a| $a.name } | str join ", ")
-                $"($item.name) — ($artist)"
+                let artists = ($item.artists? | default [] | each {|a| $a.name? | default "" } | str join ", ")
+                $"($item.name) — ($artists)"
             },
             "artist" => {
                 $item.name
             },
             "playlist" => {
-                let owner = (try { $item | get owner | get display_name } catch { "" })
+                let owner = ($item.owner?.display_name? | default ($item.owner?.id? | default ""))
                 if ($owner | is-empty) {
                     $item.name
                 } else {
