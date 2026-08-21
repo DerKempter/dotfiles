@@ -1,0 +1,23 @@
+client_id = "14aa2605ffb4486ab156dd93efeee543"
+
+# MPRIS & Notifications
+enable_media_control = true
+enable_notify = true
+
+# Cover Art (Ghostty / Kitty graphics protocol)
+enable_cover_image_cache = true
+cover_img_length = 0        # 0 auto-calculates aspect ratio to prevent distortion
+cover_img_width = 6         # Height in terminal rows
+
+# Streaming & Playback
+audio_backend = "pulseaudio"
+enable_streaming = "Always"
+pause_on_startup = false
+border_type = "Rounded"
+progress_bar_type = "Line"
+
+[device]
+name = "spotify-player"
+device_type = "speaker"
+bitrate = 320
+audio_cache = false
