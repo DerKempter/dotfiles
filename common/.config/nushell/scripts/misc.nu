@@ -58,48 +58,68 @@ export def fix-anims [] {
 }
 
 # Download, extract, and execute the installation script for Aerion Email Client automatically
-export def update-aerion [] {
-    let url = "https://github.com/hkdb/aerion/releases/latest/download/aerion-linux-amd64.tar.gz"
+export def update-aerion [
+    --pre-release (-p) # Pass this flag to include pre-releases/testing builds
+] {
+    let repo = "hkdb/aerion"
     let temp_dir = (mktemp -d -t "aerion-upgrade.XXXXXX")
     let archive_path = ($temp_dir | path join "aerion.tar.gz")
-    
-    print $"(ansi green)Downloading latest Aerion release from GitHub...(ansi reset)"
+
+    let download_url = if $pre_release {
+        print $"(ansi yellow)Fetching latest pre-release metadata from GitHub...(ansi reset)"
+        # Fetch releases list from GitHub API (sorted descending by creation date)
+        let releases = (http get $"https://api.github.com/repos/($repo)/releases")
+        if ($releases | is-empty) {
+            rm -rf $temp_dir
+            error make { msg: "No releases found on GitHub." }
+        }
+
+        # The first release in the array is the most recent (stable or pre-release)
+        let latest_release = ($releases | first)
+        let asset = ($latest_release.assets | where name == "aerion-linux-amd64.tar.gz" | first)
+
+        if ($asset | is-empty) {
+            rm -rf $temp_dir
+            error make { msg: $"Could not find aerion-linux-amd64.tar.gz in ($latest_release.tag_name)" }
+        }
+
+        print $"(ansi cyan)Found build: ($latest_release.tag_name) \(Pre-release: ($latest_release.prerelease)\)(ansi reset)"
+        $asset.browser_download_url
+    } else {
+        $"https://github.com/($repo)/releases/latest/download/aerion-linux-amd64.tar.gz"
+    }
+
+    print $"(ansi green)Downloading Aerion archive...(ansi reset)"
     try {
-        http get $url | save -f $archive_path
+        http get $download_url | save -f $archive_path
     } catch {
         rm -rf $temp_dir
-        nu-fail "Failed to download Aerion archive. Verify your internet connection." --fatal
-        return
+        error make { msg: "Failed to download Aerion archive. Verify your internet connection." }
     }
 
     print $"(ansi green)Extracting archive...(ansi reset)"
     tar -xzf $archive_path -C $temp_dir
 
-    # Find the install.sh script anywhere inside the extracted files
     let installer_paths = (glob $"($temp_dir)/**/install.sh")
     if ($installer_paths | is-empty) {
         rm -rf $temp_dir
-        nu-fail "install.sh not found in the extracted archive." --fatal
-        return
+        error make { msg: "install.sh not found in the extracted archive." }
     }
     let installer = ($installer_paths | first)
     let install_dir = ($installer | path dirname)
 
-    print $"(ansi green)Running installer script... (ansi reset)"
-    # Save current directory to change back to before cleanup
+    print $"(ansi green)Running installer script...(ansi reset)"
     let old_pwd = $env.PWD
     cd $install_dir
-    
-    # Run the installer interactively (simply type 1 or 2 at the prompt)
+
     bash ./install.sh
-    
-    # Return to original directory so we are not inside the temp folder during cleanup
+
     cd $old_pwd
 
     print $"(ansi green)Cleaning up temporary files...(ansi reset)"
     rm -rf $temp_dir
-    
-    print $"(ansi green)🎉 Aerion has been upgraded successfully!(ansi reset)"
+
+    print $"(ansi green)🎉 Aerion update workflow completed!(ansi reset)"
 }
 
 # Helper to determine fallback TERM when running in Ghostty to avoid remote/container terminfo missing issues
@@ -118,11 +138,11 @@ export def rgt [
 ] {
     let config_args = (if ($env.RIPGREP_CONFIG_PATH? | is-not-empty) { [] } else { ["--hidden"] })
     let run = (rg --json ...$config_args $pattern ...$args | complete)
-    
+
     if $run.exit_code == 1 and $run.stdout == "" {
         return []
     }
-    
+
     if $run.exit_code != 0 {
         let err_msg = ($run.stderr | str trim)
         let display_err = if ($err_msg | is-empty) { "ripgrep search failed" } else { $err_msg }
