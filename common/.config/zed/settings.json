@@ -65,7 +65,8 @@
 		}
 	},
 	"edit_predictions": {
-		"provider": "open_ai_compatible_api",
+		"allow_data_collection": "no",
+  "provider": "open_ai_compatible_api",
 		"open_ai_compatible_api": {
 			"api_url": "http://localhost:13305/v1",
 			"model": "qwen3-tk-4b-FLM",
@@ -77,8 +78,8 @@
 	"agent": {
 		"dock": "right",
 		"default_model": {
-			"provider": "lemonade",
-			"model": "Qwen3-Coder-30B-A3B-Instruct-GGUF"
+			"provider": "m-Result Hetzner",
+			"model": "hosted_vllm/gemma-4-26b-a4b"
 		},
 		"commit_message_model": {
 			"provider": "lemonade",
@@ -88,36 +89,26 @@
 	},
 	"language_models": {
 		"openai_compatible": {
-			"lemonade": {
-				"api_url": "http://localhost:13305/api/v1",
-				"available_models": [
-					{
-						"name": "Devstral-Small-2507-GGUF",
-						"max_tokens": 32768
-					},
-					{
-						"name": "Qwen3-Coder-30B-A3B-Instruct-GGUF",
-						"max_tokens": 32768
-					},
-					{
-						"name": "Qwen3-Coder-Next-GGUF",
-						"max_tokens": 32768
-					},
-					{
-						"name": "gpt-oss-20b-mxfp4-GGUF",
-						"max_tokens": 32768
-					},
-					{
-						"name": "user.QwenCoder2.5-1.5B",
-						"max_tokens": 32768
-					},
-					{
-						"name": "YOUR_CUSTOM_MODEL_NAME",
-						"display_name": "Custom Model Template",
-						"max_tokens": 32768
-					}
-				]
-			}
+			"m-Result Hetzner": {
+    "api_url": "http://142.132.129.229:8000/v1",
+    "available_models": [
+     {
+      "name": "hosted_vllm/gemma-4-26b-a4b",
+      "max_tokens": 200000,
+      "max_output_tokens": 32000,
+      "max_completion_tokens": 200000,
+      "capabilities": {
+       "tools": true,
+       "images": false,
+       "parallel_tool_calls": false,
+       "prompt_cache_key": false,
+       "chat_completions": true,
+       "interleaved_reasoning": false,
+       "max_tokens_parameter": false
+      }
+     }
+    ]
+   }
 		}
 	},
 	"indent_guides": {
