@@ -1,7 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-$directory$hostname$jobs$status$fill$cmd_duration$battery$memory_usage${custom.disk_usage}$os$sudo$docker_context
+$directory$hostname$jobs$status${custom.spotify}$fill$cmd_duration$battery$memory_usage${custom.disk_usage}$os$sudo$docker_context
 $git_branch$git_status$git_commit$git_state${custom.git_identity}$nodejs$dotnet$python$kubernetes
 $character"""
 
@@ -139,6 +139,13 @@ when = "git rev-parse --is-inside-work-tree 2> /dev/null"
 shell = ["sh"]
 style = "bg:rosewater fg:base"
 format = "([](rosewater)[ $output]($style)[](rosewater) )"
+
+[custom.spotify]
+command = "title=$(playerctl --player=spotify_player,spotify,%any metadata --format '{{ artist }} - {{ title }}' 2>/dev/null); if [ ${#title} -gt 35 ]; then echo \"$(echo \"$title\" | cut -c 1-32)…\"; else echo \"$title\"; fi"
+when = 'test "$(playerctl --player=spotify_player,spotify,%any status 2>/dev/null)" = "Playing"'
+shell = ["sh"]
+style = "bg:green fg:base"
+format = "([](green)[󰓇 $output]($style)[](green) )"
 
 [dotnet]
 symbol = "󰪮 "
