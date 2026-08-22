@@ -1,5 +1,6 @@
 {
-	"terminal": {
+  "diff_view_style": "split",
+  "terminal": {
 		"shell": {
 			"program": "/usr/bin/nu"
 		}
@@ -64,28 +65,14 @@
 			"type": "registry"
 		}
 	},
-	"edit_predictions": {
-		"allow_data_collection": "no",
-  "provider": "open_ai_compatible_api",
-		"open_ai_compatible_api": {
-			"api_url": "http://localhost:13305/v1",
-			"model": "qwen3-tk-4b-FLM",
-			"prompt_format": "qwen",
-			"max_output_tokens": 128
-		},
-		"mode": "subtle"
-	},
 	"agent": {
 		"dock": "right",
 		"default_model": {
 			"provider": "m-Result Hetzner",
 			"model": "hosted_vllm/gemma-4-26b-a4b"
 		},
-		"commit_message_model": {
-			"provider": "lemonade",
-			"model": "Qwen3-Coder-30B-A3B-Instruct-GGUF"
-		},
-		"show_turn_stats": true
+		"show_turn_stats": true,
+		"commit_message_instructions": "Create a concise commit message based on the diff. Use Conventional Commit Syntax. Try to put the changed component in the parentheses",
 	},
 	"language_models": {
 		"openai_compatible": {
