@@ -13,6 +13,16 @@
    "imports": [
       "config.json"
    ],
+   "font": {
+      "rendering": "qt",
+      "normal": {}
+   },
+   "launcher_window": {
+      "opacity": 1,
+      "client_side_decorations": {
+         "enabled": true
+      }
+   },
    "favorites": [
       "applications:nl.jknaapen.fladder",
       "applications:vesktop",
