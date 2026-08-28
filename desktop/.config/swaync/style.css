@@ -1,0 +1,65 @@
+@import "colors.css";
+
+* {
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", sans-serif;
+  font-size: 13px;
+}
+
+.control-center {
+  background: alpha(@surface_container, 0.90);
+  border: 1px solid alpha(@outline_variant, 0.3);
+  border-radius: 15px;
+  padding: 14px;
+  color: @on_surface;
+}
+
+.notification-row {
+  outline: none;
+  margin: 6px 0;
+}
+
+.notification {
+  background: alpha(@surface_container_high, 0.85);
+  border: 1px solid alpha(@outline_variant, 0.2);
+  border-radius: 12px;
+  padding: 10px;
+  color: @on_surface;
+}
+
+.notification-content {
+  margin-top: 4px;
+}
+
+.close-button {
+  background: alpha(@surface_variant, 0.5);
+  color: @on_surface;
+  border-radius: 100%;
+  padding: 2px;
+}
+
+.widget-title {
+  color: @primary;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.widget-title > button {
+  background: alpha(@surface_container_high, 0.8);
+  color: @on_surface;
+  border-radius: 10px;
+  padding: 4px 10px;
+}
+
+.widget-dnd {
+  margin: 8px 0;
+  color: @on_surface;
+}
+
+.widget-mpris {
+  background: alpha(@surface_container_high, 0.8);
+  border-radius: 12px;
+  padding: 10px;
+  margin: 8px 0;
+  color: @on_surface;
+}

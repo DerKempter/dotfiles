@@ -1,0 +1,104 @@
+{
+    "layer": "top",
+    "position": "top",
+    "margin-top": 10,
+    "margin-left": 10,
+    "margin-right": 10,
+    "height": 38,
+    "spacing": 8,
+
+    "modules-left": [
+        "hyprland/workspaces",
+        "hyprland/window"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "pulseaudio",
+        "network",
+        "bluetooth",
+        "battery",
+        "tray",
+        "custom/notification"
+    ],
+
+    "hyprland/workspaces": {
+        "disable-scroll": false,
+        "all-outputs": true,
+        "format": "{name}",
+        "on-click": "activate"
+    },
+
+    "hyprland/window": {
+        "max-length": 50,
+        "separate-outputs": true
+    },
+
+    "clock": {
+        "format": " {:%H:%M}",
+        "format-alt": " {:%Y-%m-%d   %H:%M:%S}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": " Muted",
+        "format-icons": {
+            "default": ["", "", ""]
+        },
+        "on-click": "pwvucontrol"
+    },
+
+    "network": {
+        "format-wifi": " {essid}",
+        "format-ethernet": "󰈀 {ipaddr}",
+        "format-disconnected": "󰤭 Disconnected",
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
+    },
+
+    "bluetooth": {
+        "format": " {status}",
+        "format-connected": " {device_alias}",
+        "format-connected-battery": " {device_alias} {device_battery_percentage}%",
+        "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+        "on-click": "blueman-manager"
+    },
+
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+
+    "tray": {
+        "icon-size": 18,
+        "spacing": 10
+    },
+
+    "custom/notification": {
+        "tooltip": false,
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "<span foreground='red'><sup></sup></span>",
+            "none": "",
+            "dnd-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-none": "",
+            "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "inhibited-none": "",
+            "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-inhibited-none": ""
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    }
+}

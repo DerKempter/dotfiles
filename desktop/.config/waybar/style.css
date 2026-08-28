@@ -1,0 +1,62 @@
+@import "colors.css";
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: transparent;
+    color: @on_surface;
+}
+
+.modules-left, .modules-center, .modules-right {
+    background-color: alpha(@surface_container, 0.85);
+    border: 1px solid alpha(@outline_variant, 0.25);
+    border-radius: 15px;
+    padding: 2px 10px;
+}
+
+#workspaces button {
+    padding: 0 6px;
+    color: @on_surface_variant;
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+#workspaces button.active {
+    color: @on_primary;
+    background-color: @primary;
+    font-weight: bold;
+}
+
+#workspaces button.urgent {
+    background-color: @error;
+    color: @on_error;
+}
+
+#workspaces button:hover {
+    background-color: alpha(@primary, 0.3);
+    color: @on_surface;
+}
+
+#clock, #pulseaudio, #network, #bluetooth, #battery, #tray, #custom-notification {
+    padding: 0 8px;
+    color: @on_surface;
+}
+
+#pulseaudio.muted {
+    color: @outline;
+}
+
+#battery.warning {
+    color: @tertiary;
+}
+
+#battery.critical {
+    color: @error;
+}
