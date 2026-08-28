@@ -1,62 +1,168 @@
 @import "colors.css";
 
+/* Base Waybar Reset */
 * {
     border: none;
     border-radius: 0;
     font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", sans-serif;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 700;
     min-height: 0;
 }
 
 window#waybar {
     background-color: transparent;
+    color: #cdd6f4;
+}
+
+/* Individual Pill Islands */
+#custom-os,
+#workspaces,
+#window,
+#mpris,
+#pulseaudio,
+#network,
+#bluetooth,
+#battery,
+#clock,
+#tray,
+#custom-notification {
+    background-color: alpha(@surface_container, 0.85);
+    border: 1px solid alpha(@outline_variant, 0.35);
+    border-radius: 12px;
+    padding: 2px 12px;
+    margin: 2px 2px;
     color: @on_surface;
 }
 
-.modules-left, .modules-center, .modules-right {
-    background-color: alpha(@surface_container, 0.85);
-    border: 1px solid alpha(@outline_variant, 0.25);
-    border-radius: 15px;
+/* OS / Distro Pill (Matches Starship [os] bg:pink fg:base) */
+#custom-os {
+    background-color: #f5c2e7;
+    color: #11111b;
     padding: 2px 10px;
+    font-size: 15px;
+}
+
+/* Workspaces Pill (Matches Starship [directory] bg:teal fg:base) */
+#workspaces {
+    padding: 2px 4px;
 }
 
 #workspaces button {
-    padding: 0 6px;
+    padding: 0 8px;
+    margin: 2px 2px;
     color: @on_surface_variant;
-    border-radius: 10px;
-    transition: all 0.2s ease-in-out;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #workspaces button.active {
-    color: @on_primary;
-    background-color: @primary;
-    font-weight: bold;
-}
-
-#workspaces button.urgent {
-    background-color: @error;
-    color: @on_error;
+    background-color: #94e2d5;
+    color: #11111b;
+    font-weight: 800;
 }
 
 #workspaces button:hover {
-    background-color: alpha(@primary, 0.3);
-    color: @on_surface;
+    background-color: alpha(#94e2d5, 0.3);
+    color: #cdd6f4;
 }
 
-#clock, #pulseaudio, #network, #bluetooth, #battery, #tray, #custom-notification {
-    padding: 0 8px;
-    color: @on_surface;
+#workspaces button.urgent {
+    background-color: #f38ba8;
+    color: #11111b;
+}
+
+/* Window Title Pill */
+#window {
+    font-weight: 500;
+    color: @on_surface_variant;
+}
+
+window#waybar.empty #window {
+    background-color: transparent;
+    border: none;
+}
+
+/* Center Media Pill (Matches Starship [custom.spotify] bg:green fg:base) */
+#mpris {
+    background-color: #a6e3a1;
+    color: #11111b;
+    padding: 2px 14px;
+    font-weight: 700;
+}
+
+/* Right Section Pills */
+
+/* Audio Pill (Sky Accent) */
+#pulseaudio {
+    background-color: alpha(@surface_container, 0.85);
+    color: #89dceb;
 }
 
 #pulseaudio.muted {
-    color: @outline;
+    color: #6c7086;
 }
 
-#battery.warning {
-    color: @tertiary;
+/* Network Pill (Blue Accent) */
+#network {
+    color: #89b4fa;
 }
 
-#battery.critical {
-    color: @error;
+#network.disconnected {
+    color: #f38ba8;
+}
+
+/* Bluetooth Pill (Lavender Accent) */
+#bluetooth {
+    color: #b4befe;
+}
+
+/* Battery Pill (Dynamic colors matching Starship battery display) */
+#battery {
+    color: #a6e3a1;
+}
+
+#battery.charging {
+    color: #94e2d5;
+}
+
+#battery.warning:not(.charging) {
+    background-color: #fab387;
+    color: #11111b;
+}
+
+#battery.critical:not(.charging) {
+    background-color: #eba0ac;
+    color: #11111b;
+    animation-name: blink;
+    animation-duration: 0.8s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    to {
+        background-color: #f38ba8;
+        color: #11111b;
+    }
+}
+
+/* Clock Pill (Matches Starship [cmd_duration] bg:peach fg:base) */
+#clock {
+    background-color: #fab387;
+    color: #11111b;
+    font-weight: 800;
+}
+
+/* Notification Pill (Matches Starship [character] / [jobs]) */
+#custom-notification {
+    background-color: alpha(@surface_container, 0.85);
+    color: #f5c2e7;
+    padding: 2px 10px;
+}
+
+/* System Tray */
+#tray {
+    padding: 2px 8px;
 }

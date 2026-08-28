@@ -10,7 +10,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
 
     -- Wallpaper, Idle & Notification daemons
-    hl.exec_cmd("swww-daemon")
+    hl.exec_cmd("awww-daemon || swww-daemon")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("swaync")
     hl.exec_cmd("waybar")

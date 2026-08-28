@@ -10,12 +10,22 @@ export def wallpaper [img_path: path] {
     mkdir $"($env.HOME)/.cache"
     ln -sf $full_path $"($env.HOME)/.cache/current_wallpaper"
 
-    # 2. Update wallpaper with smooth transition
-    if (which swww | is-empty) == false {
+    # 2. Update wallpaper with smooth transition (supports awww or swww)
+    if (which awww | is-empty) == false {
+        if (pgrep -x awww-daemon | is-empty) {
+            job spawn { awww-daemon }
+            sleep 200ms
+        }
+        awww img $full_path --transition-type wave --transition-fps 144 --transition-duration 1.5
+    } else if (which swww | is-empty) == false {
+        if (pgrep -x swww-daemon | is-empty) {
+            job spawn { swww-daemon }
+            sleep 200ms
+        }
         swww img $full_path --transition-type wave --transition-fps 144 --transition-duration 1.5
     }
 
-    # 3. Extract Material 3 colors with Matugen (triggers post_process hooks for Waybar, SwayNC, Hyprland, Ghostty)
+    # 3. Extract Material 3 colors with Matugen
     if (which matugen | is-empty) == false {
         matugen image $full_path
         print $"✓ Dynamic theme generated and applied from ($full_path | path basename)"

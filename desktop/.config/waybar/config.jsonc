@@ -1,60 +1,88 @@
 {
     "layer": "top",
     "position": "top",
-    "margin-top": 10,
-    "margin-left": 10,
-    "margin-right": 10,
-    "height": 38,
-    "spacing": 8,
+    "margin-top": 8,
+    "margin-left": 12,
+    "margin-right": 12,
+    "height": 34,
+    "spacing": 6,
 
     "modules-left": [
+        "custom/os",
         "hyprland/workspaces",
         "hyprland/window"
     ],
     "modules-center": [
-        "clock"
+        "mpris"
     ],
     "modules-right": [
         "pulseaudio",
         "network",
         "bluetooth",
         "battery",
+        "clock",
         "tray",
         "custom/notification"
     ],
 
+    "custom/os": {
+        "format": " ",
+        "tooltip": false,
+        "on-click": "vicinae toggle"
+    },
+
     "hyprland/workspaces": {
         "disable-scroll": false,
         "all-outputs": true,
+        "active-only": false,
         "format": "{name}",
         "on-click": "activate"
     },
 
     "hyprland/window": {
-        "max-length": 50,
+        "max-length": 35,
         "separate-outputs": true
+    },
+
+    "mpris": {
+        "format": "󱳇 {player_icon} {title} - {artist}",
+        "format-paused": "󱳇 {status_icon} <i>{title} - {artist}</i>",
+        "player-icons": {
+            "default": "▶",
+            "spotify": "",
+            "spotify_player": "",
+            "mpv": ""
+        },
+        "status-icons": {
+            "paused": "⏸"
+        },
+        "max-length": 45,
+        "tooltip-format": "{player} ({status}): {title} - {artist} [{album}]",
+        "on-click": "playerctl play-pause",
+        "on-click-right": "playerctl next"
     },
 
     "clock": {
         "format": " {:%H:%M}",
-        "format-alt": " {:%Y-%m-%d   %H:%M:%S}",
+        "format-alt": " {:%a, %d %b   %H:%M}",
         "tooltip-format": "<tt><small>{calendar}</small></tt>"
     },
 
     "pulseaudio": {
         "format": "{icon} {volume}%",
-        "format-muted": " Muted",
+        "format-muted": "󰝟 Muted",
         "format-icons": {
-            "default": ["", "", ""]
+            "default": ["󰕿", "󰖀", "󰕾"]
         },
-        "on-click": "pwvucontrol"
+        "on-click": "pwvucontrol",
+        "scroll-step": 2
     },
 
     "network": {
         "format-wifi": " {essid}",
         "format-ethernet": "󰈀 {ipaddr}",
         "format-disconnected": "󰤭 Disconnected",
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n󰅃 {bandwidthUpBytes}  󰅀 {bandwidthDownBytes}"
     },
 
     "bluetooth": {
@@ -77,21 +105,21 @@
     },
 
     "tray": {
-        "icon-size": 18,
-        "spacing": 10
+        "icon-size": 16,
+        "spacing": 8
     },
 
     "custom/notification": {
         "tooltip": false,
         "format": "{icon}",
         "format-icons": {
-            "notification": "<span foreground='red'><sup></sup></span>",
+            "notification": "<span foreground='#f38ba8'><sup></sup></span>",
             "none": "",
-            "dnd-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-notification": "<span foreground='#f38ba8'><sup></sup></span>",
             "dnd-none": "",
-            "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "inhibited-notification": "<span foreground='#f38ba8'><sup></sup></span>",
             "inhibited-none": "",
-            "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-inhibited-notification": "<span foreground='#f38ba8'><sup></sup></span>",
             "dnd-inhibited-none": ""
         },
         "return-type": "json",
