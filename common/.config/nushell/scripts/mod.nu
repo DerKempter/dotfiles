@@ -10,3 +10,4 @@ export use test-speed.nu *
 export use yazi.nu *
 export use setup_mpv.nu setup-mpv
 export use spotify.nu *
+export use desktop.nu *
