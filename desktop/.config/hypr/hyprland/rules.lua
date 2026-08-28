@@ -214,5 +214,8 @@ hl.layer_rule({ match = { namespace = "wayfreeze" }, animation = "fade" })      
 hl.layer_rule({ match = { namespace = "launcher" }, animation = "popin 80%", blur = true }) -- Fuzzel
 
 -- Shell
-hl.layer_rule({ match = { namespace = "caelestia-(border-exclusion|area-picker)" }, no_anim = true })
-hl.layer_rule({ match = { namespace = "caelestia-(drawers|background)" }, animation = "fade" })
+-- hl.layer_rule({ match = { namespace = "caelestia-(border-exclusion|area-picker)" }, no_anim = true })
+-- hl.layer_rule({ match = { namespace = "caelestia-(drawers|background)" }, animation = "fade" })
+hl.layer_rule({ match = { namespace = "waybar" }, blur = true })
+hl.layer_rule({ match = { namespace = "swaync-control-center" }, blur = true })
+hl.layer_rule({ match = { namespace = "swaync-notification-window" }, blur = true })

@@ -2,13 +2,18 @@ local vars = require("variables")
 local fn   = require("utils.functions")
 
 hl.on("hyprland.start", function()
-    -- Keyring and auth
+    -- Keyring daemon
     hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
-    hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 
     -- Clipboard history
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
+
+    -- Wallpaper, Idle & Notification daemons
+    hl.exec_cmd("swww-daemon")
+    hl.exec_cmd("hypridle")
+    hl.exec_cmd("swaync")
+    hl.exec_cmd("waybar")
 
     -- Vicinae launcher daemon
     hl.exec_cmd("vicinae server")
@@ -27,9 +32,6 @@ hl.on("hyprland.start", function()
 
     -- Forward bluetooth media commands to MPRIS
     hl.exec_cmd("mpris-proxy")
-
-    -- Start shell
-    hl.exec_cmd("caelestia shell -d")
 end)
 
 -- Resizer listeners

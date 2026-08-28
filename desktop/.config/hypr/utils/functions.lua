@@ -217,8 +217,9 @@ local function load_toggle_config()
         -- Invalid cli.json: notify and fall back to defaults.
         -- conf_or_error holds the parse error (string) or a non-table value on success.
         local reason = recognized and "Expected a JSON object" or tostring(conf_or_error):gsub("^.-:%d+: ", "")
-        hl.exec_cmd("caelestia shell toaster error " ..
-            shell_join({ "Failed to parse CLI config", reason }) .. " error")
+        -- In desktop/.config/hypr/utils/functions.lua (around line 220):
+        hl.exec_cmd("notify-send -u critical 'Config Error' " .. shell_join({ reason }))
+
     end
 
     return config
