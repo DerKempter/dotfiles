@@ -110,7 +110,6 @@ local function default_config()
             spotify = {
                 enable  = true,
                 match   = { { class = "Spotify" }, { initial_title = "Spotify" }, { initial_title = "Spotify Free" } },
-                command = { "spotify" },
                 move    = true,
             },
             feishin = { enable = true, match = { { class = "feishin" } }, move = true },
