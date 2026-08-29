@@ -20,7 +20,6 @@
         "pulseaudio",
         "network",
         "bluetooth",
-        "battery",
         "clock",
         "tray",
         "custom/notification"
@@ -66,7 +65,8 @@
     "clock": {
         "format": " {:%H:%M}",
         "format-alt": " {:%a, %d %b   %H:%M}",
-        "tooltip-format": "<tt><small>{calendar}</small></tt>"
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "on-click": "swaync-client -t -sw"
     },
 
     "pulseaudio": {
@@ -81,28 +81,17 @@
 
     "network": {
         "format-wifi": " {essid}",
-        "format-ethernet": "󰈀 {ipaddr}",
+        "format-ethernet": "󰈀 Wired",
         "format-disconnected": "󰤭 Disconnected",
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n󰅃 {bandwidthUpBytes}  󰅀 {bandwidthDownBytes}"
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n󰅃 {bandwidthUpBytes}  󰅀 {bandwidthDownBytes}",
+        "on-click": "nm-connection-editor"
     },
 
     "bluetooth": {
         "format": " {status}",
         "format-connected": " {device_alias}",
-        "format-connected-battery": " {device_alias} {device_battery_percentage}%",
         "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
-        "on-click": "blueman-manager"
-    },
-
-    "battery": {
-        "states": {
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{icon} {capacity}%",
-        "format-charging": "󰂄 {capacity}%",
-        "format-plugged": " {capacity}%",
-        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+        "on-click": "ghostty -e bluetoothctl"
     },
 
     "tray": {

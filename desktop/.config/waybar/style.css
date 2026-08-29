@@ -43,7 +43,6 @@ window#waybar {
 #pulseaudio,
 #network,
 #bluetooth,
-#battery,
 #clock,
 #tray,
 #custom-notification {
@@ -134,38 +133,6 @@ window#waybar.empty #window {
 
 #bluetooth {
     color: @tertiary;
-}
-
-#battery {
-    color: @primary;
-}
-
-#battery.charging {
-    color: @tertiary;
-}
-
-#battery.warning:not(.charging) {
-    background: @secondary_container;
-    color: @on_secondary_container;
-    border: none;
-}
-
-#battery.critical:not(.charging) {
-    background: @error;
-    color: @on_error;
-    border: none;
-    animation-name: blink;
-    animation-duration: 0.8s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-
-@keyframes blink {
-    to {
-        background: @error_container;
-        color: @on_error_container;
-    }
 }
 
 /* 6. Clock Pill (Dynamic Primary Container Highlight) */
