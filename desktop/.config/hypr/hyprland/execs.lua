@@ -30,9 +30,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("/usr/lib/geoclue-2.0/demos/agent")
     hl.exec_cmd("sleep 1 && gammastep")
 
-    -- Forward bluetooth media commands to MPRIS & manage active player priority
+    -- Forward bluetooth media commands to MPRIS
     hl.exec_cmd("mpris-proxy")
-    hl.exec_cmd("playerctld daemon")
 end)
 
 -- Resizer listeners

@@ -67,10 +67,9 @@
         "title-len": 20,
         "artist-len": 15,
         "truncate-hours": true,
-        "tooltip-format": "{player} ({status}): {title} - {artist}\nProgress: {position} / {length}\n\n󰍽 Left-click: Play/Pause\n󰍽 Right-click: Next track\n󰍽 Middle-click: Switch media source\n󰚝 Scroll: Seek ±5s",
+        "tooltip-format": "{player} ({status}): {title} - {artist}\nProgress: {position} / {length}\n\n󰍽 Left-click: Play/Pause\n󰍽 Right-click: Next track\n󰚝 Scroll: Seek ±5s",
         "on-click": "playerctl play-pause",
         "on-click-right": "playerctl next",
-        "on-click-middle": "playerctld shift",
         "on-scroll-up": "playerctl position +5",
         "on-scroll-down": "playerctl position -5"
     },
