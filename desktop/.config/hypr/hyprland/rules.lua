@@ -135,6 +135,7 @@ tagged_rule(system_monitor_tag, { "btop" }, "class")
 tagged_rule(music_player_tag, {
     "feishin|Supersonic|Plexamp",                                  -- Self hosted
     "Spotify",                                                     -- Spotify
+    "fastpotify|Fastpotify",                                       -- Fastpotify (Rust native)
     "Cider",                                                       -- Apple music
     "com.github.th-ch.youtube-music|com-maxrave-simpmusic-MainKt", -- YouTube music
 }, "class")
