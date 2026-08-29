@@ -10,7 +10,7 @@ post_process = "hyprctl reload"
 [templates.waybar]
 input_path = "~/.config/matugen/templates/waybar-colors.css"
 output_path = "~/.config/waybar/colors.css"
-post_process = "killall -SIGUSR2 waybar"
+post_process = "sh -c 'pkill waybar; waybar &'"
 
 [templates.swaync]
 input_path = "~/.config/matugen/templates/swaync-colors.css"
