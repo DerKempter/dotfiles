@@ -27,3 +27,7 @@ output_path = "~/.config/ghostty/themes/matugen"
 [templates.wlogout]
 input_path = "~/.config/matugen/templates/wlogout-colors.css"
 output_path = "~/.config/wlogout/colors.css"
+
+[templates.hyprswitch]
+input_path = "~/.config/matugen/templates/hyprswitch-colors.css"
+output_path = "~/.config/hyprswitch/colors.css"

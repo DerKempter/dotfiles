@@ -210,6 +210,7 @@ hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = vars.singleWindowGaps
 
 hl.layer_rule({ match = { namespace = "hyprpicker" }, animation = "fade" })                 -- Colour picker out animation
 hl.layer_rule({ match = { namespace = "logout_dialog" }, animation = "fade", blur = true }) -- wlogout
+hl.layer_rule({ match = { namespace = "hyprswitch" }, animation = "fade", blur = true })    -- hyprswitch
 hl.layer_rule({ match = { namespace = "selection" }, animation = "fade" })                  -- slurp
 hl.layer_rule({ match = { namespace = "wayfreeze" }, animation = "fade" })                  -- wayfreeze
 hl.layer_rule({ match = { namespace = "launcher" }, animation = "popin 80%", blur = true }) -- Fuzzel

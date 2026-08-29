@@ -1,0 +1,58 @@
+@import "colors.css";
+
+/* Base container */
+window {
+    background-color: transparent;
+    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", sans-serif;
+}
+
+.workspace {
+    background-color: alpha(@surface_container, 0.85);
+    border: 2px solid alpha(@outline_variant, 0.4);
+    border-radius: 24px;
+    padding: 16px;
+    margin: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.client {
+    background-color: alpha(@surface_container_high, 0.6);
+    border: 2px solid transparent;
+    border-radius: 18px;
+    padding: 12px;
+    margin: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.client.selected,
+.client:focus,
+.client:hover {
+    background-color: alpha(@primary_container, 0.9);
+    border-color: @primary;
+    box-shadow: 0 0 20px alpha(@primary, 0.5);
+}
+
+.client-image {
+    border-radius: 12px;
+}
+
+.index {
+    color: @secondary;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background-color: alpha(@surface, 0.7);
+}
+
+.title {
+    color: @on_surface;
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.client.selected .title {
+    color: @on_primary_container;
+    font-weight: bold;
+}

@@ -15,8 +15,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("swaync")
     hl.exec_cmd("waybar")
 
-    -- Vicinae launcher daemon
+    -- Vicinae launcher daemon & hyprswitch window switcher daemon
     hl.exec_cmd("vicinae server")
+    hl.exec_cmd("hyprswitch init --custom-css ~/.config/hyprswitch/style.css")
 
     -- Auto delete trash 30 days old
     hl.exec_cmd("trash-empty 30")
