@@ -94,9 +94,11 @@ create_bind(vars.kbMoveWinToWsPrev, hl.dsp.window.move({ workspace = "r-1" }), r
 create_bind(vars.kbMoveWinToWsSpecial, hl.dsp.window.move({ workspace = "special:special" }))
 create_bind(vars.kbMoveWinFromWsSpecial, hl.dsp.window.move({ workspace = "e+0" }))
 
--- Window groups & Alt-Tab Switcher (hyprswitch)
-create_bind(vars.kbWindowCycleNext, hl.dsp.exec_cmd("hyprswitch gui --mod-key alt_l --key tab --close mod-key-release --sort-recent && hyprswitch dispatch"))
-create_bind(vars.kbWindowCyclePrev, hl.dsp.exec_cmd("hyprswitch gui --mod-key alt_l --key tab --close mod-key-release --reverse --sort-recent && hyprswitch dispatch -r"))
+-- Window Switcher (Alt + Tab) & Workspace Switcher (Super + Tab)
+create_bind({ vars.kbWindowCycleNext, vars.kbWindowCyclePrev }, hl.dsp.exec_cmd("nu ~/.local/share/vicinae/scripts/pick-window.nu"))
+create_bind({ "SUPER + TAB", "SUPER + SHIFT + TAB" }, hl.dsp.exec_cmd("nu ~/.local/share/vicinae/scripts/pick-workspace.nu"))
+
+-- Window groups
 create_bind(vars.kbWindowGroupCycleNext, hl.dsp.group.next(), repeating)
 create_bind(vars.kbWindowGroupCyclePrev, hl.dsp.group.prev(), repeating)
 create_bind(vars.kbToggleGroup, hl.dsp.group.toggle())
