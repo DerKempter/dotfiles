@@ -1,0 +1,83 @@
+@import "colors.css";
+
+/* Reset */
+* {
+    background-image: none;
+    box-shadow: none;
+    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", sans-serif;
+    font-weight: 700;
+}
+
+/* Semi-transparent dark dynamic backdrop */
+window {
+    background-color: alpha(@background, 0.75);
+}
+
+/* Base button styling (HyDE / Starship Pill Aesthetic) */
+button {
+    color: @on_surface;
+    background-color: alpha(@surface_container, 0.85);
+    border: 2px solid alpha(@outline_variant, 0.4);
+    border-radius: 28px;
+    margin: 14px;
+    padding: 24px;
+    font-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center 38%;
+    background-size: 30%;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+button:focus,
+button:active,
+button:hover {
+    color: @on_primary;
+    background-color: @primary;
+    border-color: @primary;
+    box-shadow: 0 0 24px alpha(@primary, 0.6);
+    outline-style: none;
+}
+
+/* Action Icons from /usr/share/wlogout/icons */
+#lock {
+    background-image: url("/usr/share/wlogout/icons/lock.png");
+}
+
+#suspend {
+    background-image: url("/usr/share/wlogout/icons/suspend.png");
+}
+
+#logout {
+    background-image: url("/usr/share/wlogout/icons/logout.png");
+}
+
+#reboot {
+    background-image: url("/usr/share/wlogout/icons/reboot.png");
+}
+
+#reboot:focus,
+#reboot:active,
+#reboot:hover {
+    background-color: @secondary;
+    color: @on_secondary;
+    border-color: @secondary;
+    box-shadow: 0 0 24px alpha(@secondary, 0.6);
+}
+
+#shutdown {
+    background-image: url("/usr/share/wlogout/icons/shutdown.png");
+}
+
+#shutdown:focus,
+#shutdown:active,
+#shutdown:hover {
+    background-color: @error;
+    color: @on_error;
+    border-color: @error;
+    box-shadow: 0 0 24px alpha(@error, 0.6);
+}
+
+#hibernate {
+    background-image: url("/usr/share/wlogout/icons/hibernate.png");
+}

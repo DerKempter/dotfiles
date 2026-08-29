@@ -64,6 +64,7 @@ create_bind(vars.kbShowSidebar, hl.dsp.exec_cmd("swaync-client -t -sw"))
 create_bind(vars.kbClearNotifs, hl.dsp.exec_cmd("swaync-client -C"), locked)
 create_bind(vars.kbLock, hl.dsp.exec_cmd("hyprlock"))
 create_bind(vars.kbSleep, hl.dsp.exec_cmd(vars.sleepGestureCmd))
+create_bind({ vars.kbSession, "SUPER + BackSpace" }, hl.dsp.exec_cmd("wlogout -b 6 -c 15 -r 15 -m 280"))
 
 -- Waybar toggle / reload
 create_bind("CTRL + SUPER + SHIFT + R", hl.dsp.exec_cmd("killall waybar; waybar &"), release)
