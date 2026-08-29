@@ -1,21 +1,20 @@
 [config]
-reload_apps = true
 prefer = "saturation"
 
 [templates.hyprland]
 input_path = "~/.config/matugen/templates/hyprland-colors.lua"
 output_path = "~/.config/hypr/scheme/current.lua"
-post_process = "hyprctl reload"
+post_hook = "hyprctl reload"
 
 [templates.waybar]
 input_path = "~/.config/matugen/templates/waybar-colors.css"
 output_path = "~/.config/waybar/colors.css"
-post_process = "sh -c 'pkill waybar; waybar &'"
+post_hook = "killall -SIGUSR2 waybar"
 
 [templates.swaync]
 input_path = "~/.config/matugen/templates/swaync-colors.css"
 output_path = "~/.config/swaync/colors.css"
-post_process = "swaync-client -rs"
+post_hook = "swaync-client -rs"
 
 [templates.ghostty]
 input_path = "~/.config/matugen/templates/ghostty-colors"
