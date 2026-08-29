@@ -202,7 +202,7 @@ end
 local function load_toggle_config()
     local config = default_config()
 
-    local user_file = io.open(config_dir .. "/caelestia/cli.json", "r") -- CLI config
+    local user_file = io.open(config_dir .. "/hypr/toggles.json", "r")
     if not user_file then
         return config
     end
@@ -214,12 +214,9 @@ local function load_toggle_config()
     if recognized and type(conf_or_error) == "table" then
         merge(config, conf_or_error.toggles or {})
     else
-        -- Invalid cli.json: notify and fall back to defaults.
-        -- conf_or_error holds the parse error (string) or a non-table value on success.
+        -- Invalid toggles.json: notify and fall back to defaults.
         local reason = recognized and "Expected a JSON object" or tostring(conf_or_error):gsub("^.-:%d+: ", "")
-        -- In desktop/.config/hypr/utils/functions.lua (around line 220):
         hl.exec_cmd("notify-send -u critical 'Config Error' " .. shell_join({ reason }))
-
     end
 
     return config
