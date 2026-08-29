@@ -12,7 +12,8 @@ return {
     fileExplorer               = "thunar",
     audioSettings              = "pwvucontrol",
 
-    -- Touchpad
+    -- Mouse & Touchpad
+    mouseScrollFactor          = 0.5,
     touchpadDisableTyping      = true,
     touchpadScrollFactor       = 0.3,
     gestureFingers             = 3,
