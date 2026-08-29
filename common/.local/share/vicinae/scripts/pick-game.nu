@@ -24,7 +24,7 @@ let steam_games = (
         # Filter out Proton, Steam runtimes, & SDK tools
         if $name != null and ($name | str starts-with "Proton") == false and ($name | str starts-with "Steam Linux Runtime") == false and ($name | str starts-with "Steamworks") == false {
             {
-                title: $"🎮 ($name)  (Steam)"
+                title: $"🎮 ($name) [Steam]"
                 cmd: $"steam steam://rungameid/($appid)"
                 name: $name
             }
