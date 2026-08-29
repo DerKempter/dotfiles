@@ -1,5 +1,6 @@
 [config]
 reload_apps = true
+prefer = "saturation"
 
 [templates.hyprland]
 input_path = "~/.config/matugen/templates/hyprland-colors.lua"
