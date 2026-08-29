@@ -212,6 +212,3 @@ hl.layer_rule({ match = { namespace = "logout_dialog" }, animation = "fade" })  
 hl.layer_rule({ match = { namespace = "selection" }, animation = "fade" })                  -- slurp
 hl.layer_rule({ match = { namespace = "wayfreeze" }, animation = "fade" })                  -- wayfreeze
 hl.layer_rule({ match = { namespace = "launcher" }, animation = "popin 80%", blur = true }) -- Fuzzel
-
--- Shell
-hl.layer_rule({ match = { namespace = "swaync-control-center" }, blur = true })
