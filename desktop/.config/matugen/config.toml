@@ -6,6 +6,10 @@ input_path = "~/.config/matugen/templates/hyprland-colors.lua"
 output_path = "~/.config/hypr/scheme/current.lua"
 post_hook = "hyprctl reload"
 
+[templates.hyprlock]
+input_path = "~/.config/matugen/templates/hyprlock-colors.conf"
+output_path = "~/.config/hypr/scheme/hyprlock-colors.conf"
+
 [templates.waybar]
 input_path = "~/.config/matugen/templates/waybar-colors.css"
 output_path = "~/.config/waybar/colors.css"
