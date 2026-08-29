@@ -45,28 +45,39 @@
     },
 
     "mpris": {
-        "format": "󱳇 {player_icon} {title} - {artist}",
-        "format-paused": "󱳇 {status_icon} <i>{title} - {artist}</i>",
+        "interval": 1,
+        "format": "󱳇 {player_icon} {dynamic}",
+        "format-paused": "󱳇 {status_icon} <i>{dynamic}</i>",
         "player-icons": {
             "default": "▶",
             "spotify": "",
             "spotify_player": "",
+            "firefox": "",
+            "zen": "󰈹",
+            "chromium": "",
             "mpv": ""
         },
         "status-icons": {
             "paused": "⏸"
         },
-        "max-length": 45,
-        "tooltip-format": "{player} ({status}): {title} - {artist} [{album}]",
+        "dynamic-order": ["title", "artist", "position", "length"],
+        "dynamic-importance-order": ["title", "artist", "position", "length"],
+        "dynamic-len": 45,
+        "title-len": 20,
+        "artist-len": 15,
+        "truncate-hours": true,
+        "tooltip-format": "{player} ({status}): {title} - {artist}\nProgress: {position} / {length}\n\n󰍽 Left-click: Play/Pause\n󰍽 Right-click: Next track\n󰍽 Middle-click: Switch media source\n󰚝 Scroll: Seek ±5s",
         "on-click": "playerctl play-pause",
-        "on-click-right": "playerctl next"
+        "on-click-right": "playerctl next",
+        "on-click-middle": "playerctld shift",
+        "on-scroll-up": "playerctl position +5",
+        "on-scroll-down": "playerctl position -5"
     },
 
     "clock": {
         "format": " {:%H:%M}",
         "format-alt": " {:%a, %d %b   %H:%M}",
-        "tooltip-format": "<tt><small>{calendar}</small></tt>",
-        "on-click": "swaync-client -t -sw"
+        "tooltip-format": "<tt><small>{calendar}</small></tt>"
     },
 
     "pulseaudio": {
