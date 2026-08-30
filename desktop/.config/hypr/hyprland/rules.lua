@@ -213,3 +213,4 @@ hl.layer_rule({ match = { namespace = "logout_dialog" }, animation = "fade", blu
 hl.layer_rule({ match = { namespace = "selection" }, animation = "fade" })                  -- slurp
 hl.layer_rule({ match = { namespace = "wayfreeze" }, animation = "fade" })                  -- wayfreeze
 hl.layer_rule({ match = { namespace = "launcher" }, animation = "popin 80%", blur = true }) -- Fuzzel
+hl.layer_rule({ match = { namespace = "swayosd" }, animation = "fade", blur = true, ignore_alpha = 0.8 }) -- SwayOSD

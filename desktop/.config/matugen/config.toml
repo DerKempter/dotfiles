@@ -20,6 +20,10 @@ input_path = "~/.config/matugen/templates/swaync-colors.css"
 output_path = "~/.config/swaync/colors.css"
 post_hook = "swaync-client -rs"
 
+[templates.swayosd]
+input_path = "~/.config/matugen/templates/swayosd-colors.css"
+output_path = "~/.config/swayosd/colors.css"
+
 [templates.ghostty]
 input_path = "~/.config/matugen/templates/ghostty-colors"
 output_path = "~/.config/ghostty/themes/matugen"

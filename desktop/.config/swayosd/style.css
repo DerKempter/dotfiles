@@ -1,0 +1,45 @@
+@import url("colors.css");
+
+window {
+    background: transparent;
+    background-color: transparent;
+}
+
+window#osd {
+    background-color: alpha(@surface, 0.90);
+    border: 1.5px solid @outline_variant;
+    border-radius: 999px;
+    padding: 12px 18px;
+}
+
+#container {
+    margin: 4px;
+}
+
+image, label {
+    color: @primary;
+}
+
+progressbar:disabled,
+image:disabled {
+    opacity: 0.5;
+}
+
+progressbar {
+    min-height: 8px;
+    border-radius: 999px;
+    background-color: alpha(@on_surface, 0.15);
+    border: none;
+}
+
+trough {
+    min-height: 8px;
+    border-radius: 999px;
+    background-color: alpha(@on_surface, 0.15);
+}
+
+progress {
+    min-height: 8px;
+    border-radius: 999px;
+    background-color: @primary;
+}

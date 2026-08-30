@@ -9,7 +9,7 @@ return {
     terminal                   = "ghostty",
     browser                    = "zen-browser",
     editor                     = "zed",
-    fileExplorer               = "thunar",
+    fileExplorer               = "nautilus",
     audioSettings              = "pwvucontrol",
 
     -- Mouse & Touchpad

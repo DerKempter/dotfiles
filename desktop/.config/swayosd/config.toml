@@ -1,0 +1,14 @@
+[server]
+# Show percentage on the right of the OSD
+show_percentage = true
+
+# The maximum volume that can be reached in %
+max_volume = 100
+
+# Minimum brightness
+min_brightness = 5
+
+# OSD display duration in milliseconds
+duration = 1000
+
+[client]
