@@ -2,6 +2,10 @@ local vars = require("variables")
 local fn   = require("utils.functions")
 
 hl.on("hyprland.start", function()
+    -- D-Bus & Systemd environment import
+    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+
     -- Keyring daemon
     hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
 
