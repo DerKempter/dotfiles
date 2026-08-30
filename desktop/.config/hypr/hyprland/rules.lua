@@ -61,13 +61,13 @@ hl.window_rule({
 
 -- Opaque apps
 tagged_rule(opaque_tag, {
-    "foot",                              -- Terminal
-    "equibop",                           -- Discord client
-    "org.quickshell",                    -- Quickshell
+    "foot",                                 -- Terminal
+    "equibop",                              -- Discord client
+    "org.quickshell",                       -- Quickshell
     "feh|imv|swappy|org.gnome.Loupe|loupe", -- Image viewers
-    "krita|gimp|inkscape|darktable",     -- Image editors
-    "resolve|kdenlive|shotcut",          -- Video editors
-    "blender|godot",                     -- 3D editors
+    "krita|gimp|inkscape|darktable",        -- Image editors
+    "resolve|kdenlive|shotcut",             -- Video editors
+    "blender|godot",                        -- 3D editors
 }, "class")
 
 
@@ -79,7 +79,7 @@ tagged_rule(float_tag, {
     "org.gnome.FileRoller|file-roller",   -- Archive manager
     "blueman-manager",                    -- Bluetooth GUI
     "com.github.GradienceTeam.Gradience", -- GTK themer (deprecated)
-    "feh|imv|swappy|org.gnome.Loupe|loupe", -- Image viewers
+    "feh|swappy",                         -- Quick utility view/crop
     "org.quickshell",                     -- Quickshell
 }, "class")
 tagged_rule(float_tag, {
@@ -105,7 +105,8 @@ tagged_rule(float_60_70_tag, {
 
 -- 70% x 80%
 tagged_rule(float_70_80_tag, {
-    "org.gnome.Settings", -- System settings
+    "org.gnome.Settings",               -- System settings
+    "org.gnome.Loupe|loupe|imv",        -- Image viewers (sized nicely to 70% x 80% monitor)
 }, "class")
 tagged_rule(float_70_80_tag, {
     "Weather Forecast",   -- Weather popup terminal
