@@ -106,6 +106,7 @@ tagged_rule(float_60_70_tag, {
 -- 70% x 80%
 tagged_rule(float_70_80_tag, {
     "org.gnome.Settings", -- System settings
+    "weather-forecast",   -- Weather popup terminal
 }, "class")
 
 -- 50% x 60%
@@ -200,8 +201,8 @@ create_tag(todo_app_tag, { workspace = "special:todo" })
 ---- Workspace rules ----
 -------------------------
 
-hl.workspace_rule({ workspace = "w[tv1]s[false]", gaps_out = vars.singleWindowGapsOut })
-hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = vars.singleWindowGapsOut })
+hl.workspace_rule({ workspace = "w[tv1]s[false] prisoners[false]", gaps_out = vars.singleWindowGapsOut })
+hl.workspace_rule({ workspace = "f[1]s[false] prisoners[false]", gaps_out = vars.singleWindowGapsOut })
 
 
 ---------------------
