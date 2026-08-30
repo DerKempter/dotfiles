@@ -61,23 +61,28 @@ WEATHER_ICONS = {
 
 def get_weather():
     if os.path.exists(CACHE_FILE):
-        mtime = os.path.getmtime(CACHE_FILE)
-        if time.time() - mtime < CACHE_DURATION:
-            try:
+        try:
+            mtime = os.path.getmtime(CACHE_FILE)
+            if time.time() - mtime < CACHE_DURATION:
                 with open(CACHE_FILE, "r") as f:
                     return json.load(f)
-            except Exception:
-                pass
+        except Exception:
+            pass
 
     try:
         req = urllib.request.Request(
             "https://wttr.in/?format=j1",
             headers={"User-Agent": "Mozilla/5.0 (Waybar Weather Client)"},
         )
-        with urllib.request.urlopen(req, timeout=4) as resp:
+        with urllib.request.urlopen(req, timeout=3) as resp:
             data = json.loads(resp.read().decode())
-            with open(CACHE_FILE, "w") as f:
-                json.dump(data, f)
+            try:
+                temp_cache = CACHE_FILE + ".tmp"
+                with open(temp_cache, "w") as f:
+                    json.dump(data, f)
+                os.replace(temp_cache, CACHE_FILE)
+            except Exception:
+                pass
             return data
     except Exception:
         if os.path.exists(CACHE_FILE):

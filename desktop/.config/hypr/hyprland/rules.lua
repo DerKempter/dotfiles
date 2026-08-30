@@ -217,3 +217,4 @@ hl.layer_rule({ match = { namespace = "selection" }, animation = "fade" })      
 hl.layer_rule({ match = { namespace = "wayfreeze" }, animation = "fade" })                  -- wayfreeze
 hl.layer_rule({ match = { namespace = "launcher" }, animation = "popin 80%", blur = true }) -- Fuzzel
 hl.layer_rule({ match = { namespace = "swayosd" }, animation = "fade", blur = true, ignore_alpha = 0.8 }) -- SwayOSD
+hl.layer_rule({ match = { namespace = "vicinae" }, animation = "popin 85%", blur = true }) -- Vicinae launcher

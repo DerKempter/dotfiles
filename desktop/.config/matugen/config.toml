@@ -13,7 +13,7 @@ output_path = "~/.config/hypr/scheme/hyprlock-colors.conf"
 [templates.waybar]
 input_path = "~/.config/matugen/templates/waybar-colors.css"
 output_path = "~/.config/waybar/colors.css"
-post_hook = "killall -SIGUSR2 waybar"
+post_hook = "~/.config/waybar/scripts/reload.sh"
 
 [templates.swaync]
 input_path = "~/.config/matugen/templates/swaync-colors.css"
