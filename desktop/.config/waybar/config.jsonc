@@ -21,6 +21,7 @@
         "idle_inhibitor",
         "cpu",
         "memory",
+        "custom/weather",
         "pulseaudio",
         "network",
         "bluetooth",
@@ -114,6 +115,15 @@
         "interval": 2,
         "tooltip-format": "RAM: {used:0.1f}GiB / {total:0.1f}GiB ({percentage}%)\nSwap: {swapUsed:0.1f}GiB / {swapTotal:0.1f}GiB",
         "on-click": "ghostty -e btop"
+    },
+
+    "custom/weather": {
+        "format": "{}",
+        "tooltip": true,
+        "interval": 900,
+        "exec": "~/.config/waybar/scripts/weather.py",
+        "return-type": "json",
+        "on-click": "xdg-open https://wttr.in"
     },
 
     "clock": {

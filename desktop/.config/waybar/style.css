@@ -44,6 +44,7 @@ window#waybar {
 #idle_inhibitor,
 #cpu,
 #memory,
+#custom-weather,
 #pulseaudio,
 #network,
 #bluetooth,
@@ -148,13 +149,17 @@ window#waybar.empty #window {
     border: none;
 }
 
-/* 6. Hardware Stats Pills */
+/* 6. Hardware Stats & Weather Pills */
 #cpu {
     color: @secondary;
 }
 
 #memory {
     color: @tertiary;
+}
+
+#custom-weather {
+    color: @primary;
 }
 
 /* 7. Status & Connectivity Pills */
