@@ -106,8 +106,10 @@ tagged_rule(float_60_70_tag, {
 -- 70% x 80%
 tagged_rule(float_70_80_tag, {
     "org.gnome.Settings", -- System settings
-    "weather-forecast",   -- Weather popup terminal
 }, "class")
+tagged_rule(float_70_80_tag, {
+    "Weather Forecast",   -- Weather popup terminal
+}, "title")
 
 -- 50% x 60%
 tagged_rule(float_50_60_tag, {
