@@ -24,6 +24,7 @@
       }
    },
    "favorites": [
+      "scripts:pick-game.nu",
       "applications:nl.jknaapen.fladder",
       "applications:vesktop",
       "applications:thunderbird",

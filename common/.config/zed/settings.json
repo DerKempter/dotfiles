@@ -61,9 +61,9 @@
 		"show": "auto"
 	},
 	"agent_servers": {
-		"gemini": {
-			"type": "registry"
-		}
+		"antigravity-acp": {
+   "type": "registry"
+  }
 	},
 	"agent": {
 		"dock": "right",
