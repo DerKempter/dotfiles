@@ -40,6 +40,10 @@ window#waybar {
 #workspaces,
 #window,
 #mpris,
+#privacy,
+#idle_inhibitor,
+#cpu,
+#memory,
 #pulseaudio,
 #network,
 #bluetooth,
@@ -114,7 +118,46 @@ window#waybar.empty #window {
     font-weight: 700;
 }
 
-/* 5. Status / Hardware Pills */
+/* 5. Privacy & Idle Inhibitor Pills */
+#privacy {
+    color: @error;
+    padding: 3px 10px;
+}
+
+#privacy-item {
+    color: @error;
+    padding: 0 2px;
+}
+
+#privacy-item.screenshare {
+    color: @tertiary;
+}
+
+#privacy-item.audio-in {
+    color: @error;
+}
+
+#idle_inhibitor {
+    color: @on_surface_variant;
+    padding: 3px 10px;
+}
+
+#idle_inhibitor.activated {
+    background: @primary;
+    color: @on_primary;
+    border: none;
+}
+
+/* 6. Hardware Stats Pills */
+#cpu {
+    color: @secondary;
+}
+
+#memory {
+    color: @tertiary;
+}
+
+/* 7. Status & Connectivity Pills */
 #pulseaudio {
     color: @primary;
 }
@@ -135,7 +178,7 @@ window#waybar.empty #window {
     color: @tertiary;
 }
 
-/* 6. Clock Pill (Dynamic Primary Container Highlight) */
+/* 8. Clock Pill (Dynamic Primary Container Highlight) */
 #clock {
     background: @primary_container;
     color: @on_primary_container;
@@ -143,13 +186,13 @@ window#waybar.empty #window {
     font-weight: 800;
 }
 
-/* 7. Notification Pill */
+/* 9. Notification Pill */
 #custom-notification {
     color: @primary;
     padding: 3px 12px;
 }
 
-/* 8. System Tray */
+/* 10. System Tray */
 #tray {
     padding: 3px 8px;
 }

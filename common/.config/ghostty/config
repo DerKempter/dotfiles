@@ -1,7 +1,7 @@
 background-opacity = 0.80
 background-blur = 25
 
-theme = Catppuccin Mocha
+theme = matugen
 
 font-family = JetBrainsMono Nerd Font
 font-size = 11
@@ -9,10 +9,8 @@ font-thicken = true
 font-feature = +liga,+calt,+dlig
 cursor-style = underline
 cursor-style-blink = false
-cursor-color = #f2cdcd
 cursor-text = cell-background
 unfocused-split-opacity = 0.85
-split-divider-color = #cba6f7
 
 mouse-hide-while-typing = true
 mouse-scroll-multiplier = 0.25
