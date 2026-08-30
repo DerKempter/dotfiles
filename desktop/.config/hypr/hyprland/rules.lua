@@ -61,13 +61,13 @@ hl.window_rule({
 
 -- Opaque apps
 tagged_rule(opaque_tag, {
-    "foot",                          -- Terminal
-    "equibop",                       -- Discord client
-    "org.quickshell",                -- Quickshell
-    "feh|imv|swappy",                -- Image viewers
-    "krita|gimp|inkscape|darktable", -- Image editors
-    "resolve|kdenlive|shotcut",      -- Video editors
-    "blender|godot",                 -- 3D editors
+    "foot",                              -- Terminal
+    "equibop",                           -- Discord client
+    "org.quickshell",                    -- Quickshell
+    "feh|imv|swappy|org.gnome.Loupe|loupe", -- Image viewers
+    "krita|gimp|inkscape|darktable",     -- Image editors
+    "resolve|kdenlive|shotcut",          -- Video editors
+    "blender|godot",                     -- 3D editors
 }, "class")
 
 
@@ -79,7 +79,7 @@ tagged_rule(float_tag, {
     "org.gnome.FileRoller|file-roller",   -- Archive manager
     "blueman-manager",                    -- Bluetooth GUI
     "com.github.GradienceTeam.Gradience", -- GTK themer (deprecated)
-    "feh|imv|swappy",                     -- Image viewers
+    "feh|imv|swappy|org.gnome.Loupe|loupe", -- Image viewers
     "org.quickshell",                     -- Quickshell
 }, "class")
 tagged_rule(float_tag, {
