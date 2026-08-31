@@ -76,6 +76,11 @@ if command -v atuin >/dev/null 2>&1; then
   eval "$(atuin init zsh)"
 fi
 
+# Dynamic Starship Config (uses cached matugen-generated theme outside git if present)
+if [ -f "$HOME/.cache/starship.toml" ]; then
+  export STARSHIP_CONFIG="$HOME/.cache/starship.toml"
+fi
+
 # Starship Prompt (Must be loaded last)
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
@@ -84,4 +89,3 @@ fi
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:$HOME/.lmstudio/bin"
 # End of LM Studio CLI section
-

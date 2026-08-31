@@ -1,4 +1,6 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
 
 # If not running interactively, don't do anything
 case $- in
@@ -7,6 +9,7 @@ case $- in
 esac
 
 # don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
 HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
@@ -42,15 +45,22 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# Alias definitions
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# Load custom aliases if present
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# enable programmable completion features
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
@@ -120,6 +130,11 @@ precmd_functions=()
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 if command -v atuin >/dev/null 2>&1; then
   eval "$(atuin init bash)"
+fi
+
+# Dynamic Starship Config (uses cached matugen-generated theme outside git if present)
+if [ -f "$HOME/.cache/starship.toml" ]; then
+  export STARSHIP_CONFIG="$HOME/.cache/starship.toml"
 fi
 
 # Starship Prompt (Must be loaded last)

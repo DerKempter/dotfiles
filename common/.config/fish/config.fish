@@ -77,6 +77,11 @@ if command -v atuin >/dev/null 2>&1
   atuin init fish | source
 end
 
+# Dynamic Starship Config (uses cached matugen-generated theme outside git if present)
+if test -f "$HOME/.cache/starship.toml"
+  set -gx STARSHIP_CONFIG "$HOME/.cache/starship.toml"
+end
+
 # Starship Prompt initialization
 if command -v starship >/dev/null 2>&1
   starship init fish | source
@@ -98,43 +103,17 @@ function ssh-log --description "SSH with local session logging"
   set -l timestamp (date "+%Y-%m-%d_%H-%M-%S")
   
   # Extract the hostname from arguments for a better filename
-  # (This is a simplified extraction, takes the last arg usually)
-  set -l remote_host $argv[-1] 
-  set -l log_file "$log_dir/ssh_$remote_host_$timestamp.log"
-
-  echo "🔴 [Logging SSH session to $log_file]"
-
-  # 2. Use `script` to record the session
-  script -q -c "/usr/bin/ssh $argv" $log_file
-
-  perl -i -pe 's/\e\[?.*?[\@-~]//g; s/\e\].*?\a//g' $log_file
-end
-
-function log_command --on-event fish_postexec
-  set -l cmd $argv[1]
-  set -l log_file "$HOME/Syncthing/ActivityLogs/commands_cachyos.log"
-  set -l timestamp (date "+%Y-%m-%d %H:%M:%S")
-  set -l current_dir (pwd)
-
-  # --- PRIVACY FILTER ---
-  if string match -q -r "password|token|key" $cmd
-    return
+  set -l target_host "unknown"
+  for arg in $argv
+    if not string match -r "^-" -- $arg
+      set target_host (string replace -r "^.*@" "" -- $arg)
+      break
+    end
   end
   
-  # Don't log simple commands (optional)
-  if string match -q -r "(ls|cd|clear|exit|git status|mkdir|cat)" $cmd
-    return
-  end
+  set -l log_file "$log_dir/ssh_"$timestamp"_$target_host.log"
 
-  echo "$timestamp | $current_dir | $cmd" >> $log_file
+  # 2. Inform the user and start the logged session
+  echo "Logging SSH session to: $log_file"
+  script --quiet --flush --return --command "ssh $argv" "$log_file"
 end
-
-# Source local/private configurations if present (not tracked by git)
-if test -f ~/.config/fish/config.local.fish
-  source ~/.config/fish/config.local.fish
-end
-
-# Added by LM Studio CLI (lms)
-set -gx PATH $PATH $HOME/.lmstudio/bin
-# End of LM Studio CLI section
-

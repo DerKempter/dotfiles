@@ -7,6 +7,11 @@ $env.MICRO_TRUECOLOR = "1"
 $env.RIPGREP_CONFIG_PATH = ($env.HOME | path join ".ripgreprc")
 $env.N_PREFIX = ($env.HOME | path join ".n")
 
+# Dynamic Starship Config (uses cached matugen-generated theme outside git if present)
+let cached_starship = ($env.HOME | path join ".cache/starship.toml")
+let default_starship = ($env.HOME | path join ".config/starship.toml")
+$env.STARSHIP_CONFIG = (if ($cached_starship | path exists) { $cached_starship } else { $default_starship })
+
 # ==============================================================================
 # Path Customization
 # ==============================================================================
@@ -98,17 +103,32 @@ if not ($cargo_env | path exists) {
 # Keychain SSH Key Management
 if not (which keychain | is-empty) {
     let keychain_output = (with-env { SHELL: csh } {
-        ^keychain --eval --quiet --noask
-    }
-        | lines
-        | where $it =~ "setenv"
-        | parse "setenv {name} {value};"
-        | update value { |row| $row.value | str trim -c '"' }
-        | transpose -rd)
+        keychain --eval --quiet --noask
+    })
 
-    if not ($keychain_output | is-empty) {
-        load-env $keychain_output
-    }
+    let keychain_env = ($keychain_output
+        | lines
+        | where { |line| $line =~ "^setenv" }
+        | each { |line|
+            let parts = ($line | parse "setenv {key} {value};")
+            if not ($parts | is-empty) {
+                let row = ($parts | first)
+                { name: $row.key, value: $row.value }
+            }
+        }
+        | compact
+        | reduce -f {} { |it, acc| $acc | upsert $it.name $it.value })
+
+    load-env $keychain_env
 } else {
-    print -e $"(ansi yellow)Warning: keychain is not installed. SSH key management has not been initialized.(ansi reset)"
+    print -e $"(ansi yellow)Warning: keychain is not installed. SSH Agent has not been initialized.(ansi reset)"
+}
+
+# Starship Prompt Cache initialization
+let starship_path = ($nu.data-dir | path join "vendor/autoload/starship.nu")
+if not (which starship | is-empty) {
+    if not ($starship_path | path exists) {
+        mkdir ($nu.data-dir | path join "vendor/autoload")
+        starship init nu | save -f $starship_path
+    }
 }
