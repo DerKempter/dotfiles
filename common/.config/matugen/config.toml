@@ -1,5 +1,6 @@
 [config]
 prefer = "saturation"
+type = "scheme-expressive"
 
 [templates.kde]
 input_path = "~/.config/matugen/templates/kde-colors.colors"

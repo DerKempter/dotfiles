@@ -77,9 +77,9 @@ if (which plasma-apply-wallpaperimage | is-empty) == false {
     swww img $full_path --transition-type wave --transition-fps 144 --transition-duration 1.5
 }
 
-# 3. Extract Material 3 colors and generate theme
+# 3. Extract Material 3 colors and generate theme (defaulting to Expressive)
 if (which matugen | is-empty) == false {
-    matugen image $full_path
+    matugen -t scheme-expressive image $full_path
     if (which notify-send | is-empty) == false {
         notify-send -u low "Wallpaper & Theme" $"Applied ($full_path | path basename)" -i $full_path
     }
