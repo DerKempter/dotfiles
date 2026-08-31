@@ -52,106 +52,60 @@ if ($files | is-empty) {
     exit 1
 }
 
-# 1. Parse structured items and categories
-let items = (
+# 1. Discover subcategories
+let categories = (
     $files
     | each { |f|
         let rel = ($f | str replace $"($root_dir)/" "")
         let parts = ($rel | split row "/")
-        let cat = if ($parts | length) > 1 { $parts | first } else { "General" }
-        let label = if ($parts | length) > 1 {
-            $"📁 ($cat) / ($f | path basename)"
-        } else {
-            $"🖼️ ($f | path basename)"
-        }
-        { title: $label, full_path: $f, category: $cat, rel_path: $rel }
+        if ($parts | length) > 1 { $parts | first } else { null }
     }
+    | compact
+    | uniq
+    | sort
 )
 
-let categories = ($items | where category != "General" | get category | uniq | sort)
-
-# 2. Build quick actions
-mut menu_entries = []
-
-if ($items | length) > 1 {
-    let total_count = ($items | length)
-    $menu_entries = ($menu_entries | append {
-        title: $"🎲 Random Wallpaper \(All ($total_count) images\)",
-        action: "random_all",
-        full_path: "",
-        category: "Action"
-    })
-}
+# 2. Build menu with Quick Random actions followed by real image file paths for Quick Look previews
+mut menu_entries = ["🎲 Random Wallpaper (All)"]
 
 for cat in $categories {
-    let cat_count = ($items | where category == $cat | length)
-    $menu_entries = ($menu_entries | append {
-        title: $"📁 Category: ($cat) \(($cat_count) images\)",
-        action: $"filter_($cat)",
-        full_path: "",
-        category: "Filter"
-    })
-    $menu_entries = ($menu_entries | append {
-        title: $"🎲 Random from ($cat)",
-        action: $"random_($cat)",
-        full_path: "",
-        category: "Action"
-    })
+    $menu_entries = ($menu_entries | append $"🎲 Random from ($cat)")
 }
 
-for item in $items {
-    $menu_entries = ($menu_entries | append {
-        title: $item.title,
-        action: "select_file",
-        full_path: $item.full_path,
-        category: $item.category
-    })
-}
+$menu_entries = ($menu_entries | append $files)
 
-# 3. Present unified interactive picker in Vicinae
-let selected_title = (
+# 3. Present interactive picker in Vicinae
+let selected = (
     $menu_entries
-    | each { |e| $e.title }
     | str join (char nl)
-    | ^vicinae dmenu -p "Search wallpapers or filter..."
+    | ^vicinae dmenu -p "Search wallpapers by name or category..."
     | str trim
 )
 
-if ($selected_title | is-empty) {
+if ($selected | is-empty) {
     exit 0
 }
 
-let picked_entry = ($menu_entries | where title == $selected_title | first)
-if ($picked_entry == null) {
-    exit 0
-}
-
-# 4. Resolve selected file based on action
-mut final_file = ""
-
-if $picked_entry.action == "random_all" {
-    let chosen = ($items | shuffle | first)
-    if ($chosen != null) { $final_file = $chosen.full_path }
-} else if ($picked_entry.action | str starts-with "random_") {
-    let cat = ($picked_entry.action | str replace "random_" "")
-    let chosen = ($items | where category == $cat | shuffle | first)
-    if ($chosen != null) { $final_file = $chosen.full_path }
-} else if ($picked_entry.action | str starts-with "filter_") {
-    let cat = ($picked_entry.action | str replace "filter_" "")
-    let cat_items = ($items | where category == $cat)
-    let sub_selected = (
-        $cat_items
-        | each { |i| $"🖼️ ($i.full_path | path basename)" }
-        | str join (char nl)
-        | ^vicinae dmenu -p $"Pick from ($cat)..."
-        | str trim
+# 4. Resolve selected entry
+let final_file = if $selected == "🎲 Random Wallpaper (All)" or $selected == "🎲 Random Wallpaper" {
+    $files | shuffle | first
+} else if ($selected | str starts-with "🎲 Random from ") {
+    let cat = ($selected | str replace "🎲 Random from " "")
+    let cat_files = (
+        $files
+        | where { |f|
+            let rel = ($f | str replace $"($root_dir)/" "")
+            let parts = ($rel | split row "/")
+            ($parts | length) > 1 and ($parts | first) == $cat
+        }
     )
-    if ($sub_selected | is-not-empty) {
-        let chosen = ($cat_items | where { |i| $"🖼️ ($i.full_path | path basename)" == $sub_selected } | first)
-        if ($chosen != null) { $final_file = $chosen.full_path }
+    if ($cat_files | is-not-empty) {
+        $cat_files | shuffle | first
+    } else {
+        $files | shuffle | first
     }
 } else {
-    $final_file = $picked_entry.full_path
+    $selected
 }
 
 if ($final_file | is-empty) or not ($final_file | path exists) {
