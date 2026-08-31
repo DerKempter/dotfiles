@@ -13,8 +13,17 @@
 **/niri/dms/
 **/hypr/scheme/current.conf
 **/hypr/scheme/current.lua
+**/hypr/scheme/hyprlock-colors.conf
 **/hypr/hyprland-gui.lua
 **/hypr/dms/colors.lua
+
+# Dynamic Matugen theme artifacts
+**/waybar/colors.css
+**/swaync/colors.css
+**/swayosd/colors.css
+**/wlogout/colors.css
+**/hyprswitch/colors.css
+**/ghostty/themes/matugen
 
 # Ignore all dynamic/bootstrapped assets in the mpv directory except tracked configurations
 **/mpv/*
