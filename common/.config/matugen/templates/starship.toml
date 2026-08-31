@@ -20,10 +20,10 @@ format = "[](teal)[$symbol$path]($style)[](teal) "
 
 [directory.substitutions]
 "Documents" = "󰈙 "
-"Downloads" = "󰉍 "
-"Music" = "󱍚 "
+"Downloads" = "󱑢 "
+"Music" = "󰝚 "
 "Pictures" = "󰉏 "
-"dotfiles" = "󱒓 "
+"dotfiles" = "󰒓 "
 
 [character]
 success_symbol = "[󰄾](bold sky)"
@@ -38,12 +38,12 @@ format = "[](pink)[ $symbol ]($style)[](pink) "
 Linux = ""
 CachyOS = ""
 Arch = "󰣇"
-Ubuntu = "󱄈"
+Ubuntu = "󰕈"
 Windows = "󰍲"
 
 [hostname]
 ssh_only = true
-format = "[](rosewater)[󱒋 $hostname]($style)[](rosewater) "
+format = "[](rosewater)[󰒋 $hostname]($style)[](rosewater) "
 style = "bg:rosewater fg:text"
 
 [jobs]
@@ -78,9 +78,9 @@ renamed    = "[](pink)[ ${count}](bg:pink fg:base)[](pink) "
 untracked  = "[](pink)[ ${count}](bg:pink fg:base)[](pink) "
 stashed    = "[](pink)[ ${count}](bg:pink fg:base)[](pink) "
 conflicted = "[](pink)[ ${count}](bg:pink fg:base)[](pink) "
-ahead      = "[](pink)[󱖣 ${count}](bg:pink fg:base)[](pink) "
-behind     = "[](pink)[󱖡 ${count}](bg:pink fg:base)[](pink) "
-diverged   = "[](pink)[󱖤 󱖣${ahead_count}󱖡${behind_count}](bg:pink fg:base)[](pink) "
+ahead      = "[](pink)[󰶣 ${count}](bg:pink fg:base)[](pink) "
+behind     = "[](pink)[󰶡 ${count}](bg:pink fg:base)[](pink) "
+diverged   = "[](pink)[󰶤 󰶣${ahead_count}󰶡${behind_count}](bg:pink fg:base)[](pink) "
 
 [nodejs]
 symbol = " "
@@ -130,7 +130,7 @@ format = "[](pink)[$symbol$ram_pct]($style)[](pink) "
 command = "usage=$(df $HOME --output=pcent | tail -1 | tr -dc '0-9'); if [ \"$usage\" -gt 85 ]; then echo $usage; fi"
 shell = ["sh"]
 style = "bg:flamingo fg:base"
-format = "([](flamingo)[󰻚 $output%]($style)[](flamingo) )"
+format = "([](flamingo)[󰋊 $output%]($style)[](flamingo) )"
 when = "true"
 
 [custom.git_identity]
@@ -145,10 +145,10 @@ command = "artist=$(playerctl --player=spotify_player,spotify,%any metadata arti
 when = 'test "$(playerctl --player=spotify_player,spotify,%any status 2>/dev/null)" = "Playing"'
 shell = ["sh"]
 style = "bg:green fg:base"
-format = "([](green)[󱳇 $output]($style)[](green) )"
+format = "([](green)[󰓇 $output]($style)[](green) )"
 
 [dotnet]
-symbol = "󲺮 "
+symbol = "󰪮 "
 style = "bg:lavender fg:base"
 format = "[](lavender)[$symbol($version)]($style)[](lavender) "
 
@@ -166,7 +166,7 @@ map_symbol = true
 
 [sudo]
 disabled = false
-symbol = "󱞀"
+symbol = "󰞀"
 style = "bg:flamingo fg:base"
 format = "[](flamingo)[ $symbol ]($style)[](flamingo) "
 
