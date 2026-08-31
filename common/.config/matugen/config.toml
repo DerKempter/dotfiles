@@ -7,6 +7,11 @@ input_path = "~/.config/matugen/templates/kde-colors.colors"
 output_path = "~/.local/share/color-schemes/Matugen.colors"
 post_hook = "command -v plasma-apply-colorscheme >/dev/null 2>&1 && (plasma-apply-colorscheme BreezeDark >/dev/null 2>&1 || true; plasma-apply-colorscheme Matugen) || true"
 
+[templates.vicinae]
+input_path = "~/.config/matugen/templates/vicinae-theme.toml"
+output_path = "~/.local/share/vicinae/themes/matugen.toml"
+post_hook = "command -v vicinae >/dev/null 2>&1 && (vicinae theme set matugen >/dev/null 2>&1 || true) || true"
+
 [templates.ghostty]
 input_path = "~/.config/matugen/templates/ghostty-colors"
 output_path = "~/.config/ghostty/themes/matugen"

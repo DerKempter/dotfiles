@@ -17,6 +17,12 @@
       "rendering": "qt",
       "normal": {}
    },
+   "theme": {
+      "dark": {
+         "name": "matugen",
+         "icon_theme": "Bibata-Modern-Ice"
+      }
+   },
    "launcher_window": {
       "opacity": 1,
       "client_side_decorations": {
