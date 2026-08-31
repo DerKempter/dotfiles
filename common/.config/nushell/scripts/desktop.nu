@@ -6,12 +6,14 @@ export def wallpaper [img_path: path] {
         return
     }
 
-    # 1. Update hyprlock fast cache symlink
+    # 1. Update cache symlink
     mkdir $"($env.HOME)/.cache"
     ln -sf $full_path $"($env.HOME)/.cache/current_wallpaper"
 
-    # 2. Update wallpaper with smooth transition (supports awww or swww)
-    if (which awww | is-empty) == false {
+    # 2. Update wallpaper with smooth transition (supports plasma, awww, or swww)
+    if (which plasma-apply-wallpaperimage | is-empty) == false {
+        plasma-apply-wallpaperimage $full_path
+    } else if (which awww | is-empty) == false {
         if (pgrep -x awww-daemon | is-empty) {
             job spawn { awww-daemon }
             sleep 200ms
@@ -29,5 +31,8 @@ export def wallpaper [img_path: path] {
     if (which matugen | is-empty) == false {
         matugen image $full_path
         print $"✓ Dynamic theme generated and applied from ($full_path | path basename)"
+        if (which notify-send | is-empty) == false {
+            notify-send -u low "Wallpaper & Theme" $"Applied ($full_path | path basename)" -i $full_path
+        }
     }
 }

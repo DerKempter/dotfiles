@@ -1,28 +1,10 @@
 [config]
 prefer = "saturation"
 
-[templates.hyprland]
-input_path = "~/.config/matugen/templates/hyprland-colors.lua"
-output_path = "~/.config/hypr/scheme/current.lua"
-post_hook = "hyprctl reload"
-
-[templates.hyprlock]
-input_path = "~/.config/matugen/templates/hyprlock-colors.conf"
-output_path = "~/.config/hypr/scheme/hyprlock-colors.conf"
-
-[templates.waybar]
-input_path = "~/.config/matugen/templates/waybar-colors.css"
-output_path = "~/.config/waybar/colors.css"
-post_hook = "~/.config/waybar/scripts/reload.sh"
-
-[templates.swaync]
-input_path = "~/.config/matugen/templates/swaync-colors.css"
-output_path = "~/.config/swaync/colors.css"
-post_hook = "swaync-client -rs"
-
-[templates.swayosd]
-input_path = "~/.config/matugen/templates/swayosd-colors.css"
-output_path = "~/.config/swayosd/colors.css"
+[templates.kde]
+input_path = "~/.config/matugen/templates/kde-colors.colors"
+output_path = "~/.local/share/color-schemes/Matugen.colors"
+post_hook = "command -v plasma-apply-colorscheme >/dev/null 2>&1 && plasma-apply-colorscheme Matugen || true"
 
 [templates.ghostty]
 input_path = "~/.config/matugen/templates/ghostty-colors"
@@ -31,6 +13,29 @@ output_path = "~/.config/ghostty/themes/matugen"
 [templates.starship]
 input_path = "~/.config/matugen/templates/starship.toml"
 output_path = "~/.config/starship.toml"
+
+[templates.hyprland]
+input_path = "~/.config/matugen/templates/hyprland-colors.lua"
+output_path = "~/.config/hypr/scheme/current.lua"
+post_hook = "command -v hyprctl >/dev/null 2>&1 && hyprctl reload || true"
+
+[templates.hyprlock]
+input_path = "~/.config/matugen/templates/hyprlock-colors.conf"
+output_path = "~/.config/hypr/scheme/hyprlock-colors.conf"
+
+[templates.waybar]
+input_path = "~/.config/matugen/templates/waybar-colors.css"
+output_path = "~/.config/waybar/colors.css"
+post_hook = "test -f ~/.config/waybar/scripts/reload.sh && ~/.config/waybar/scripts/reload.sh || true"
+
+[templates.swaync]
+input_path = "~/.config/matugen/templates/swaync-colors.css"
+output_path = "~/.config/swaync/colors.css"
+post_hook = "command -v swaync-client >/dev/null 2>&1 && swaync-client -rs || true"
+
+[templates.swayosd]
+input_path = "~/.config/matugen/templates/swayosd-colors.css"
+output_path = "~/.config/swayosd/colors.css"
 
 [templates.wlogout]
 input_path = "~/.config/matugen/templates/wlogout-colors.css"
