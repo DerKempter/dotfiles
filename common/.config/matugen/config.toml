@@ -4,7 +4,7 @@ prefer = "saturation"
 [templates.kde]
 input_path = "~/.config/matugen/templates/kde-colors.colors"
 output_path = "~/.local/share/color-schemes/Matugen.colors"
-post_hook = "command -v plasma-apply-colorscheme >/dev/null 2>&1 && plasma-apply-colorscheme Matugen || true"
+post_hook = "command -v plasma-apply-colorscheme >/dev/null 2>&1 && (plasma-apply-colorscheme BreezeDark >/dev/null 2>&1 || true; plasma-apply-colorscheme Matugen) || true"
 
 [templates.ghostty]
 input_path = "~/.config/matugen/templates/ghostty-colors"
