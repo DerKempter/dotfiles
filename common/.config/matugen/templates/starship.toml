@@ -44,7 +44,7 @@ Windows = "󰍲"
 [hostname]
 ssh_only = true
 format = "[](rosewater)[󱒋 $hostname]($style)[](rosewater) "
-style = "bg:rosewater fg:base"
+style = "bg:rosewater fg:text"
 
 [jobs]
 symbol = " "
@@ -53,7 +53,7 @@ format = "[[](peach)[$symbol$number]($style)[](peach) ](peach) "
 
 [git_branch]
 symbol = " "
-style = "bg:base fg:mauve"
+style = "bg:base fg:text"
 truncation_length = 35
 truncation_symbol = "…"
 format = "[](base)[$symbol$branch]($style)[](base) "
@@ -90,13 +90,13 @@ format = "[](teal)[$symbol($version)]($style)[](teal) "
 [docker_context]
 disabled = false
 symbol = " "
-style = "bg:blue fg:base"
+style = "bg:blue fg:text"
 only_with_files = false
 format = "[](blue)[$symbol$context]($style)[](blue) "
 
 [kubernetes]
 symbol = "☸ "
-style = "bg:blue fg:base"
+style = "bg:blue fg:text"
 disabled = false
 format = "[](blue)[$symbol$context]($style)[](blue) "
 
@@ -137,7 +137,7 @@ when = "true"
 command = "local=$(git config --local user.email); global=$(git config --global user.email); if [ -n \"$local\" ] && [ \"$local\" != \"$global\" ]; then echo \"$local\"; fi"
 when = "git rev-parse --is-inside-work-tree 2> /dev/null"
 shell = ["sh"]
-style = "bg:rosewater fg:base"
+style = "bg:rosewater fg:text"
 format = "([](rosewater)[ $output]($style)[](rosewater) )"
 
 [custom.spotify]
@@ -154,7 +154,7 @@ format = "[](lavender)[$symbol($version)]($style)[](lavender) "
 
 [python]
 symbol = " "
-style = "bg:yellow fg:base"
+style = "bg:yellow fg:text"
 format = "[](yellow)[$symbol${pyenv_prefix}($version )($virtualenv)]($style)[](yellow) "
 
 [status]
