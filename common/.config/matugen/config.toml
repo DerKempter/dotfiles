@@ -32,6 +32,10 @@ output_path = "~/.config/micro/colorschemes/matugen.micro"
 input_path = "~/.config/matugen/templates/lazygit-theme.yml"
 output_path = "~/.cache/lazygit/theme.yml"
 
+[templates.atuin]
+input_path = "~/.config/matugen/templates/atuin-theme.toml"
+output_path = "~/.config/atuin/themes/matugen.toml"
+
 [templates.hyprland]
 input_path = "~/.config/matugen/templates/hyprland-colors.lua"
 output_path = "~/.config/hypr/scheme/current.lua"

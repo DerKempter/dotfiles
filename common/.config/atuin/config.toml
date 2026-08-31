@@ -77,7 +77,7 @@ columns = ["exit", "duration", "time", "command"]
 filters = [ "workspace", "directory", "global", "host", "session" ]
 
 [theme]
-name = "catppuccin"
+name = "matugen"
 
 [ai]
 enabled = true

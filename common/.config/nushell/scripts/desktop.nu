@@ -29,6 +29,8 @@ def "nu-complete wallpaper targets" [] {
 
     let base_options = [
         { value: "random", description: "Pick a random wallpaper" },
+        { value: "pick", description: "Interactive fuzzy picker with live terminal preview" },
+        { value: "preview", description: "Show terminal preview of current or specified wallpaper" },
         { value: "list", description: "List all wallpapers and categories" },
     ]
 
@@ -110,11 +112,20 @@ def "nu-complete theme styles" [] {
     $profiles | append $modes | append $colors
 }
 
+# Helper to render a clean ANSI text preview with chafa (avoids GPU overlay persistence)
+def render-image-preview [img_path: string, size: string = "50x20"] {
+    if (which chafa | is-empty) or not ($img_path | path exists) { return }
+    try {
+        ^chafa --format=symbols -s $size $img_path
+    } catch { }
+}
+
 # Set desktop wallpaper and generate matching dynamic theme
 export def wallpaper [
-    target?: string@"nu-complete wallpaper targets"         # Image path, category name, relative name, "random", or "list"
-    category?: string@"nu-complete wallpaper categories"   # Category for random pick (case-insensitive, e.g. wallpaper random space)
+    target?: string@"nu-complete wallpaper targets"         # Image path, category name, relative name, "random", "pick", "preview", or "list"
+    category?: string@"nu-complete wallpaper categories"   # Category or target for random/preview
     --type (-t): string@"nu-complete theme types" = "scheme-expressive" # Scheme profile
+    --pick (-p)                                             # Interactive fuzzy picker with live terminal preview
 ] {
     let root = (get-wallpaper-root)
     let files = if ($root | is-not-empty) {
@@ -130,8 +141,77 @@ export def wallpaper [
         $"scheme-($type)"
     }
 
+    let target_str = ($target | default "")
+    let target_lower = ($target_str | str lowercase)
+
+    # Handle interactive fuzzy picker with live preview
+    if $pick or $target_lower == "pick" or $target_lower == "select" or $target_lower == "fzf" {
+        if ($files | is-empty) {
+            print -e "No wallpapers found."
+            return
+        }
+        if (which fzf | is-empty) {
+            print -e "Error: fzf is not installed. Install fzf for interactive wallpaper selection."
+            return
+        }
+
+        let preview_cmd = if (which chafa | is-not-empty) {
+            "chafa --format=symbols -s 50x25 {} 2>/dev/null"
+        } else {
+            "file {}"
+        }
+
+        let chosen = (
+            $files
+            | str join (char nl)
+            | ^fzf --preview=$preview_cmd --preview-window=right:50% --header="[Enter] Apply Wallpaper | [Esc] Cancel"
+            | str trim
+        )
+
+        if ($chosen | is-empty) {
+            return
+        }
+
+        wallpaper $chosen --type $stype
+        return
+    }
+
+    # Handle "preview" subcommand
+    if $target_lower == "preview" {
+        let prev_target = if ($category | is-not-empty) {
+            $category
+        } else if ("~/.cache/current_wallpaper" | path exists) {
+            "~/.cache/current_wallpaper" | path expand
+        } else {
+            ""
+        }
+
+        if ($prev_target | is-empty) {
+            print -e "No wallpaper specified and no current wallpaper found."
+            return
+        }
+
+        let direct = ($prev_target | path expand)
+        let resolved = if ($direct | path exists) {
+            $direct
+        } else {
+            # Find in wallpapers
+            let match = ($files | where { |f| ($f | str lowercase) | str contains ($prev_target | str lowercase) } | first)
+            $match | default ""
+        }
+
+        if ($resolved | is-empty) or not ($resolved | path exists) {
+            print -e $"Error: Could not find wallpaper matching '($prev_target)'."
+            return
+        }
+
+        print $"Previewing: ($resolved | path basename)"
+        render-image-preview $resolved "55x20"
+        return
+    }
+
     # Handle "list" or empty argument
-    if ($target | default "" | str lowercase) == "list" or ($target | is-empty) {
+    if $target_lower == "list" or ($target | is-empty) {
         if ($files | is-empty) {
             print -e "No wallpapers found."
             return
@@ -148,9 +228,6 @@ export def wallpaper [
         )
         return $table_data
     }
-
-    let target_str = ($target | default "")
-    let target_lower = ($target_str | str lowercase)
 
     # Handle "random"
     mut resolved_path = ""
@@ -258,49 +335,38 @@ export def theme [
 
     if ($style | is-empty) {
         print $"Current wallpaper: ($current_wall | path basename)"
-        print ""
-        print "Available Scheme Profiles:"
-        print "  theme expressive    - Android Material You default"
-        print "  theme fruit-salad   - Playful & high contrast"
-        print "  theme vibrant       - Max saturation & vividness"
-        print "  theme rainbow       - Full spectrum"
-        print "  theme fidelity      - Strict image fidelity"
-        print "  theme tonal-spot    - Classic Material"
-        print "  theme monochrome    - Minimal grayscale"
-        print ""
-        print "Mode Controls:"
-        print "  theme dark          - Dark mode"
-        print "  theme light         - Light mode"
-        print "  theme <#hex>        - Custom accent color"
-        print ""
-        print "Extracted Wallpaper Source Accents:"
-        let raw_colors = (try { ^matugen image --show-source-colors $current_wall | lines | str trim | where ($it | str starts-with "#") } catch { [] })
-        $raw_colors | enumerate | each { |r|
-            let idx = $r.index + 1
-            print $"  theme ($r.item)   - Source Accent ($idx)"
-        }
+        print $"Theme profiles: expressive, fruit-salad, vibrant, rainbow, fidelity, content, tonal-spot, monochrome"
+        print $"Modes: dark, light"
+        print "Source accent colors:"
+        try {
+            ^matugen image --show-source-colors $current_wall
+        } catch { }
         return
     }
 
-    let style_str = ($style | default "")
-    let style_lower = ($style_str | str lowercase)
+    let input_style = ($style | str lowercase)
 
-    if ($style_str | str starts-with "#") {
-        matugen color hex $style_str
-        print $"✓ Applied accent color: ($style_str)"
-    } else if $style_lower == "dark" {
-        matugen -m dark -t scheme-expressive image $current_wall
-        print "✓ Switched to Dark Mode (Expressive)"
-    } else if $style_lower == "light" {
-        matugen -m light -t scheme-expressive image $current_wall
-        print "✓ Switched to Light Mode (Expressive)"
-    } else {
-        let stype = if ($style_lower | str starts-with "scheme-") {
-            $style_lower
-        } else {
-            $"scheme-($style_lower)"
-        }
-        matugen -t $stype image $current_wall
-        print $"✓ Applied theme profile: ($stype)"
+    # 1. Dark / Light mode toggle
+    if $input_style == "dark" or $input_style == "light" {
+        ^matugen -m $input_style image $current_wall
+        print $"✓ Switched to ($input_style) mode"
+        return
     }
+
+    # 2. Custom Hex color accent override
+    if ($style | str starts-with "#") {
+        ^matugen color hex ($style | str replace "#" "")
+        print $"✓ Applied accent color ($style)"
+        return
+    }
+
+    # 3. Scheme type profile
+    let stype = if ($input_style | str starts-with "scheme-") {
+        $input_style
+    } else {
+        $"scheme-($input_style)"
+    }
+
+    ^matugen -t $stype image $current_wall
+    print $"✓ Applied theme profile ($stype)"
 }
