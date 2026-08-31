@@ -6,6 +6,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
     hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
 
+    -- Start graphical session systemd units (Waybar, SwayNC, Hypridle)
+    hl.exec_cmd("systemctl --user start hyprland-session.target")
+
     -- Keyring daemon
     hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
 
@@ -13,14 +16,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
 
-    -- Wallpaper, Idle & Notification daemons
+    -- Daemons without systemd units
     hl.exec_cmd("awww-daemon || swww-daemon")
-    hl.exec_cmd("hypridle")
-    hl.exec_cmd("swaync")
-    hl.exec_cmd("waybar")
     hl.exec_cmd("swayosd-server")
-
-    -- Vicinae launcher daemon
     hl.exec_cmd("vicinae server")
 
     -- Auto delete trash 30 days old

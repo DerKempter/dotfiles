@@ -15,9 +15,6 @@
   "hide-on-action": false,
   "widgets": [
     "title",
-    "mpris",
-    "volume",
-    "backlight",
     "dnd",
     "notifications"
   ],
@@ -29,17 +26,6 @@
     },
     "dnd": {
       "text": "Do Not Disturb"
-    },
-    "mpris": {
-      "image-size": 72,
-      "image-radius": 12
-    },
-    "volume": {
-      "label": "󰕾",
-      "show-per-app": true
-    },
-    "backlight": {
-      "label": "󰃠"
     }
   }
 }
