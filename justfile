@@ -1,31 +1,27 @@
+# justfile
+# Automation recipes for managing dotfiles, symlinks, and cross-shell testing
+
 set shell := ["nu", "-c"]
 
-# Main entry points (auto-detect OS)
+# =============================================================================
+# Linking & Environment Provisioning
+# =============================================================================
+
+# Apply GNU Stow symlinks across common and machine-specific configurations
 link:
     if $nu.os-info.name == "windows" { just link-windows } else { just link-linux }
-
-unlink:
-    if $nu.os-info.name == "windows" { just unlink-windows } else { just unlink-linux }
-
-# =============================================================================
-# Linux Operations (GNU Stow)
-# =============================================================================
 
 link-linux:
     stow -R common --verbose
     if (sys host | get hostname) == "joshs-cachy-box" { stow -R desktop --verbose }
 
+# Remove GNU Stow symlinks
+unlink:
+    if $nu.os-info.name == "windows" { just unlink-windows } else { just unlink-linux }
+
 unlink-linux:
     stow -D common --verbose
     if (sys host | get hostname) == "joshs-cachy-box" { stow -D desktop --verbose }
-
-diff:
-    stow -n -v -R common
-    if (sys host | get hostname) == "joshs-cachy-box" { stow -n -v -R desktop }
-
-# =============================================================================
-# Windows Operations (Native Nushell Symlinks)
-# =============================================================================
 
 link-windows:
     print "=== Linking Windows Targets ==="
@@ -45,7 +41,7 @@ unlink-windows:
 
 # Install external package dependencies (like Yazi plugins/flavors)
 install:
-    ya pkg install
+    ya pkg install --discard
 
 # Audit and install essential CLI dependencies and apply symlinks
 setup:
@@ -58,11 +54,11 @@ check:
     print "✓ Bash syntax OK"
 
     print "=== Validating Zsh ==="
-    zsh -n common/.zshrc
-    print "✓ Zsh syntax OK"
+    if (which zsh | is-empty) == false { zsh -n common/.zshrc; print "✓ Zsh syntax OK" } else { print "⚠ Zsh is not installed on host. Static check skipped." }
 
     print "=== Validating Nushell ==="
-    glob common/.config/nushell/**/*.nu | each { |file| nu --ide-check 10 $file }
+    glob common/.config/nushell/**/*.nu | each { |file| nu --ide-check 20 $file }
+    glob tests/*.nu | each { |file| nu --ide-check 20 $file }
     print "✓ Nushell syntax OK"
 
     print "=== Validating Fish ==="

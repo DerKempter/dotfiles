@@ -16,6 +16,7 @@ export def main [] {
         { name: "bash", binaries: ["bash"] },
         { name: "stow", binaries: ["stow"] },
         { name: "just", binaries: ["just"] },
+        { name: "matugen", binaries: ["matugen"] },
         { name: "starship", binaries: ["starship"] },
         { name: "atuin", binaries: ["atuin"] },
         { name: "yazi", binaries: ["yazi"] },
@@ -133,6 +134,35 @@ def install-missing-tools [missing: list<string>] {
             if "atuin" in $missing and (which atuin | is-empty) {
                 print "Installing atuin..."
                 ^curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | ^bash
+            }
+
+            if "yazi" in $missing and (which yazi | is-empty) {
+                print "Installing yazi..."
+                let tmp_zip = $"($env.HOME)/.local/bin/yazi.zip"
+                ^curl -sLo $tmp_zip "https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-gnu.zip"
+                let tmp_dir = (mktemp -d)
+                ^unzip -q $tmp_zip -d $tmp_dir
+                let yazi_bin = (glob $"($tmp_dir)/yazi-*/yazi" | first)
+                let ya_bin = (glob $"($tmp_dir)/yazi-*/ya" | first)
+                ^cp $yazi_bin $"($env.HOME)/.local/bin/yazi"
+                ^cp $ya_bin $"($env.HOME)/.local/bin/ya"
+                rm -rf $tmp_dir
+                rm -f $tmp_zip
+            }
+
+            if "matugen" in $missing and (which matugen | is-empty) {
+                print "Installing matugen..."
+                if not (which cargo | is-empty) {
+                    ^cargo install matugen
+                } else {
+                    let asset_url = (^curl -s "https://api.github.com/repos/InioX/matugen/releases/latest" | ^grep -oP '"browser_download_url": "\K[^"]*x86_64\.tar\.gz' | head -n 1 | str trim)
+                    if not ($asset_url | is-empty) {
+                        let tmp_tar = $"($env.HOME)/.local/bin/matugen.tar.gz"
+                        ^curl -sLo $tmp_tar $asset_url
+                        ^tar -xzf $tmp_tar -C $"($env.HOME)/.local/bin" matugen
+                        rm -f $tmp_tar
+                    }
+                }
             }
 
             if "fnm" in $missing and (which fnm | is-empty) {

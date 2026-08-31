@@ -62,6 +62,7 @@ install_arch() {
     local ARCH_PACKAGES=(
         nushell zsh bash
         stow just
+        matugen
         starship atuin
         yazi bat lazygit lazydocker micro
         zoxide keychain git-delta fzf ripgrep
@@ -150,7 +151,23 @@ install_debian() {
         rm -rf "${TEMP_DIR}"
     fi
 
-    # 9. fnm (Fast Node Manager)
+    # 9. Matugen (Material You color generator)
+    if ! has_cmd matugen; then
+        log_info "Installing matugen..."
+        if command -v cargo >/dev/null 2>&1; then
+            cargo install matugen
+        else
+            local MATUGEN_URL
+            MATUGEN_URL=$(curl -s "https://api.github.com/repos/InioX/matugen/releases/latest" | grep -oP '"browser_download_url": "\K[^"]*x86_64\.tar\.gz' | head -n 1)
+            if [ -n "$MATUGEN_URL" ]; then
+                curl -sLo "$HOME/.local/bin/matugen.tar.gz" "$MATUGEN_URL"
+                tar -xzf "$HOME/.local/bin/matugen.tar.gz" -C "$HOME/.local/bin" matugen
+                rm -f "$HOME/.local/bin/matugen.tar.gz"
+            fi
+        fi
+    fi
+
+    # 10. fnm (Fast Node Manager)
     if ! has_cmd fnm; then
         log_info "Installing fnm..."
         curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.local/bin" --skip-shell
@@ -199,16 +216,15 @@ if command -v just >/dev/null 2>&1; then
     just link
     
     if command -v ya >/dev/null 2>&1; then
-        log_info "Installing Yazi package plugins..."
+        log_info "Installing Yazi plugins..."
         just install || true
     fi
 elif command -v stow >/dev/null 2>&1; then
-    log_info "Applying GNU Stow symlinks directly..."
+    log_info "Applying GNU Stow symlinks..."
     stow -R common --verbose
 else
-    log_warn "Neither 'just' nor 'stow' found. Skipping automatic symlinking."
+    log_error "Neither 'just' nor 'stow' found. Cannot link dotfiles."
+    exit 1
 fi
 
-printf "\n%b==============================================================================%b\n" "${GREEN}${BOLD}" "${RESET}"
-printf "%b             🎉 Dotfiles Installation & Setup Complete!              %b\n" "${GREEN}${BOLD}" "${RESET}"
-printf "%b==============================================================================%b\n" "${GREEN}${BOLD}" "${RESET}"
+log_success "🎉 Dotfiles environment setup complete!"
