@@ -81,6 +81,11 @@ if [ -f "$HOME/.cache/starship.toml" ]; then
   export STARSHIP_CONFIG="$HOME/.cache/starship.toml"
 fi
 
+# Dynamic Lazygit Config (uses cached matugen-generated theme outside git if present)
+if [ -f "$HOME/.cache/lazygit/theme.yml" ]; then
+  export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.cache/lazygit/theme.yml"
+fi
+
 # Starship Prompt (Must be loaded last)
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"

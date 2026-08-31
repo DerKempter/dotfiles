@@ -20,6 +20,18 @@ output_path = "~/.config/ghostty/themes/matugen"
 input_path = "~/.config/matugen/templates/starship.toml"
 output_path = "~/.cache/starship.toml"
 
+[templates.yazi]
+input_path = "~/.config/matugen/templates/yazi-flavor.toml"
+output_path = "~/.config/yazi/flavors/matugen.yazi/flavor.toml"
+
+[templates.micro]
+input_path = "~/.config/matugen/templates/micro-colorscheme.micro"
+output_path = "~/.config/micro/colorschemes/matugen.micro"
+
+[templates.lazygit]
+input_path = "~/.config/matugen/templates/lazygit-theme.yml"
+output_path = "~/.cache/lazygit/theme.yml"
+
 [templates.hyprland]
 input_path = "~/.config/matugen/templates/hyprland-colors.lua"
 output_path = "~/.config/hypr/scheme/current.lua"

@@ -12,6 +12,11 @@ let cached_starship = ($env.HOME | path join ".cache/starship.toml")
 let default_starship = ($env.HOME | path join ".config/starship.toml")
 $env.STARSHIP_CONFIG = (if ($cached_starship | path exists) { $cached_starship } else { $default_starship })
 
+# Dynamic Lazygit Config (uses cached matugen-generated theme outside git if present)
+let cached_lg_theme = ($env.HOME | path join ".cache/lazygit/theme.yml")
+let base_lg_config = ($env.HOME | path join ".config/lazygit/config.yml")
+$env.LG_CONFIG_FILE = (if ($cached_lg_theme | path exists) { $"($base_lg_config),($cached_lg_theme)" } else { $base_lg_config })
+
 # ==============================================================================
 # Path Customization
 # ==============================================================================
