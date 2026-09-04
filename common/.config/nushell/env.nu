@@ -31,6 +31,7 @@ $env.PATH = (
         ($env.HOME | path join ".cargo" "bin")
         ($env.HOME | path join ".nub" "bin")
         ($env.HOME | path join ".atuin" "bin")
+        ($env.HOME | path join ".lmstudio" "bin")
     ]
     | compact
     | uniq
@@ -46,6 +47,12 @@ if ($bun_bin | path exists) {
 let deno_bin = ($env.HOME | path join ".deno" "bin")
 if ($deno_bin | path exists) {
     $env.PATH = ($env.PATH | prepend $deno_bin)
+}
+
+# LM Studio
+let lmstudio_bin = ($env.HOME | path join ".lmstudio" "bin")
+if ($lmstudio_bin | path exists) {
+    $env.PATH = ($env.PATH | prepend $lmstudio_bin)
 }
 
 # SQL Server Command Line Tools
@@ -103,6 +110,31 @@ if not ($cargo_env | path exists) {
         mkdir $cargo_dir
     }
     "" | save -f $cargo_env
+}
+
+# Atuin shell history hook initializer
+let atuin_share_dir = ($env.HOME | path join ".local" "share" "atuin")
+let atuin_init = ($atuin_share_dir | path join "init.nu")
+let atuin_pty = ($atuin_share_dir | path join "pty-proxy-init.nu")
+
+if not ($atuin_share_dir | path exists) {
+    mkdir $atuin_share_dir
+}
+
+if not (which atuin | is-empty) {
+    if not ($atuin_init | path exists) or (open $atuin_init | is-empty) {
+        atuin init nu | save -f $atuin_init
+    }
+    if not ($atuin_pty | path exists) or (open $atuin_pty | is-empty) {
+        atuin pty-proxy init nu | save -f $atuin_pty
+    }
+}
+
+if not ($atuin_init | path exists) {
+    touch $atuin_init
+}
+if not ($atuin_pty | path exists) {
+    touch $atuin_pty
 }
 
 # Keychain SSH Key Management

@@ -13,6 +13,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y zsh fish stow just
+          # Install atuin and zoxide for realistic CI validation
+          curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+          curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | bash
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "$HOME/.atuin/bin" >> $GITHUB_PATH
 
       - name: Install Nushell
         uses: hustcer/setup-nu@v3
