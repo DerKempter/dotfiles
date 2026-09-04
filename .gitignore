@@ -16,6 +16,7 @@
 **/hypr/scheme/hyprlock-colors.conf
 **/hypr/hyprland-gui.lua
 **/hypr/dms/colors.lua
+**/hypr/shaders/
 
 # Dynamic Matugen theme artifacts
 **/waybar/colors.css

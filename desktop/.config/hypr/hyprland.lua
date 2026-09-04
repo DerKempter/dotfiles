@@ -46,6 +46,7 @@ require("hyprland.decoration")
 require("hyprland.group")
 require("hyprland.execs")
 require("hyprland.rules")
+require("hyprland.shaders")
 require("hyprland.gestures")
 require("hyprland.keybinds")
 
