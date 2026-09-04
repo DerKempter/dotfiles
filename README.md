@@ -18,6 +18,50 @@ Whenever a wallpaper is selected or a theme profile is changed, colors are insta
 
 ---
 
+## Hyprland Window Shaders (HyprWindowShade)
+
+Hyprland open and close window animations are augmented with custom GLSL fragment shaders powered by [HyprWindowShade](https://github.com/ManofJELLO/HyprWindowShade) and the [Hyprland-Shader](https://github.com/jbuck95/Hyprland-Shader) library (configured with `ionize` on open and `starfield` on close).
+
+### Setup Instructions
+
+1. **Download Shaders**:
+   Clone the shader library directly into your Hyprland shaders directory:
+   ```bash
+   git clone https://github.com/jbuck95/Hyprland-Shader.git /tmp/Hyprland-Shader
+   mkdir -p ~/.config/hypr/shaders
+   cp -r /tmp/Hyprland-Shader/shaders/* ~/.config/hypr/shaders/
+   ```
+
+2. **Compile and Install Plugin**:
+   HyprWindowShade compiles directly against Hyprland's headers:
+   ```bash
+   git clone https://github.com/ManofJELLO/HyprWindowShade.git /tmp/HyprWindowShade
+   mkdir -p ~/.local/share/hyprland/plugins
+
+   g++ -shared -fPIC -O3 -std=c++23 -fno-gnu-unique \
+       /tmp/HyprWindowShade/*.cpp -o ~/.local/share/hyprland/plugins/HyprWindowShade.so \
+       -I/var/cache/hyprpm/$USER/headersRoot/include \
+       -I/var/cache/hyprpm/$USER/headersRoot/include/hyprland \
+       -I/var/cache/hyprpm/$USER/headersRoot/include/hyprland/src \
+       -I/var/cache/hyprpm/$USER/headersRoot/include/hyprland/protocols \
+       -I/usr/include/cairo \
+       -I/usr/include/freetype2 \
+       -I/usr/include/libpng16 \
+       -I/usr/include/pixman-1 \
+       -I/usr/include/libdrm \
+       -lGLESv2 -lEGL -lGL
+   ```
+
+3. **Enable & Configure**:
+   - The plugin and rules are loaded via `desktop/.config/hypr/hyprland/shaders.lua`.
+   - Window sizing during animations is kept at `popin 100%` (linear) in `desktop/.config/hypr/hyprland/animations.lua` to prevent texture stretching while shaders render.
+   - Reload Hyprland to apply:
+     ```bash
+     hyprctl reload
+     ```
+
+---
+
 ## Applications & Configs
 
 *   **Shells**:
