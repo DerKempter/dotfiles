@@ -2,8 +2,10 @@ local home = os.getenv("HOME")
 local shaderDir = home .. "/.config/hypr/shaders"
 local pluginPath = home .. "/.local/share/hyprland/plugins/HyprWindowShade.so"
 
--- Ensure HyprWindowShade plugin is loaded
-hl.exec_cmd("hyprctl plugin load " .. pluginPath)
+-- Ensure HyprWindowShade plugin is loaded on Hyprland startup
+hl.on("hyprland.start", function()
+    hl.exec_cmd("hyprctl plugin load " .. pluginPath)
+end)
 
 local M = {}
 
