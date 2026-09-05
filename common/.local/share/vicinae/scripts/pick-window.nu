@@ -24,7 +24,7 @@ def get_icon [class: string] {
         "󰈹"
     } else if ($c | str contains "spotify") or ($c | str contains "fastpotify") or ($c | str contains "feishin") {
         ""
-    } else if ($c | str contains "vesktop") or ($c | str contains "discord") {
+    } else if ($c | str contains "equibop") or ($c | str contains "vesktop") or ($c | str contains "discord") {
         "󰙯"
     } else if ($c | str contains "steam") {
         "󰓓"

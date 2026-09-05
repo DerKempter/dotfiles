@@ -21,7 +21,7 @@ def get_icon [class: string] {
         "󰈹"
     } else if ($c | str contains "spotify") or ($c | str contains "fastpotify") or ($c | str contains "feishin") {
         ""
-    } else if ($c | str contains "vesktop") or ($c | str contains "discord") {
+    } else if ($c | str contains "equibop") or ($c | str contains "vesktop") or ($c | str contains "discord") {
         "󰙯"
     } else if ($c | str contains "steam") {
         "󰓓"
@@ -38,7 +38,7 @@ def get_icon [class: string] {
 let special_defs = [
     { id: "special:music", name: "music", title: "Music", icon: "", desc: "Fastpotify / Music Player" }
     { id: "special:sysmon", name: "sysmon", title: "Sysmon", icon: "󰄛", desc: "btop / System Monitor" }
-    { id: "special:communication", name: "communication", title: "Communication", icon: "󰙯", desc: "Discord / Vesktop" }
+    { id: "special:communication", name: "communication", title: "Communication", icon: "󰙯", desc: "Discord / Equibop" }
     { id: "special:todo", name: "todo", title: "Todo", icon: "󰠲", desc: "Todo / Tasks Workspace" }
     { id: "special:special", name: "specialws", title: "Scratchpad", icon: "󰄛", desc: "General Scratchpad" }
 ]
