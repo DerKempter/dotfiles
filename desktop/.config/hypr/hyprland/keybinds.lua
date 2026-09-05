@@ -185,14 +185,17 @@ create_bind(
     locked_repeating
 )
 
--- Clipboard (cliphist + vicinae / fuzzel)
-create_bind(vars.kbClipboard, hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"))
-create_bind(vars.kbClipboardDel, hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist delete"))
+-- Clipboard (cliphist + vicinae)
+create_bind(vars.kbClipboard, hl.dsp.exec_cmd("nu ~/.local/share/vicinae/scripts/pick-clipboard.nu"))
+create_bind(vars.kbClipboardDel, hl.dsp.exec_cmd("cliphist list | vicinae dmenu -p \"Delete clipboard entry...\" -n \"Delete Clipboard\" | cliphist delete"))
 create_bind(
     vars.kbClipboardPasteLatest,
     hl.dsp.exec_cmd('sleep 0.5s && ydotool type -d 1 "$(cliphist list | head -1 | cliphist decode)"'),
     locked
 )
+
+-- Emoji Picker (Vicinae native emoji search)
+create_bind(vars.kbEmoji, hl.dsp.exec_cmd("vicinae deeplink vicinae://launch/core/search-emojis"))
 
 
 -- Testing
