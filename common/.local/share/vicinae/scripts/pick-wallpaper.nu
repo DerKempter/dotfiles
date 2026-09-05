@@ -120,10 +120,10 @@ if (which plasma-apply-wallpaperimage | is-empty) == false {
     plasma-apply-wallpaperimage $final_file
 } else if (which awww | is-empty) == false {
     if (pgrep -x awww-daemon | is-empty) { job spawn { awww-daemon }; sleep 200ms }
-    awww img $final_file --transition-type wave --transition-fps 144 --transition-duration 1.5
+    awww img $final_file --transition-type random --transition-fps 144 --transition-duration 1.5
 } else if (which swww | is-empty) == false {
     if (pgrep -x swww-daemon | is-empty) { job spawn { swww-daemon }; sleep 200ms }
-    swww img $final_file --transition-type wave --transition-fps 144 --transition-duration 1.5
+    swww img $final_file --transition-type random --transition-fps 144 --transition-duration 1.5
 }
 
 if (which matugen | is-empty) == false {

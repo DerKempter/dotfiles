@@ -299,13 +299,13 @@ export def wallpaper [
             job spawn { awww-daemon }
             sleep 200ms
         }
-        awww img $resolved_path --transition-type wave --transition-fps 144 --transition-duration 1.5
+        awww img $resolved_path --transition-type random --transition-fps 144 --transition-duration 1.5
     } else if (which swww | is-empty) == false {
         if (pgrep -x swww-daemon | is-empty) {
             job spawn { swww-daemon }
             sleep 200ms
         }
-        swww img $resolved_path --transition-type wave --transition-fps 144 --transition-duration 1.5
+        swww img $resolved_path --transition-type random --transition-fps 144 --transition-duration 1.5
     }
 
     # 3. Extract Material 3 colors with Matugen
