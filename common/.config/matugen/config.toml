@@ -15,6 +15,7 @@ post_hook = "command -v vicinae >/dev/null 2>&1 && (vicinae theme set matugen >/
 [templates.ghostty]
 input_path = "~/.config/matugen/templates/ghostty-colors"
 output_path = "~/.config/ghostty/themes/matugen"
+post_hook = "pkill -SIGUSR2 -x ghostty || true"
 
 [templates.starship]
 input_path = "~/.config/matugen/templates/starship.toml"
