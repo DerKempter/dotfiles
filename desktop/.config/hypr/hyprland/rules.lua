@@ -163,6 +163,14 @@ tagged_rule(todo_app_tag, {
 tagged_rule(float_tag, { { class = "steam", title = "Friends List" } })
 tagged_rule(xwl_popup_tag, { { class = "steam", title = "" } })
 
+-- Hyprland share picker (Screenshare dialog)
+hl.window_rule({
+    match  = { class = "hyprland-share-picker" },
+    float  = true,
+    pin    = true,
+    center = true,
+})
+
 -- Ueberzugpp
 hl.window_rule({ match = { class = "ueberzugpp_.*" }, float = true, no_initial_focus = true })
 
