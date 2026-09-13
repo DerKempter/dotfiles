@@ -17,19 +17,10 @@ module.exports = P(G);
 
 var r = require("@vicinae/api");
 var a = require("react/jsx-runtime");
-var cp = require("node:child_process");
 
-function runCommand(cmd, title) {
-    (0, r.closeMainWindow)();
-    cp.exec(cmd, (err) => {
-        if (err) {
-            (0, r.showToast)({
-                style: r.Toast.Style.Failure,
-                title: "Failed to execute action",
-                message: err.message
-            });
-        }
-    });
+async function triggerAction(item) {
+    await (0, r.closeMainWindow)();
+    await (0, r.open)(item.deeplink);
 }
 
 const ITEMS = [
@@ -38,72 +29,60 @@ const ITEMS = [
         title: "Lock Screen",
         subtitle: "Lock session",
         icon: r.Icon.Lock,
-        action: "hyprlock",
-        command: "hyprlock",
+        deeplink: "vicinae://launch/power/lock",
         type: "Security / Session",
-        target: "Display Compositor",
         shortcutKey: "l",
-        description: "Locks the current Hyprland session and displays the secure lockscreen."
+        description: "Locks the current desktop session using Vicinae's native lock provider."
     },
     {
         id: "suspend",
         title: "Suspend / Sleep",
-        subtitle: "Low power mode",
+        subtitle: "Low-power sleep",
         icon: r.Icon.Moon,
-        action: "systemctl suspend",
-        command: "systemctl suspend",
+        deeplink: "vicinae://launch/power/suspend",
         type: "Power State",
-        target: "Systemd ACPI S3",
         shortcutKey: "u",
-        description: "Places the computer into low-power RAM sleep mode."
+        description: "Puts the computer into low-power sleep mode."
     },
     {
         id: "reboot",
         title: "Restart / Reboot",
-        subtitle: "Restart computer",
+        subtitle: "Reboot computer",
         icon: r.Icon.ArrowClockwise,
-        action: "systemctl reboot",
-        command: "systemctl reboot",
+        deeplink: "vicinae://launch/power/reboot",
         type: "System Lifecycle",
-        target: "Full Hardware Reset",
         shortcutKey: "r",
-        description: "Gracefully stops all running services and restarts the operating system."
+        description: "Safely restarts the operating system and reboots the machine."
     },
     {
-        id: "poweroff",
+        id: "power-off",
         title: "Power Off / Shutdown",
         subtitle: "Shut down system",
         icon: r.Icon.Power,
-        action: "systemctl poweroff",
-        command: "systemctl poweroff",
+        deeplink: "vicinae://launch/power/power-off",
         type: "System Lifecycle",
-        target: "ACPI Power State S5",
         shortcutKey: "s",
-        description: "Safely syncs filesystems, terminates processes, and powers off the machine."
+        description: "Safely terminates processes, syncs storage, and powers down hardware."
     },
     {
         id: "logout",
         title: "Log Out",
-        subtitle: "Exit Hyprland",
+        subtitle: "Exit current session",
         icon: r.Icon.Door,
-        action: "hyprctl dispatch exit",
-        command: "hyprctl dispatch exit",
-        type: "Compositor Session",
-        target: "Display Server",
+        deeplink: "vicinae://launch/power/logout",
+        type: "Session Lifecycle",
         shortcutKey: "e",
-        description: "Ends your current Hyprland desktop session and returns to login manager/TTY."
+        description: "Ends the current desktop session and returns to login manager."
     },
     {
         id: "hibernate",
         title: "Hibernate",
         subtitle: "Save state to disk",
         icon: r.Icon.HardDrive,
-        action: "systemctl hibernate",
-        command: "systemctl hibernate",
+        deeplink: "vicinae://launch/power/hibernate",
         type: "Power State",
-        target: "Disk Swap Image (S4)",
         shortcutKey: "h",
-        description: "Writes active RAM state to swap disk and completely powers down."
+        description: "Writes active memory state to disk swap image and powers down."
     }
 ];
 
@@ -127,16 +106,16 @@ function PowerMenu() {
                                 title: item.title,
                                 icon: item.icon,
                                 shortcut: { modifiers: ["ctrl"], key: item.shortcutKey },
-                                onAction: () => runCommand(item.action, item.title)
+                                onAction: () => triggerAction(item)
                             }),
                             (0, a.jsx)(r.Action.CopyToClipboard, {
-                                title: "Copy Shell Command",
-                                content: item.command
+                                title: "Copy Vicinae Deeplink",
+                                content: item.deeplink
                             })
                         ]
                     }),
                     detail: (0, a.jsx)(r.List.Item.Detail, {
-                        markdown: `### ${item.title}\n\n${item.description}\n\n---\n\n\`\`\`bash\n$ ${item.command}\n\`\`\``,
+                        markdown: `### ${item.title}\n\n${item.description}\n\n---\n\n\`\`\`text\n${item.deeplink}\n\`\`\``,
                         metadata: (0, a.jsxs)(r.List.Item.Detail.Metadata, {
                             children: [
                                 (0, a.jsx)(r.List.Item.Detail.Metadata.Label, {
@@ -144,14 +123,10 @@ function PowerMenu() {
                                     text: item.type
                                 }),
                                 (0, a.jsx)(r.List.Item.Detail.Metadata.Label, {
-                                    title: "Target Subsystem",
-                                    text: item.target
+                                    title: "Vicinae Target",
+                                    text: item.deeplink.replace("vicinae://launch/", "")
                                 }),
                                 (0, a.jsx)(r.List.Item.Detail.Metadata.Separator, {}),
-                                (0, a.jsx)(r.List.Item.Detail.Metadata.Label, {
-                                    title: "Command",
-                                    text: item.command
-                                }),
                                 (0, a.jsx)(r.List.Item.Detail.Metadata.TagList, {
                                     title: "Direct Hotkey",
                                     children: (0, a.jsx)(r.List.Item.Detail.Metadata.TagList.Item, {
