@@ -68,7 +68,7 @@ return {
     -- All the following binds can be either an array of binds to bind multiple keys, or a single string.
 
     -- Workspaces
-    kbMoveWinToWsSpecial       = { "SUPER + ALT + S", "CTRL + SUPER + SHIFT + Up" },
+    kbMoveWinToWsSpecial       = "CTRL + SUPER + SHIFT + Up",
     kbMoveWinFromWsSpecial     = "CTRL + SUPER + SHIFT + Down",
     kbMoveWinToWsNext          = { "SUPER + ALT + mouse_down", "SUPER + ALT + Page_Down", "CTRL + SUPER + SHIFT + Right" },
     kbMoveWinToWsPrev          = { "SUPER + ALT + mouse_up", "SUPER + ALT + Page_Up", "CTRL + SUPER + SHIFT + Left" },
@@ -121,6 +121,8 @@ return {
     kbScreenshot               = "Print",
     kbScreenshotFreeze         = "SUPER + SHIFT + S",
     kbScreenshotRegion         = "SUPER + SHIFT + ALT + S",
+    kbScreenshotOCR            = "SUPER + ALT + S",
+    kbWallpaperRandom          = "SUPER + ALT + W",
     kbRecord                   = "CTRL + ALT + R",
     kbRecordSound              = "SUPER + ALT + R",
     kbRecordRegion             = "SUPER + SHIFT + ALT + R",
@@ -135,6 +137,7 @@ return {
 
     -- Misc
     kbLauncher                 = "SUPER + SUPER_L",
+    kbKeybindsCheatsheet       = "SUPER + F1",
     kbSession                  = "CTRL + ALT + Delete",
     kbShowSidebar              = "SUPER + N",
     kbClearNotifs              = "CTRL + ALT + C",

@@ -59,6 +59,9 @@ create_bind(
     end
 )
 
+-- Cheatsheet / Keybinds Helper
+create_bind(vars.kbKeybindsCheatsheet, hl.dsp.exec_cmd("vicinae deeplink vicinae://launch/@sovereign/store.vicinae.hypr-keybinds/hyprland-keybinds"))
+
 -- Notifications, Sidebar & Locking
 create_bind(vars.kbShowSidebar, hl.dsp.exec_cmd("swaync-client -t -sw"))
 create_bind(vars.kbClearNotifs, hl.dsp.exec_cmd("swaync-client -C"), locked)
@@ -159,6 +162,8 @@ create_bind(vars.kbAudioSettings, hl.dsp.exec_cmd(vars.audioSettings))
 create_bind(vars.kbScreenshot, hl.dsp.exec_cmd("grim - | wl-copy"), locked)
 create_bind(vars.kbScreenshotFreeze, hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | swappy -f -"))
 create_bind(vars.kbScreenshotRegion, hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy"))
+create_bind(vars.kbScreenshotOCR, hl.dsp.exec_cmd('grim -g "$(slurp)" - | tesseract stdin stdout -l eng 2>/dev/null | wl-copy && notify-send -i edit-copy "OCR" "Text copied to clipboard!"'))
+create_bind(vars.kbWallpaperRandom, hl.dsp.exec_cmd('nu -c "use ~/.config/nushell/scripts/desktop.nu *; wallpaper random"'))
 create_bind(vars.kbColorPicker, hl.dsp.exec_cmd("hyprpicker -a"))
 
 -- Brightness (swayosd / brightnessctl)
@@ -185,9 +190,9 @@ create_bind(
     locked_repeating
 )
 
--- Clipboard (cliphist + vicinae)
-create_bind(vars.kbClipboard, hl.dsp.exec_cmd("nu ~/.local/share/vicinae/scripts/pick-clipboard.nu"))
-create_bind(vars.kbClipboardDel, hl.dsp.exec_cmd("cliphist list | vicinae dmenu -p \"Delete clipboard entry...\" -n \"Delete Clipboard\" | cliphist delete"))
+-- Clipboard (vicinae native rich history)
+create_bind(vars.kbClipboard, hl.dsp.exec_cmd("vicinae deeplink vicinae://launch/clipboard/history"))
+create_bind(vars.kbClipboardDel, hl.dsp.exec_cmd('cliphist list | vicinae dmenu -p "Delete clipboard entry..." -n "Delete Clipboard" | cliphist delete'))
 create_bind(
     vars.kbClipboardPasteLatest,
     hl.dsp.exec_cmd('sleep 0.5s && ydotool type -d 1 "$(cliphist list | head -1 | cliphist decode)"'),
