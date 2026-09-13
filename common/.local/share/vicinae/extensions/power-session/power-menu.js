@@ -32,7 +32,7 @@ const ITEMS = [
         deeplink: "vicinae://launch/power/lock",
         type: "Security / Session",
         shortcutKey: "l",
-        description: "Locks the current desktop session using Vicinae's native lock provider."
+        description: "Locks the current desktop session."
     },
     {
         id: "suspend",
@@ -52,7 +52,7 @@ const ITEMS = [
         deeplink: "vicinae://launch/power/reboot",
         type: "System Lifecycle",
         shortcutKey: "r",
-        description: "Safely restarts the operating system and reboots the machine."
+        description: "Restarts the operating system and reboots the machine."
     },
     {
         id: "power-off",
@@ -62,13 +62,13 @@ const ITEMS = [
         deeplink: "vicinae://launch/power/power-off",
         type: "System Lifecycle",
         shortcutKey: "s",
-        description: "Safely terminates processes, syncs storage, and powers down hardware."
+        description: "Safely terminates processes and powers off hardware."
     },
     {
         id: "logout",
         title: "Log Out",
         subtitle: "Exit current session",
-        icon: r.Icon.Door,
+        icon: r.Icon.ArrowRightCircleFilled,
         deeplink: "vicinae://launch/power/logout",
         type: "Session Lifecycle",
         shortcutKey: "e",
@@ -82,7 +82,7 @@ const ITEMS = [
         deeplink: "vicinae://launch/power/hibernate",
         type: "Power State",
         shortcutKey: "h",
-        description: "Writes active memory state to disk swap image and powers down."
+        description: "Writes active memory state to disk and powers down completely."
     }
 ];
 
@@ -107,24 +107,16 @@ function PowerMenu() {
                                 icon: item.icon,
                                 shortcut: { modifiers: ["ctrl"], key: item.shortcutKey },
                                 onAction: () => triggerAction(item)
-                            }),
-                            (0, a.jsx)(r.Action.CopyToClipboard, {
-                                title: "Copy Vicinae Deeplink",
-                                content: item.deeplink
                             })
                         ]
                     }),
                     detail: (0, a.jsx)(r.List.Item.Detail, {
-                        markdown: `### ${item.title}\n\n${item.description}\n\n---\n\n\`\`\`text\n${item.deeplink}\n\`\`\``,
+                        markdown: `### ${item.title}\n\n${item.description}`,
                         metadata: (0, a.jsxs)(r.List.Item.Detail.Metadata, {
                             children: [
                                 (0, a.jsx)(r.List.Item.Detail.Metadata.Label, {
                                     title: "Action Type",
                                     text: item.type
-                                }),
-                                (0, a.jsx)(r.List.Item.Detail.Metadata.Label, {
-                                    title: "Vicinae Target",
-                                    text: item.deeplink.replace("vicinae://launch/", "")
                                 }),
                                 (0, a.jsx)(r.List.Item.Detail.Metadata.Separator, {}),
                                 (0, a.jsx)(r.List.Item.Detail.Metadata.TagList, {
