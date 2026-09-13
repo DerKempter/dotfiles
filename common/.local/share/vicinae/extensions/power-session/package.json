@@ -2,75 +2,31 @@
   "$schema": "https://raw.githubusercontent.com/vicinaehq/vicinae/refs/heads/main/extra/schemas/extension.json",
   "name": "power-session",
   "title": "Power & Session",
-  "description": "System power management, lock, reboot and shutdown with customizable command overrides",
+  "description": "System power management, lock, reboot, suspend, hibernate, and logout with rich metadata and custom command overrides.",
   "categories": ["System"],
   "license": "MIT",
   "platforms": ["Linux"],
   "author": "joshkempter",
+  "contributors": [],
+  "pastContributors": [],
   "icon": "icon.png",
-  "preferences": [
-    {
-      "name": "customLockCmd",
-      "title": "Custom Lock Command",
-      "description": "Custom command to run for Lock Screen. Leave empty to use default (vicinae://launch/power/lock).",
-      "type": "textfield",
-      "required": false,
-      "placeholder": "hyprlock",
-      "default": ""
-    },
-    {
-      "name": "customSuspendCmd",
-      "title": "Custom Suspend Command",
-      "description": "Custom command to run for Suspend / Sleep. Leave empty to use default (vicinae://launch/power/suspend).",
-      "type": "textfield",
-      "required": false,
-      "placeholder": "systemctl suspend",
-      "default": ""
-    },
-    {
-      "name": "customRebootCmd",
-      "title": "Custom Reboot Command",
-      "description": "Custom command to run for Reboot. Leave empty to use default (vicinae://launch/power/reboot).",
-      "type": "textfield",
-      "required": false,
-      "placeholder": "systemctl reboot",
-      "default": ""
-    },
-    {
-      "name": "customShutdownCmd",
-      "title": "Custom Shutdown Command",
-      "description": "Custom command to run for Shutdown. Leave empty to use default (vicinae://launch/power/power-off).",
-      "type": "textfield",
-      "required": false,
-      "placeholder": "systemctl poweroff",
-      "default": ""
-    },
-    {
-      "name": "customLogoutCmd",
-      "title": "Custom Logout Command",
-      "description": "Custom command to run for Logout. Leave empty to use default (vicinae://launch/power/logout).",
-      "type": "textfield",
-      "required": false,
-      "placeholder": "hyprctl dispatch exit",
-      "default": ""
-    },
-    {
-      "name": "customHibernateCmd",
-      "title": "Custom Hibernate Command",
-      "description": "Custom command to run for Hibernate. Leave empty to use default (vicinae://launch/power/hibernate).",
-      "type": "textfield",
-      "required": false,
-      "placeholder": "systemctl hibernate",
-      "default": ""
-    }
-  ],
   "commands": [
     {
       "name": "power-menu",
       "title": "Power & Session Menu",
-      "subtitle": "Lock, Suspend, Reboot, Shutdown",
-      "description": "Power and session actions with detail metadata and custom command support",
+      "subtitle": "Lock, Suspend, Reboot, Shutdown, Logout",
+      "description": "Power and session actions with detail metadata, hotkeys, and interactive customization UI",
       "mode": "view"
     }
-  ]
+  ],
+  "scripts": {
+    "build": "vici build",
+    "dev": "vici develop"
+  },
+  "dependencies": {
+    "@vicinae/api": "^0.22.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
 }
