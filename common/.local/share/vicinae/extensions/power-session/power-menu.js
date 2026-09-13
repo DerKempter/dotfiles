@@ -62,7 +62,7 @@ const ITEMS = [
         icon: r.Icon.Lock,
         deeplink: "vicinae://launch/power/lock",
         defaultCmd: "vicinae://launch/power/lock",
-        placeholder: "e.g. hyprlock or swaylock",
+        placeholder: "hyprlock",
         type: "Security / Session",
         shortcutKey: "l",
         description: "Locks the current desktop session."
@@ -74,7 +74,7 @@ const ITEMS = [
         icon: r.Icon.Moon,
         deeplink: "vicinae://launch/power/suspend",
         defaultCmd: "vicinae://launch/power/suspend",
-        placeholder: "e.g. systemctl suspend",
+        placeholder: "systemctl suspend",
         type: "Power State",
         shortcutKey: "u",
         description: "Puts the computer into low-power sleep mode."
@@ -86,7 +86,7 @@ const ITEMS = [
         icon: r.Icon.ArrowClockwise,
         deeplink: "vicinae://launch/power/reboot",
         defaultCmd: "vicinae://launch/power/reboot",
-        placeholder: "e.g. systemctl reboot",
+        placeholder: "systemctl reboot",
         type: "System Lifecycle",
         shortcutKey: "r",
         description: "Restarts the operating system and reboots the machine."
@@ -98,7 +98,7 @@ const ITEMS = [
         icon: r.Icon.Power,
         deeplink: "vicinae://launch/power/power-off",
         defaultCmd: "vicinae://launch/power/power-off",
-        placeholder: "e.g. systemctl poweroff",
+        placeholder: "systemctl poweroff",
         type: "System Lifecycle",
         shortcutKey: "s",
         description: "Safely terminates processes and powers off hardware."
@@ -110,7 +110,7 @@ const ITEMS = [
         icon: r.Icon.ArrowRightCircleFilled,
         deeplink: "vicinae://launch/power/logout",
         defaultCmd: "vicinae://launch/power/logout",
-        placeholder: "e.g. hyprctl dispatch exit",
+        placeholder: "hyprctl dispatch exit",
         type: "Session Lifecycle",
         shortcutKey: "e",
         description: "Ends the current desktop session and returns to login manager."
@@ -122,7 +122,7 @@ const ITEMS = [
         icon: r.Icon.HardDrive,
         deeplink: "vicinae://launch/power/hibernate",
         defaultCmd: "vicinae://launch/power/hibernate",
-        placeholder: "e.g. systemctl hibernate",
+        placeholder: "systemctl hibernate",
         type: "Power State",
         shortcutKey: "h",
         description: "Writes active memory state to disk and powers down completely."
@@ -196,8 +196,7 @@ function SettingsForm({ config, onSaved }) {
         }),
         children: [
             (0, a.jsx)(r.Form.Description, {
-                title: "Customize Power Commands",
-                text: "Specify custom shell commands (e.g. hyprctl dispatch exit, hyprlock, systemctl poweroff). Leave an input blank to use Vicinae's built-in power deeplink."
+                text: "Specify custom shell commands to execute (e.g. hyprctl dispatch exit, hyprlock, systemctl poweroff). Leave any input blank to fallback to the default Vicinae built-in power deeplink."
             }),
             (0, a.jsx)(r.Form.Separator, {}),
             ...ITEMS.map(item => (
