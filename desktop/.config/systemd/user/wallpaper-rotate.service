@@ -1,0 +1,8 @@
+[Unit]
+Description=Rotate desktop wallpaper and regenerate Material You theme
+PartOf=hyprland-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/nu -c "use ~/.config/nushell/scripts/desktop.nu *; wallpaper random"
+Environment=PATH=/home/joshkempter/.opencode/bin:/home/joshkempter/.local/bin:/home/joshkempter/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/bin
