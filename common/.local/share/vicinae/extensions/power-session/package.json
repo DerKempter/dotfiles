@@ -1,0 +1,20 @@
+{
+  "$schema": "https://raw.githubusercontent.com/vicinaehq/vicinae/refs/heads/main/extra/schemas/extension.json",
+  "name": "power-session",
+  "title": "Power & Session",
+  "description": "System power management, lock, reboot and shutdown with detailed metadata",
+  "categories": ["System"],
+  "license": "MIT",
+  "platforms": ["Linux"],
+  "author": "joshkempter",
+  "icon": "icon.png",
+  "commands": [
+    {
+      "name": "power-menu",
+      "title": "Power & Session Menu",
+      "subtitle": "Lock, Suspend, Reboot, Shutdown",
+      "description": "Power and session actions with detail metadata",
+      "mode": "view"
+    }
+  ]
+}
