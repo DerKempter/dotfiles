@@ -35,43 +35,51 @@ window#waybar {
     padding: 4px 10px;
 }
 
-/* Base style for EVERY module (Pill shape) */
+/* Base style for standalone modules & island capsules with smooth easing */
 #custom-os,
 #workspaces,
-#window,
-#mpris,
+#window-info,
+.window-info,
+#group-window-info,
+#media,
+.media,
+#group-media,
 #privacy,
-#idle_inhibitor,
-#cpu,
-#memory,
-#custom-weather,
-#pulseaudio,
-#network,
-#bluetooth,
-#clock,
-#tray,
-#custom-notification {
+#hardware,
+.hardware,
+#group-hardware,
+#connectivity,
+.connectivity,
+#group-connectivity,
+#time,
+.time,
+#group-time {
     background: alpha(@surface_container, 0.85);
     border: 1px solid alpha(@outline_variant, 0.5);
     border-radius: 20px;
     padding: 3px 12px;
     margin: 0 4px;
     color: @on_surface;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* 1. OS / Distro Pill (Dynamic Primary Accent) */
+/* 1. OS / Distro Pill */
 #custom-os {
     background: @primary;
     color: @on_primary;
     border: none;
     font-size: 15px;
     padding: 3px 12px;
+    transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#custom-os:hover {
+    background: alpha(@primary, 0.85);
 }
 
 /* 2. Workspaces Pill */
 #workspaces {
     padding: 2px 4px;
-    background: alpha(@surface_container, 0.85);
 }
 
 #workspaces button {
@@ -80,13 +88,14 @@ window#waybar {
     border-radius: 16px;
     padding: 0 8px;
     margin: 1px 2px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 #workspaces button.active {
     background: @secondary;
     color: @on_secondary;
     font-weight: 800;
+    min-width: 24px;
 }
 
 #workspaces button:hover {
@@ -99,27 +108,113 @@ window#waybar {
     color: @on_error;
 }
 
-/* 3. Window Title Pill */
-#window {
+/* 3. Merged Window-Info Pill (Taskbar Icons + Active Window Title) */
+#window-info,
+.window-info,
+#group-window-info {
+    padding: 2px 8px;
+}
+
+#window-info #taskbar,
+.window-info #taskbar {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+#taskbar button {
+    background: transparent;
+    border-radius: 14px;
+    padding: 2px 6px;
+    margin: 1px 2px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#taskbar button:hover {
+    background: alpha(@surface_container_high, 0.9);
+}
+
+#taskbar button.active {
+    background: alpha(@primary_container, 0.5);
+    border-bottom: 2px solid @primary;
+    padding: 2px 8px;
+}
+
+#taskbar button.minimized {
+    opacity: 0.45;
+}
+
+/* Straight vertical primary accent divider between app dock and active window title */
+#window-info #window,
+.window-info #window {
+    background: transparent;
+    border: none;
+    border-radius: 0;
     font-weight: 500;
     color: @on_surface_variant;
+    padding: 1px 8px 1px 10px;
+    margin: 2px 0 2px 4px;
+    border-left: 2px solid alpha(@primary, 0.55);
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 window#waybar.empty #window {
+    border-left: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 4. Center Media & Volume Island Capsule */
+#media,
+.media,
+#group-media {
+    padding: 2px 6px;
+}
+
+#media #mpris,
+.media #mpris {
     background: transparent;
-    border: none;
-}
-
-/* 4. Center Media / Spotify Pill (Dynamic Tertiary Accent) */
-#mpris {
-    background: @tertiary;
-    color: @on_tertiary;
-    border: none;
-    padding: 3px 14px;
+    color: @tertiary;
     font-weight: 700;
+    padding: 2px 8px;
+    margin: 1px 1px;
+    border-radius: 0;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* 5. Privacy & Idle Inhibitor Pills */
+#media #pulseaudio,
+.media #pulseaudio {
+    background: transparent;
+    color: @primary;
+    padding: 2px 8px;
+    margin: 2px 1px 2px 4px;
+    border-left: 2px solid alpha(@primary, 0.55);
+    border-radius: 0;
+    transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#media #pulseaudio:first-child,
+.media #pulseaudio:first-child {
+    border-left: none;
+    margin-left: 1px;
+    padding-left: 8px;
+}
+
+#media #mpris:hover,
+#media #pulseaudio:hover,
+.media #mpris:hover,
+.media #pulseaudio:hover {
+    background: alpha(@surface_container_high, 0.85);
+    border-radius: 12px;
+}
+
+#pulseaudio.muted {
+    color: @outline;
+}
+
+/* 5. Privacy Module */
 #privacy {
     color: @error;
     padding: 3px 10px;
@@ -138,18 +233,88 @@ window#waybar.empty #window {
     color: @error;
 }
 
+/* ========================================================================= */
+/* Right Island Capsules (Hardware, Connectivity, Time & Tray)               */
+/* ========================================================================= */
+
+#hardware,
+.hardware,
+#group-hardware,
+#connectivity,
+.connectivity,
+#group-connectivity,
+#time,
+.time,
+#group-time {
+    padding: 2px 6px;
+}
+
+/* Reset submodules inside capsules */
+#hardware #idle_inhibitor,
+#hardware #cpu,
+#hardware #memory,
+#hardware #custom-weather,
+#connectivity #network,
+#connectivity #bluetooth,
+#time #clock,
+#time #tray,
+#time #custom-notification,
+.hardware #idle_inhibitor,
+.hardware #cpu,
+.hardware #memory,
+.hardware #custom-weather,
+.connectivity #network,
+.connectivity #bluetooth,
+.time #clock,
+.time #tray,
+.time #custom-notification {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 2px 7px;
+    margin: 1px 1px;
+    transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Submodule Hover Highlights */
+#hardware #idle_inhibitor:hover,
+#hardware #cpu:hover,
+#hardware #memory:hover,
+#hardware #custom-weather:hover,
+#connectivity #network:hover,
+#connectivity #bluetooth:hover,
+#time #clock:hover,
+#time #custom-notification:hover,
+.hardware #idle_inhibitor:hover,
+.hardware #cpu:hover,
+.hardware #memory:hover,
+.hardware #custom-weather:hover,
+.connectivity #network:hover,
+.connectivity #bluetooth:hover,
+.time #clock:hover,
+.time #custom-notification:hover {
+    background: alpha(@surface_container_high, 0.85);
+    border-radius: 12px;
+}
+
+/* Idle Inhibitor inside Hardware capsule with straight vertical divider */
 #idle_inhibitor {
     color: @on_surface_variant;
-    padding: 3px 10px;
+    padding: 2px 6px;
 }
 
 #idle_inhibitor.activated {
-    background: @primary;
-    color: @on_primary;
-    border: none;
+    color: @primary;
 }
 
-/* 6. Hardware Stats & Weather Pills */
+#hardware #cpu,
+.hardware #cpu {
+    border-left: 2px solid alpha(@primary, 0.55);
+    margin: 2px 1px 2px 4px;
+    padding-left: 9px;
+}
+
+/* Capsule 1: Hardware Accents */
 #cpu {
     color: @secondary;
 }
@@ -162,15 +327,7 @@ window#waybar.empty #window {
     color: @primary;
 }
 
-/* 7. Status & Connectivity Pills */
-#pulseaudio {
-    color: @primary;
-}
-
-#pulseaudio.muted {
-    color: @outline;
-}
-
+/* Capsule 2: Connectivity Accents */
 #network {
     color: @secondary;
 }
@@ -183,21 +340,23 @@ window#waybar.empty #window {
     color: @tertiary;
 }
 
-/* 8. Clock Pill (Dynamic Primary Container Highlight) */
+/* Capsule 3: Time, Tray & Notification with straight vertical dividers */
 #clock {
-    background: @primary_container;
-    color: @on_primary_container;
-    border: none;
+    color: @on_surface;
     font-weight: 800;
 }
 
-/* 9. Notification Pill */
-#custom-notification {
-    color: @primary;
-    padding: 3px 12px;
+#time #tray,
+.time #tray {
+    padding: 2px 6px 2px 8px;
+    margin: 2px 1px 2px 4px;
+    border-left: 2px solid alpha(@primary, 0.55);
 }
 
-/* 10. System Tray */
-#tray {
-    padding: 3px 8px;
+#time #custom-notification,
+.time #custom-notification {
+    color: @primary;
+    padding: 2px 6px 2px 8px;
+    margin: 2px 1px 2px 4px;
+    border-left: 2px solid alpha(@primary, 0.55);
 }

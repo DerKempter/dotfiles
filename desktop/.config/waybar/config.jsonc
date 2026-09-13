@@ -11,23 +11,16 @@
     "modules-left": [
         "custom/os",
         "hyprland/workspaces",
-        "hyprland/window"
+        "group/window-info"
     ],
     "modules-center": [
-        "mpris"
+        "group/media"
     ],
     "modules-right": [
         "privacy",
-        "idle_inhibitor",
-        "cpu",
-        "memory",
-        "custom/weather",
-        "pulseaudio",
-        "network",
-        "bluetooth",
-        "clock",
-        "tray",
-        "custom/notification"
+        "group/hardware",
+        "group/connectivity",
+        "group/time"
     ],
 
     "custom/os": {
@@ -44,9 +37,40 @@
         "on-click": "activate"
     },
 
+    "group/window-info": {
+        "orientation": "horizontal",
+        "modules": [
+            "wlr/taskbar",
+            "hyprland/window"
+        ]
+    },
+
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 17,
+        "tooltip-format": "{title} ({app_id})",
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "all-outputs": true,
+        "active-only": false
+    },
+
     "hyprland/window": {
-        "max-length": 35,
+        "max-length": 30,
         "separate-outputs": true
+    },
+
+    "group/media": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 400,
+            "transition-left-to-right": true,
+            "click-to-reveal": false
+        },
+        "modules": [
+            "mpris",
+            "pulseaudio"
+        ]
     },
 
     "mpris": {
@@ -75,6 +99,16 @@
         "on-click-right": "playerctl next"
     },
 
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟 Muted",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "pwvucontrol",
+        "scroll-step": 2
+    },
+
     "privacy": {
         "icon-spacing": 6,
         "icon-size": 13,
@@ -90,6 +124,16 @@
                 "tooltip": true,
                 "tooltip-icon-size": 16
             }
+        ]
+    },
+
+    "group/hardware": {
+        "orientation": "horizontal",
+        "modules": [
+            "idle_inhibitor",
+            "cpu",
+            "memory",
+            "custom/weather"
         ]
     },
 
@@ -126,20 +170,12 @@
         "on-click": "ghostty --title='Weather Forecast' -e sh -c \"curl -s 'https://wttr.in' | less -S -R\""
     },
 
-    "clock": {
-        "format": " {:%H:%M}",
-        "format-alt": " {:%a, %d %b   %H:%M}",
-        "tooltip-format": "<tt><small>{calendar}</small></tt>"
-    },
-
-    "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-muted": "󰝟 Muted",
-        "format-icons": {
-            "default": ["󰕿", "󰖀", "󰕾"]
-        },
-        "on-click": "pwvucontrol",
-        "scroll-step": 2
+    "group/connectivity": {
+        "orientation": "horizontal",
+        "modules": [
+            "network",
+            "bluetooth"
+        ]
     },
 
     "network": {
@@ -157,9 +193,24 @@
         "on-click": "ghostty -e bluetoothctl"
     },
 
+    "group/time": {
+        "orientation": "horizontal",
+        "modules": [
+            "clock",
+            "tray",
+            "custom/notification"
+        ]
+    },
+
     "tray": {
         "icon-size": 16,
         "spacing": 8
+    },
+
+    "clock": {
+        "interval": 1,
+        "format": " {:%a, %d %b   %H:%M:%S}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>"
     },
 
     "custom/notification": {
