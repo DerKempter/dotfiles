@@ -164,6 +164,7 @@ create_bind(vars.kbScreenshotFreeze, hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | s
 create_bind(vars.kbScreenshotRegion, hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy"))
 create_bind(vars.kbScreenshotOCR, hl.dsp.exec_cmd('grim -g "$(slurp)" - | tesseract stdin stdout -l eng 2>/dev/null | wl-copy && notify-send -i edit-copy "OCR" "Text copied to clipboard!"'))
 create_bind(vars.kbWallpaperRandom, hl.dsp.exec_cmd('nu -c "use ~/.config/nushell/scripts/desktop.nu *; wallpaper random"'))
+create_bind(vars.kbWallpaperSelect, hl.dsp.exec_cmd("nu ~/.local/share/vicinae/scripts/pick-wallpaper.nu"))
 create_bind(vars.kbColorPicker, hl.dsp.exec_cmd("hyprpicker -a"))
 
 -- Brightness (swayosd / brightnessctl)

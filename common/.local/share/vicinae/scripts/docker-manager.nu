@@ -5,7 +5,12 @@
 # @vicinae.mode silent
 # @vicinae.icon 🐳
 
-def main [] {
+def main [--detached] {
+    if not $detached {
+        ^setsid nu $env.CURRENT_FILE --detached out+err> /dev/null
+        return
+    }
+
     let containers = (
         ^docker ps -a --format '{{.Names}} ({{.Status}})'
         | lines
@@ -24,7 +29,7 @@ def main [] {
     let actions = ["Restart", "Stop", "Start", "Follow Logs in Terminal"]
     let action = ($actions | str join (char nl) | ^vicinae dmenu -p $"Action for ($name)..." | str trim)
 
-    match $action {
+    match $action {\
         "Restart" => { ^docker restart $name; ^notify-send "Docker" $"Restarted ($name)" -a "Docker" }
         "Stop" => { ^docker stop $name; ^notify-send "Docker" $"Stopped ($name)" -a "Docker" }
         "Start" => { ^docker start $name; ^notify-send "Docker" $"Started ($name)" -a "Docker" }

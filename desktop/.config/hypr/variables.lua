@@ -126,6 +126,7 @@ return {
     kbScreenshotRegion         = "SUPER + SHIFT + ALT + S",
     kbScreenshotOCR            = "SUPER + ALT + S",
     kbWallpaperRandom          = "SUPER + ALT + W",
+    kbWallpaperSelect          = "SUPER + SHIFT + W",
     kbRecord                   = "CTRL + ALT + R",
     kbRecordSound              = "SUPER + ALT + R",
     kbRecordRegion             = "SUPER + SHIFT + ALT + R",
