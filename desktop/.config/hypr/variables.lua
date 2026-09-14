@@ -29,11 +29,14 @@ return {
     blurPasses                 = 2,
     blurXray                   = false,
 
-    -- Shadow
+    -- Shadow (Uniform all-around elevated box-shadow)
     shadowEnabled              = true,
-    shadowRange                = 15,
+    shadowRange                = 26,
     shadowRenderPower          = 4,
-    shadowColour               = "rgba(" .. scheme.inversePrimary .. "10)",
+    shadowOffset               = "0 0",
+    shadowScale                = 1.0,
+    shadowColour               = "rgba(000000aa)",
+    shadowColourInactive       = "rgba(000000aa)",
 
     -- Gaps
     workspaceGaps              = 20,
@@ -41,12 +44,12 @@ return {
     windowGapsOut              = 10,
     singleWindowGapsOut        = 20,
 
-    -- Window styling
+    -- Window styling (Subtle accent border without heavy glow)
     windowOpacity              = 0.95,
     windowRounding             = 15,
     windowBorderSize           = 1,
-    activeWindowBorderColour   = "rgba(" .. scheme.primary .. "e6)",
-    inactiveWindowBorderColour = "rgba(" .. scheme.onSurfaceVariant .. "11)",
+    activeWindowBorderColour   = "rgba(" .. scheme.primary .. "77)",
+    inactiveWindowBorderColour = "rgba(" .. (scheme.outlineVariant or scheme.onSurfaceVariant or "ffffff") .. "33)",
 
     -- Misc
     volumeStep                 = 2,

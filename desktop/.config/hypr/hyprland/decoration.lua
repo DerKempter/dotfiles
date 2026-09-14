@@ -17,10 +17,13 @@ hl.config({
         },
 
         shadow = {
-            enabled      = vars.shadowEnabled,
-            range        = vars.shadowRange,
-            render_power = vars.shadowRenderPower,
-            color        = vars.shadowColour,
+            enabled        = vars.shadowEnabled,
+            range          = vars.shadowRange,
+            render_power   = vars.shadowRenderPower,
+            offset         = vars.shadowOffset,
+            scale          = vars.shadowScale,
+            color          = vars.shadowColour,
+            color_inactive = vars.shadowColourInactive,
         },
     },
 })
