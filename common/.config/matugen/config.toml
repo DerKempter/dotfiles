@@ -37,6 +37,11 @@ output_path = "~/.cache/lazygit/theme.yml"
 input_path = "~/.config/matugen/templates/atuin-theme.toml"
 output_path = "~/.config/atuin/themes/matugen.toml"
 
+[templates.spotifast]
+input_path = "~/.config/matugen/templates/spotifast-theme.json"
+output_path = "~/.config/fastpotify/themes/matugen.json"
+post_hook = "sh -c 'command -v spotifast >/dev/null 2>&1 && spotifast reload-themes 2>/dev/null || (command -v fastpotify >/dev/null 2>&1 && fastpotify reload-themes 2>/dev/null) || true'"
+
 [templates.hyprland]
 input_path = "~/.config/matugen/templates/hyprland-colors.lua"
 output_path = "~/.config/hypr/scheme/current.lua"
