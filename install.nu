@@ -4,6 +4,17 @@
 # Audits, installs dependencies, and links dotfiles across supported distributions
 # =============================================================================
 
+# Helper: Fail with formatted error message
+def nu-fail [msg: string] {
+    error make { msg: $msg }
+}
+
+# Helper to check if a real external binary exists on the system (ignoring completions/.nu files)
+def has-binary [cmd: string] {
+    let results = (which -a $cmd | where type == "external" and not ($it.path | str ends-with ".nu") and ($it.path | path exists))
+    ($results | is-not-empty)
+}
+
 # Run the dotfiles installer and dependency audit
 def main [] {
     print $"(ansi cyan_bold)          Dotfiles Essentials Installer & Audit - Nushell             (ansi reset)"
@@ -100,7 +111,7 @@ def audit-tools [os_id: string] {
     }
 
     $defs | each { |entry|
-        let is_installed = not (which $entry.tool | is-empty)
+        let is_installed = (has-binary $entry.tool)
         let pkg_name = ($entry | get $os_key)
 
         let is_special = match $os_key {
@@ -123,9 +134,9 @@ def audit-tools [os_id: string] {
 def install-system-packages [os_id: string, pkgs: list<string>] {
     match $os_id {
         "arch" | "cachyos" | "endeavouros" | "manjaro" => {
-            if not (which paru | is-empty) {
+            if (has-binary paru) {
                 ^paru -S --needed --noconfirm ...$pkgs
-            } else if not (which yay | is-empty) {
+            } else if (has-binary yay) {
                 ^yay -S --needed --noconfirm ...$pkgs
             } else {
                 ^sudo pacman -S --needed --noconfirm ...$pkgs
@@ -168,7 +179,7 @@ def install-special-tool [tool: string, os_id: string] {
             ^curl --proto "=https" --tlsv1.2 -sSf https://setup.atuin.sh | ^bash
         }
         "eza" => {
-            if not (which cargo | is-empty) {
+            if (has-binary cargo) {
                 print "Installing eza via cargo..."
                 ^cargo install eza
             }
@@ -178,20 +189,20 @@ def install-special-tool [tool: string, os_id: string] {
             ^curl --proto "=https" --tlsv1.2 -sSf https://just.systems/install.sh | ^bash -s -- --to $local_bin
         }
         "delta" => {
-            if not (which cargo | is-empty) {
+            if (has-binary cargo) {
                 print "Installing git-delta via cargo..."
                 ^cargo install git-delta
             }
         }
         "yazi" => {
-            if not (which cargo | is-empty) {
+            if (has-binary cargo) {
                 print "Installing yazi via cargo..."
                 ^cargo install --locked yazi-fm yazi-cli
             }
         }
         "fnm" => {
             print "Installing Fast Node Manager (fnm)..."
-            if not (which curl | is-empty) {
+            if (has-binary curl) {
                 ^curl -fsSL https://fnm.vercel.app/install | ^bash -s -- --install-dir $"($env.HOME)/.local/bin" --skip-shell
             }
         }
@@ -204,13 +215,13 @@ def install-special-tool [tool: string, os_id: string] {
 # Applies dotfiles Stow links and Yazi plugins
 def sync-stow-links [] {
     print $"\n(ansi cyan_bold)--- Syncing Dotfiles Configurations ---(ansi reset)"
-    if not (which just | is-empty) {
+    if (has-binary just) {
         ^just link
-        if not (which ya | is-empty) {
+        if (has-binary ya) {
             print "Installing Yazi plugins..."
             try { ^just install } catch {}\
         }
-    } else if not (which stow | is-empty) {
+    } else if (has-binary stow) {
         ^stow -R common --target $env.HOME --verbose
     } else {
         nu-fail "Neither 'just' nor 'stow' found. Cannot link dotfiles."

@@ -15,6 +15,12 @@ export def nu-fail [
     }
 }
 
+# Helper to check if a real external binary exists in PATH (ignoring completions/.nu files)
+export def has-binary [cmd: string] {
+    let results = (which -a $cmd | where type == "external" and not ($it.path | str ends-with ".nu") and ($it.path | path exists))
+    ($results | is-not-empty)
+}
+
 export def "git histogram" [
     --limit: int = -1 # Number of recent commits to analyze
 ] {

@@ -50,7 +50,7 @@ def --env deactivate [] {
 
 # Daily developer TUI & CLI utilities
 def --wrapped bat [...args] {
-    if not (which batcat | is-empty) {
+    if (has-binary batcat) {
         ^batcat ...$args
     } else {
         ^bat ...$args
@@ -58,9 +58,9 @@ def --wrapped bat [...args] {
 }
 
 def --wrapped cat [...args] {
-    if not (which ^bat | is-empty) {
+    if (has-binary bat) {
         ^bat ...$args
-    } else if not (which batcat | is-empty) {
+    } else if (has-binary batcat) {
         ^batcat ...$args
     } else {
         ^cat ...$args
@@ -76,7 +76,7 @@ alias ld = ^lazydocker
 
 # Initialize Starship prompt using the Nushell autoload directory if not already cached
 let starship_path = ($nu.data-dir | path join "vendor/autoload/starship.nu")
-if not (which starship | is-empty) {
+if (has-binary starship) {
     if not ($starship_path | path exists) {
         mkdir ($nu.data-dir | path join "vendor/autoload")
         starship init nu | save -f $starship_path

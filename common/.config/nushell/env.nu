@@ -1,4 +1,18 @@
 # ==============================================================================
+# Environment Conversions & Sanitization
+# ==============================================================================
+
+# Sanitize / convert host environment variables inherited from other shells
+$env.ENV_CONVERSIONS = ($env.ENV_CONVERSIONS? | default {} | upsert __zoxide_hooked {
+    from_string: { |s| if ($s | describe) == "bool" { $s } else { $s == "true" or $s == "1" } }
+    to_string: { |v| $v | into string }
+})
+
+if "__zoxide_hooked" in $env {
+    hide-env -i __zoxide_hooked
+}
+
+# ==============================================================================
 # Environment Variables
 # ==============================================================================
 
@@ -61,26 +75,34 @@ if ($mssql_bin | path exists) {
     $env.PATH = ($env.PATH | append $mssql_bin)
 }
 
+# Helper to check if a real external executable exists on the system
+def has-binary [cmd: string] {
+    let results = (which -a $cmd | where type == "external" and not ($it.path | str ends-with ".nu") and ($it.path | path exists))
+    ($results | is-not-empty)
+}
+
 # fnm (Fast Node Manager)
 let fnm_path = ($env.HOME | path join ".local" "share" "fnm")
 if ($fnm_path | path exists) {
     $env.PATH = ($env.PATH | prepend $fnm_path)
 
-    # Load fnm environment variables dynamically
-    let fnm_env = (fnm env --shell bash
-        | lines
-        | str replace "export " ""
-        | str replace -a "\"" ""
-        | split column "="
-        | rename name value
-        | where name != "PATH"
-        | reduce -f {} {|it, acc| $acc | upsert $it.name $it.value })
+    if (has-binary fnm) {
+        # Load fnm environment variables dynamically
+        let fnm_env = (fnm env --shell bash
+            | lines
+            | str replace "export " ""
+            | str replace -a "\"" ""
+            | split column "="
+            | rename name value
+            | where name != "PATH"
+            | reduce -f {} {|it, acc| $acc | upsert $it.name $it.value })
 
-    load-env $fnm_env
+        load-env $fnm_env
 
-    # Add active node version path from FNM
-    if ($env.FNM_MULTISHELL_PATH? | is-not-empty) {
-        $env.PATH = ($env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join "bin"))
+        # Add active node version path from FNM
+        if ($env.FNM_MULTISHELL_PATH? | is-not-empty) {
+            $env.PATH = ($env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join "bin"))
+        }
     }
 }
 
@@ -90,7 +112,7 @@ if ($fnm_path | path exists) {
 
 # Zoxide smart directory jumping initializer (cached for startup performance)
 let zoxide_cache = ($env.HOME | path join ".zoxide.nu")
-if not (which zoxide | is-empty) {
+if (has-binary zoxide) {
     if not ($zoxide_cache | path exists) or (open $zoxide_cache | is-empty) {
         zoxide init nushell | save -f $zoxide_cache
     }
@@ -121,7 +143,7 @@ if not ($atuin_share_dir | path exists) {
     mkdir $atuin_share_dir
 }
 
-if not (which atuin | is-empty) {
+if (has-binary atuin) {
     if not ($atuin_init | path exists) or (open $atuin_init | is-empty) {
         atuin init nu | save -f $atuin_init
     }
@@ -138,7 +160,7 @@ if not ($atuin_pty | path exists) {
 }
 
 # Keychain SSH Key Management
-if not (which keychain | is-empty) {
+if (has-binary keychain) {
     let keychain_output = (with-env { SHELL: csh } {
         keychain --eval --quiet --noask
     })
@@ -163,7 +185,7 @@ if not (which keychain | is-empty) {
 
 # Starship Prompt Cache initialization
 let starship_path = ($nu.data-dir | path join "vendor/autoload/starship.nu")
-if not (which starship | is-empty) {
+if (has-binary starship) {
     if not ($starship_path | path exists) {
         mkdir ($nu.data-dir | path join "vendor/autoload")
         starship init nu | save -f $starship_path
