@@ -20,10 +20,10 @@ format = "[](teal)[$symbol$path]($style)[](teal) "
 
 [directory.substitutions]
 "Documents" = "󰈙 "
-"Downloads" = "󱑢 "
+"Downloads" = "󰉍 "
 "Music" = "󰝚 "
 "Pictures" = "󰉏 "
-"dotfiles" = "󰒓 "
+"dotfiles" = "󱒓 "
 
 [character]
 success_symbol = "[󰄾](bold sky)"
@@ -38,7 +38,7 @@ format = "[](pink)[ $symbol ]($style)[](pink) "
 Linux = ""
 CachyOS = ""
 Arch = "󰣇"
-Ubuntu = "󰕈"
+Ubuntu = "󱄈"
 Windows = "󰍲"
 
 [hostname]
@@ -78,9 +78,9 @@ renamed    = "[](pink)[ ${count}](bg:pink fg:base)[](pink) "
 untracked  = "[](pink)[ ${count}](bg:pink fg:base)[](pink) "
 stashed    = "[](pink)[ ${count}](bg:pink fg:base)[](pink) "
 conflicted = "[](pink)[ ${count}](bg:pink fg:base)[](pink) "
-ahead      = "[](pink)[󰶣 ${count}](bg:pink fg:base)[](pink) "
-behind     = "[](pink)[󰶡 ${count}](bg:pink fg:base)[](pink) "
-diverged   = "[](pink)[󰶤 󰶣${ahead_count}󰶡${behind_count}](bg:pink fg:base)[](pink) "
+ahead      = "[](pink)[󰛃 ${count}](bg:pink fg:base)[](pink) "
+behind     = "[](pink)[󰛁 ${count}](bg:pink fg:base)[](pink) "
+diverged   = "[](pink)[󰛄 󰛃${ahead_count}󰛁${behind_count}](bg:pink fg:base)[](pink) "
 
 [nodejs]
 symbol = " "
@@ -103,7 +103,7 @@ format = "[](blue)[$symbol$context]($style)[](blue) "
 [cmd_duration]
 min_time = 500
 style = "bg:peach fg:base"
-format = "[](peach)[󱎫 $duration]($style)[](peach) "
+format = "[](peach)[󰔛 $duration]($style)[](peach) "
 
 [battery]
 full_symbol = "󰁹 "
@@ -145,7 +145,7 @@ command = "artist=$(playerctl --player=spotify_player,spotify,%any metadata arti
 when = 'test "$(playerctl --player=spotify_player,spotify,%any status 2>/dev/null)" = "Playing"'
 shell = ["sh"]
 style = "bg:green fg:base"
-format = "([](green)[󰓇 $output]($style)[](green) )"
+format = "([](green)[󱳇 $output]($style)[](green) )"
 
 [dotnet]
 symbol = "󰪮 "
@@ -166,39 +166,39 @@ map_symbol = true
 
 [sudo]
 disabled = false
-symbol = "󰞀"
+symbol = "󱞀"
 style = "bg:flamingo fg:base"
 format = "[](flamingo)[ $symbol ]($style)[](flamingo) "
 
 [palettes.matugen]
-crust = "#11131a"
-mantle = "#11131a"
-base = "#1d1f27"
+crust = "#171118"
+mantle = "#171118"
+base = "#241d25"
 
-overlay2 = "#8c909f"
-overlay1 = "#424654"
-overlay0 = "#32353c"
+overlay2 = "#9b8c9b"
+overlay1 = "#4f4350"
+overlay0 = "#3a323a"
 
-surface2 = "#272a31"
-surface1 = "#1d1f27"
-surface0 = "#11131a"
+surface2 = "#2f282f"
+surface1 = "#241d25"
+surface0 = "#171118"
 
-text = "#e1e2ec"
-subtext1 = "#c2c6d6"
-subtext0 = "#8c909f"
+text = "#ebdfe9"
+subtext1 = "#d2c1d2"
+subtext0 = "#9b8c9b"
 
-rosewater = "#304f10"
+rosewater = "#005049"
 flamingo = "#ffb4ab"
-pink = "#acd285"
-mauve = "#e8b9d4"
+pink = "#74d7cb"
+mauve = "#ecb8ce"
 red = "#ffb4ab"
 maroon = "#ffb4ab"
-peach = "#b3c6f9"
-yellow = "#334671"
-green = "#acd285"
-teal = "#e8b9d4"
-sky = "#acd285"
-sapphire = "#e8b9d4"
-blue = "#5f3c52"
-lavender = "#b3c6f9"
-cyan = "#424654"
+peach = "#e7b7e8"
+yellow = "#5e3962"
+green = "#74d7cb"
+teal = "#ecb8ce"
+sky = "#74d7cb"
+sapphire = "#ecb8ce"
+blue = "#613b4d"
+lavender = "#e7b7e8"
+cyan = "#4f4350"

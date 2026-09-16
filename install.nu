@@ -60,7 +60,7 @@ def main [] {
         $still_missing | select tool pkg | print
     }
 
-    # Ensure dotfiles symlinks are active
+    # Ensure dotfiles symlinks and fallback themes are active
     sync-stow-links
 }
 
@@ -141,8 +141,7 @@ def audit-tools [os_id: string] {
             _ => false
         }
 
-        {
-            tool: $entry.tool,
+        {\n            tool: $entry.tool,
             pkg: $pkg_name,
             missing: (not $is_installed),
             install_type: (if $is_special { "special" } else { "system" })
@@ -226,6 +225,27 @@ def install-special-tool [tool: string, os_id: string] {
     }
 }
 
+# Bootstraps default themes from matugen defaults if not present
+def bootstrap-default-themes [] {
+    let defaults_dir = ($env.FILE_PWD? | default "." | path join "common/.config/matugen/defaults")
+    let targets = [
+        [($defaults_dir | path join "ghostty-theme"), ($env.HOME | path join ".config/ghostty/themes/matugen")],
+        [($defaults_dir | path join "yazi-flavor.toml"), ($env.HOME | path join ".config/yazi/flavors/matugen.yazi/flavor.toml")],
+        [($defaults_dir | path join "atuin-theme.toml"), ($env.HOME | path join ".config/atuin/themes/matugen.toml")],
+        [($defaults_dir | path join "micro-colorscheme.micro"), ($env.HOME | path join ".config/micro/colorschemes/matugen.micro")],
+        [($defaults_dir | path join "vicinae-theme.toml"), ($env.HOME | path join ".local/share/vicinae/themes/matugen.toml")]
+    ]
+    for pair in $targets {
+        let src = $pair.0
+        let dst = $pair.1
+        if ($src | path exists) and not ($dst | path exists) {
+            mkdir ($dst | path dirname)
+            cp $src $dst
+            print $"✓ Bootstrapped default theme: ($dst)"
+        }
+    }
+}
+
 # Applies dotfiles Stow links and Yazi plugins
 def sync-stow-links [] {
     print $"\n(ansi cyan_bold)--- Syncing Dotfiles Configurations ---(ansi reset)"
@@ -237,6 +257,7 @@ def sync-stow-links [] {
         }
     } else if (has-binary stow) {
         ^stow -R common --target $env.HOME --verbose
+        bootstrap-default-themes
     } else {
         nu-fail "Neither 'just' nor 'stow' found. Cannot link dotfiles."
     }

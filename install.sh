@@ -196,6 +196,28 @@ done
 log_success "All essential CLI tools and dependencies are installed."
 
 # -----------------------------------------------------------------------------
+# Bootstrap Default Themes
+# -----------------------------------------------------------------------------
+bootstrap_default_themes() {
+    local defaults_dir="$SCRIPT_DIR/common/.config/matugen/defaults"
+    local pairs=(
+        "$defaults_dir/ghostty-theme:$HOME/.config/ghostty/themes/matugen"
+        "$defaults_dir/yazi-flavor.toml:$HOME/.config/yazi/flavors/matugen.yazi/flavor.toml"
+        "$defaults_dir/atuin-theme.toml:$HOME/.config/atuin/themes/matugen.toml"
+        "$defaults_dir/micro-colorscheme.micro:$HOME/.config/micro/colorschemes/matugen.micro"
+        "$defaults_dir/vicinae-theme.toml:$HOME/.local/share/vicinae/themes/matugen.toml"
+    )
+    for pair in "${pairs[@]}"; do
+        IFS=":" read -r src dst <<< "$pair"
+        if [ -f "$src" ] && [ ! -f "$dst" ]; then
+            mkdir -p "$(dirname "$dst")"
+            cp "$src" "$dst"
+            log_success "Bootstrapped default theme: $dst"
+        fi
+    done
+}
+
+# -----------------------------------------------------------------------------
 # Symlink Dotfiles & Yazi Plugins
 # -----------------------------------------------------------------------------
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -212,6 +234,7 @@ if command -v just >/dev/null 2>&1; then
 elif command -v stow >/dev/null 2>&1; then
     log_info "Applying GNU Stow symlinks..."
     stow -R common --target "$HOME" --verbose
+    bootstrap_default_themes
 else
     log_error "Neither 'just' nor 'stow' found. Cannot link dotfiles."
     exit 1

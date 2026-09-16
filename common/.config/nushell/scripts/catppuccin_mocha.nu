@@ -1,40 +1,41 @@
-# Catppuccin Mocha for Nushell
+# Catppuccin Mocha / Matugen baseline theme for Nushell
 # https://github.com/catppuccin/nushell
 
 export def main [] {
     let catppuccin_mocha = {
-        rosewater: "#f5e0dc"
-        flamingo: "#f2cdcd"
-        pink: "#f5c2e7"
-        mauve: "#cba6f7"
-        red: "#f38ba8"
-        maroon: "#eba0ac"
-        peach: "#fab387"
-        yellow: "#f9e2af"
-        green: "#a6e3a1"
-        teal: "#94e2d5"
-        sky: "#89dceb"
-        sapphire: "#74c7ec"
-        blue: "#89b4fa"
-        lavender: "#b4befe"
-        text: "#cdd6f4"
-        subtext1: "#bac2de"
-        subtext0: "#a6adc8"
-        overlay2: "#9399b2"
-        overlay1: "#7f849c"
-        overlay0: "#6c7086"
-        surface2: "#585b70"
-        surface1: "#45475a"
-        surface0: "#313244"
-        base: "#1e1e2e"
-        mantle: "#181825"
-        crust: "#11111b"
+        rosewater: "#005049"
+        flamingo: "#ffb4ab"
+        pink: "#74d7cb"
+        mauve: "#ecb8ce"
+        red: "#ffb4ab"
+        maroon: "#ffb4ab"
+        peach: "#e7b7e8"
+        yellow: "#5e3962"
+        green: "#74d7cb"
+        teal: "#ecb8ce"
+        sky: "#74d7cb"
+        sapphire: "#ecb8ce"
+        blue: "#613b4d"
+        lavender: "#e7b7e8"
+        cyan: "#4f4350"
+        text: "#ebdfe9"
+        subtext1: "#d2c1d2"
+        subtext0: "#9b8c9b"
+        overlay2: "#9b8c9b"
+        overlay1: "#4f4350"
+        overlay0: "#3a323a"
+        surface2: "#2f282f"
+        surface1: "#241d25"
+        surface0: "#171118"
+        base: "#241d25"
+        mantle: "#171118"
+        crust: "#171118"
     }
 
     let catppuccin_theme = {
         separator: $catppuccin_mocha.overlay0
         leading_trailing_space_bg: $catppuccin_mocha.overlay0
-        header: { fg: $catppuccin_mocha.blue attr: "b" }
+        header: { fg: $catppuccin_mocha.pink attr: "b" }
         empty: $catppuccin_mocha.lavender
         bool: $catppuccin_mocha.lavender
         int: $catppuccin_mocha.peach
@@ -102,10 +103,10 @@ export def main [] {
         shape_match_pattern: $catppuccin_mocha.green
         shape_matching_brackets: { attr: "u" }
         shape_nothing: $catppuccin_mocha.teal
-        shape_operator: $catppuccin_mocha.yellow
+        shape_operator: $catppuccin_mocha.peach
         shape_or: { fg: $catppuccin_mocha.mauve attr: "b" }
         shape_pipe: { fg: $catppuccin_mocha.mauve attr: "b" }
-        shape_range: { fg: $catppuccin_mocha.yellow attr: "b" }
+        shape_range: { fg: $catppuccin_mocha.peach attr: "b" }
         shape_record: { fg: $catppuccin_mocha.teal attr: "b" }
         shape_redirection: { fg: $catppuccin_mocha.mauve attr: "b" }
         shape_signature: { fg: $catppuccin_mocha.green attr: "b" }
