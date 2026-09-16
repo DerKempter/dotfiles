@@ -1,207 +1,204 @@
 #!/usr/bin/env bash
-# ==============================================================================
+# =============================================================================
 # Dotfiles Essentials Installer (Bash Bootstrapper)
-# ==============================================================================
-# Installs core CLI utilities, shells, and dependencies across CachyOS / Arch
-# and Debian / Ubuntu (Tuxedo OS), then links configurations using GNU Stow.
-# ==============================================================================
-
+# Audits, installs dependencies, and links dotfiles across supported distributions
+# =============================================================================
 set -euo pipefail
 
-# Color palette & styling (ANSI-C string literals)
-BOLD=$'\033[1m'
-GREEN=$'\033[32m'
-CYAN=$'\033[36m'
-YELLOW=$'\033[33m'
-RED=$'\033[31m'
-RESET=$'\033[0m'
+BOLD="$(tput bold 2>/dev/null || echo '')"
+GREEN="$(tput setaf 2 2>/dev/null || echo '')"
+YELLOW="$(tput setaf 3 2>/dev/null || echo '')"
+CYAN="$(tput setaf 6 2>/dev/null || echo '')"
+RED="$(tput setaf 1 2>/dev/null || echo '')"
+RESET="$(tput sgr0 2>/dev/null || echo '')"
 
-log_info() { printf "%s[INFO]%s %b\n" "${CYAN}${BOLD}" "${RESET}" "$1"; }
-log_success() { printf "%s[OK]%s %b\n" "${GREEN}${BOLD}" "${RESET}" "$1"; }
-log_warn() { printf "%s[WARN]%s %b\n" "${YELLOW}${BOLD}" "${RESET}" "$1"; }
-log_error() { printf "%s[ERROR]%s %b\n" "${RED}${BOLD}" "${RESET}" "$1"; }
-
-has_cmd() {
-    for cmd in "$@"; do
-        if command -v "$cmd" >/dev/null 2>&1; then
-            return 0
-        fi
-    done
-    return 1
+log_info() {
+    printf "%b==> %b%s\n" "${CYAN}${BOLD}" "${RESET}" "$1"
 }
 
-printf "%b==============================================================================%b\n" "${CYAN}${BOLD}" "${RESET}"
-printf "%b          Dotfiles Essentials Bootstrapper & Package Installer           %b\n" "${CYAN}${BOLD}" "${RESET}"
-printf "%b==============================================================================%b\n\n" "${CYAN}${BOLD}" "${RESET}"
+log_success() {
+    printf "%b✓ %b%s\n" "${GREEN}${BOLD}" "${RESET}" "$1"
+}
 
-# Ensure ~/.local/bin exists and is in PATH
-mkdir -p "$HOME/.local/bin"
-export PATH="$HOME/.local/bin:$PATH"
+log_warn() {
+    printf "%b⚠ %b%s\n" "${YELLOW}${BOLD}" "${RESET}" "$1"
+}
+
+log_error() {
+    printf "%b✗ %b%s\n" "${RED}${BOLD}" "${RESET}" "$1" >&2
+}
+
+# -----------------------------------------------------------------------------
+# Header
+# -----------------------------------------------------------------------------
+printf "%b          Dotfiles Essentials Bootstrapper & Package Installer           %b\n" "${CYAN}${BOLD}" "${RESET}"
+printf "%b=========================================================================%b\n\n" "${CYAN}" "${RESET}"
 
 # -----------------------------------------------------------------------------
 # OS Detection
 # -----------------------------------------------------------------------------
-OS_TYPE="unknown"
+OS_ID=""
 if [ -f /etc/os-release ]; then
+    # shellcheck disable=SC1091
     . /etc/os-release
-    OS_TYPE=$ID
-    OS_LIKE=${ID_LIKE:-""}
-else
-    log_error "Cannot detect OS type via /etc/os-release."
+    OS_ID="${ID:-}"
+elif [ "$(uname)" == "Darwin" ]; then
+    OS_ID="darwin"
+fi
+
+if [ -z "$OS_ID" ]; then
+    log_error "Unable to identify operating system. Exiting."
     exit 1
 fi
 
-log_info "Detected Operating System: ${BOLD}${OS_TYPE}${RESET}"
+log_info "Detected operating system: ${BOLD}${OS_ID}${RESET}"
 
 # -----------------------------------------------------------------------------
-# Arch Linux / CachyOS Installation
+# Dependency Audit Configuration
 # -----------------------------------------------------------------------------
-install_arch() {
-    log_info "Installing essential packages via pacman..."
-    
-    local ARCH_PACKAGES=(
-        nushell zsh bash
-        stow just
-        matugen
-        starship atuin
-        yazi bat lazygit lazydocker micro
-        zoxide keychain git-delta fzf ripgrep
-        uv fnm
-    )
-
-    if command -v pacman >/dev/null 2>&1; then
-        sudo pacman -S --needed --noconfirm "${ARCH_PACKAGES[@]}" || {
-            log_warn "Some packages failed to install directly via pacman. Retrying core packages..."
-            sudo pacman -S --needed --noconfirm nushell zsh bash stow just starship atuin yazi bat lazygit micro zoxide keychain git-delta fzf ripgrep uv
-        }
-    fi
-}
+ESSENTIAL_TOOLS=(
+    "git:git:git:git:git:git:git"
+    "curl:curl:curl:curl:curl:curl:curl"
+    "stow:stow:stow:stow:stow:stow:stow"
+    "just:just:just:just:just:just:just"
+    "nu:nushell:nushell:nushell:nushell:nushell:nushell"
+    "starship:starship:starship:starship:starship:starship:starship"
+    "zoxide:zoxide:zoxide:zoxide:zoxide:zoxide:zoxide"
+    "atuin:atuin:atuin:atuin:atuin:atuin:atuin"
+    "eza:eza:eza:eza:eza:eza:eza"
+    "bat:bat:bat:bat:bat:bat:bat"
+    "rg:ripgrep:ripgrep:ripgrep:ripgrep:ripgrep:ripgrep"
+    "fd:fd:fd-find:fd-find:fd:fd:fd"
+    "fzf:fzf:fzf:fzf:fzf:fzf:fzf"
+    "delta:git-delta:git-delta:git-delta:git-delta:git-delta:git-delta"
+    "yazi:yazi:yazi:yazi:yazi:yazi:yazi"
+    "fnm:fnm:fnm:fnm:fnm:fnm:fnm"
+)
 
 # -----------------------------------------------------------------------------
-# Debian / Ubuntu / Tuxedo OS Installation
+# Installation Helper Functions
 # -----------------------------------------------------------------------------
-install_debian() {
-    log_info "Installing APT essentials..."
-    sudo apt-get update -qq
-    sudo apt-get install -y -qq \
-        zsh bash stow bat micro zoxide keychain git-delta fzf ripgrep \
-        curl git build-essential ca-certificates
+MISSING_PKGS=()
+SPECIAL_INSTALLS=()
 
-    log_info "Checking & installing standalone CLI tools into ~/.local/bin..."
-
-    # 1. Just runner
-    if ! has_cmd just; then
-        log_info "Installing just..."
-        curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to "$HOME/.local/bin"
+for entry in "${ESSENTIAL_TOOLS[@]}"; do
+    IFS=":" read -r bin_name arch_pkg debian_pkg fedora_pkg suse_pkg alpine_pkg brew_pkg <<< "$entry"
+    if ! command -v "$bin_name" >/dev/null 2>&1; then
+        log_warn "Missing required binary: ${BOLD}$bin_name${RESET}"
+        case "$OS_ID" in
+            arch|cachyos|endeavouros|manjaro)
+                MISSING_PKGS+=("$arch_pkg")
+                ;;
+            ubuntu|debian|pop|linuxmint)
+                if [[ "$bin_name" =~ ^(starship|atuin|eza|yazi|fnm|just|delta)$ ]]; then
+                    SPECIAL_INSTALLS+=("$bin_name")
+                else
+                    MISSING_PKGS+=("$debian_pkg")
+                fi
+                ;;
+            fedora|rhel|centos)
+                if [[ "$bin_name" =~ ^(fnm|yazi)$ ]]; then
+                    SPECIAL_INSTALLS+=("$bin_name")
+                else
+                    MISSING_PKGS+=("$fedora_pkg")
+                fi
+                ;;
+            opensuse*|suse)
+                if [[ "$bin_name" =~ ^(fnm|yazi)$ ]]; then
+                    SPECIAL_INSTALLS+=("$bin_name")
+                else
+                    MISSING_PKGS+=("$suse_pkg")
+                fi
+                ;;
+            alpine)
+                MISSING_PKGS+=("$alpine_pkg")
+                ;;
+            darwin)
+                MISSING_PKGS+=("$brew_pkg")
+                ;;
+        esac
+    else
+        log_success "Found binary: ${BOLD}$bin_name${RESET}"
     fi
-
-    # 2. Starship prompt
-    if ! has_cmd starship; then
-        log_info "Installing starship..."
-        curl -sS https://starship.rs/install.sh | sh -s -- -y -b "$HOME/.local/bin"
-    fi
-
-    # 3. uv Python manager
-    if ! has_cmd uv; then
-        log_info "Installing uv..."
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-    fi
-
-    # 4. Nushell
-    if ! has_cmd nu; then
-        log_info "Installing Nushell via Fury APT repository..."
-        sudo mkdir -p /etc/apt/keyrings
-        curl -fsSL https://apt.fury.io/nushell/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/fury-nushell.gpg
-        echo "deb [signed-by=/etc/apt/keyrings/fury-nushell.gpg] https://apt.fury.io/nushell/ /" | sudo tee /etc/apt/sources.list.d/fury-nushell.list >/dev/null
-        sudo apt-get update -qq
-        sudo apt-get install -y -qq nushell
-    fi
-
-    # 5. Lazygit
-    if ! has_cmd lazygit; then
-        log_info "Installing lazygit..."
-        local LG_VERSION
-        LG_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -oP '"tag_name": "v\K[^"]+')
-        curl -sLo "$HOME/.local/bin/lazygit.tar.gz" "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LG_VERSION}_Linux_x86_64.tar.gz"
-        tar -xzf "$HOME/.local/bin/lazygit.tar.gz" -C "$HOME/.local/bin" lazygit
-        rm -f "$HOME/.local/bin/lazygit.tar.gz"
-    fi
-
-    # 6. Lazydocker
-    if ! has_cmd lazydocker; then
-        log_info "Installing lazydocker..."
-        DIR="$HOME/.local/bin" curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-    fi
-
-    # 7. Atuin
-    if ! has_cmd atuin; then
-        log_info "Installing atuin..."
-        curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | bash
-    fi
-
-    # 8. Yazi
-    if ! has_cmd yazi; then
-        log_info "Installing yazi..."
-        local YAZI_TAR="yazi-x86_64-unknown-linux-gnu.zip"
-        local TEMP_DIR
-        TEMP_DIR=$(mktemp -d)
-        curl -sSL "https://github.com/sxyazi/yazi/releases/latest/download/${YAZI_TAR}" -o "${TEMP_DIR}/${YAZI_TAR}"
-        unzip -q "${TEMP_DIR}/${YAZI_TAR}" -d "${TEMP_DIR}"
-        cp "${TEMP_DIR}"/yazi-*/yazi "${TEMP_DIR}"/yazi-*/ya "$HOME/.local/bin/"
-        rm -rf "${TEMP_DIR}"
-    fi
-
-    # 9. Matugen (Material You color generator)
-    if ! has_cmd matugen; then
-        log_info "Installing matugen..."
-        if command -v cargo >/dev/null 2>&1; then
-            cargo install matugen
-        else
-            local MATUGEN_URL
-            MATUGEN_URL=$(curl -s "https://api.github.com/repos/InioX/matugen/releases/latest" | grep -oP '"browser_download_url": "\K[^"]*x86_64\.tar\.gz' | head -n 1)
-            if [ -n "$MATUGEN_URL" ]; then
-                curl -sLo "$HOME/.local/bin/matugen.tar.gz" "$MATUGEN_URL"
-                tar -xzf "$HOME/.local/bin/matugen.tar.gz" -C "$HOME/.local/bin" matugen
-                rm -f "$HOME/.local/bin/matugen.tar.gz"
-            fi
-        fi
-    fi
-
-    # 10. fnm (Fast Node Manager)
-    if ! has_cmd fnm; then
-        log_info "Installing fnm..."
-        curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.local/bin" --skip-shell
-    fi
-}
+done
 
 # -----------------------------------------------------------------------------
-# Dispatch Installer
+# Package Installation Execution
 # -----------------------------------------------------------------------------
-case "$OS_TYPE" in
-    cachyos|arch)
-        install_arch
-        ;;
-    ubuntu|debian|tuxedo|pop|mint)
-        install_debian
-        ;;
-    *)
-        if [[ "${OS_LIKE}" == *"arch"* ]]; then
-            install_arch
-        elif [[ "${OS_LIKE}" == *"debian"* || "${OS_LIKE}" == *"ubuntu"* ]]; then
-            install_debian
-        else
-            log_warn "Unrecognized OS distribution '${OS_TYPE}'. Attempting pacman or apt fallback..."
-            if command -v pacman >/dev/null 2>&1; then
-                install_arch
-            elif command -v apt-get >/dev/null 2>&1; then
-                install_debian
+if [ "${#MISSING_PKGS[@]}" -gt 0 ]; then
+    log_info "Installing missing system packages: ${MISSING_PKGS[*]}..."
+    case "$OS_ID" in
+        arch|cachyos|endeavouros|manjaro)
+            if command -v paru >/dev/null 2>&1; then
+                paru -S --needed --noconfirm "${MISSING_PKGS[@]}"
+            elif command -v yay >/dev/null 2>&1; then
+                yay -S --needed --noconfirm "${MISSING_PKGS[@]}"
             else
-                log_error "No supported package manager (pacman/apt) found."
-                exit 1
+                sudo pacman -S --needed --noconfirm "${MISSING_PKGS[@]}"
             fi
-        fi
-        ;;
-esac
+            ;;
+        ubuntu|debian|pop|linuxmint)
+            sudo apt update && sudo apt install -y "${MISSING_PKGS[@]}"
+            ;;
+        fedora|rhel|centos)
+            sudo dnf install -y "${MISSING_PKGS[@]}"
+            ;;
+        opensuse*|suse)
+            sudo zypper install -y "${MISSING_PKGS[@]}"
+            ;;
+        alpine)
+            sudo apk add "${MISSING_PKGS[@]}"
+            ;;
+        darwin)
+            brew install "${MISSING_PKGS[@]}"
+            ;;
+    esac
+fi
+
+# -----------------------------------------------------------------------------
+# Standalone Fallback Installers (for distros with older/missing repos)
+# -----------------------------------------------------------------------------
+mkdir -p "$HOME/.local/bin"
+export PATH="$HOME/.local/bin:$PATH"
+
+for tool in "${SPECIAL_INSTALLS[@]}"; do
+    case "$tool" in
+        starship)
+            log_info "Installing starship via official install script..."
+            curl -sS https://starship.rs/install.sh | sh -s -- -y -b "$HOME/.local/bin"
+            ;;
+        atuin)
+            log_info "Installing atuin via official install script..."
+            curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | bash
+            ;;
+        eza)
+            log_info "Installing eza..."
+            if command -v cargo >/dev/null 2>&1; then
+                cargo install eza
+            fi
+            ;;
+        just)
+            log_info "Installing just via official script..."
+            curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to "$HOME/.local/bin"
+            ;;
+        delta)
+            log_info "Installing git-delta..."
+            if command -v cargo >/dev/null 2>&1; then
+                cargo install git-delta
+            fi
+            ;;
+        yazi)
+            log_info "Installing yazi..."
+            if command -v cargo >/dev/null 2>&1; then
+                cargo install --locked yazi-fm yazi-cli
+            fi
+            ;;
+        fnm)
+            log_info "Installing Fast Node Manager (fnm)..."
+            curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.local/bin" --skip-shell
+            ;;
+    esac
+done
 
 log_success "All essential CLI tools and dependencies are installed."
 
@@ -221,7 +218,7 @@ if command -v just >/dev/null 2>&1; then
     fi
 elif command -v stow >/dev/null 2>&1; then
     log_info "Applying GNU Stow symlinks..."
-    stow -R common --verbose
+    stow -R common --target "$HOME" --verbose
 else
     log_error "Neither 'just' nor 'stow' found. Cannot link dotfiles."
     exit 1

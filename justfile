@@ -12,16 +12,16 @@ link:
     if $nu.os-info.name == "windows" { just link-windows } else { just link-linux }
 
 link-linux:
-    stow -R common --verbose
-    if (sys host | get hostname) == "joshs-cachy-box" { stow -R desktop --verbose }
+    stow -R common --target $env.HOME --verbose
+    if (sys host | get hostname) == "joshs-cachy-box" { stow -R desktop --target $env.HOME --verbose }
 
 # Remove GNU Stow symlinks
 unlink:
     if $nu.os-info.name == "windows" { just unlink-windows } else { just unlink-linux }
 
 unlink-linux:
-    stow -D common --verbose
-    if (sys host | get hostname) == "joshs-cachy-box" { stow -D desktop --verbose }
+    stow -D common --target $env.HOME --verbose
+    if (sys host | get hostname) == "joshs-cachy-box" { stow -D desktop --target $env.HOME --verbose }
 
 link-windows:
     print "=== Linking Windows Targets ==="

@@ -1,172 +1,197 @@
-# install.nu
+#!/usr/bin/env nu
+# =============================================================================
 # Dotfiles Essentials Installer & Audit Tool for Nushell
-
-use common/.config/nushell/scripts/misc.nu nu-fail
+# Audits, installs dependencies, and links dotfiles across supported distributions
+# =============================================================================
 
 # Run the dotfiles installer and dependency audit
-export def main [] {
-    print $"(ansi cyan_bold)==============================================================================(ansi reset)"
+def main [] {
     print $"(ansi cyan_bold)          Dotfiles Essentials Installer & Audit - Nushell             (ansi reset)"
-    print $"(ansi cyan_bold)==============================================================================(ansi reset)\n"
+    print $"(ansi cyan)=========================================================================(ansi reset)\n"
 
-    # Define all required essential tools and binary alias fallbacks
-    let essentials = [
-        { name: "nu", binaries: ["nu"] },
-        { name: "zsh", binaries: ["zsh"] },
-        { name: "bash", binaries: ["bash"] },
-        { name: "stow", binaries: ["stow"] },
-        { name: "just", binaries: ["just"] },
-        { name: "matugen", binaries: ["matugen"] },
-        { name: "starship", binaries: ["starship"] },
-        { name: "atuin", binaries: ["atuin"] },
-        { name: "yazi", binaries: ["yazi"] },
-        { name: "bat", binaries: ["bat", "batcat"] },
-        { name: "lazygit", binaries: ["lazygit"] },
-        { name: "lazydocker", binaries: ["lazydocker"] },
-        { name: "micro", binaries: ["micro"] },
-        { name: "zoxide", binaries: ["zoxide"] },
-        { name: "keychain", binaries: ["keychain"] },
-        { name: "delta", binaries: ["delta", "git-delta"] },
-        { name: "fzf", binaries: ["fzf"] },
-        { name: "rg", binaries: ["rg", "ripgrep"] },
-        { name: "uv", binaries: ["uv"] },
-        { name: "fnm", binaries: ["fnm"] }
-    ]
+    # Identify current OS
+    let os_id = (get-os-id)
+    print $"(ansi cyan_bold)==>(ansi reset) Detected operating system: (ansi default_bold)($os_id)(ansi reset)"
 
-    # Audit current availability of essential binaries
-    let audit_results = ($essentials | each {|item|
-        let found = ($item.binaries | each {|b| which $b } | flatten)
-        if ($found | is-empty) {
-            { Tool: $item.name, Status: $"(ansi red)Missing(ansi reset)", Location: "-" }
-        } else {
-            { Tool: $item.name, Status: $"(ansi green)Installed(ansi reset)", Location: ($found | first | get path) }
+    # Audit essential tools
+    let audit_results = (audit-tools $os_id)
+    
+    let missing_system_pkgs = ($audit_results | where missing and ($it.install_type == "system") | get pkg)
+    let missing_special_pkgs = ($audit_results | where missing and ($it.install_type == "special") | get tool)
+
+    # Install missing packages if any
+    if ($missing_system_pkgs | is-not-empty) {
+        print $"\n(ansi cyan_bold)==>(ansi reset) Installing missing system packages: ($missing_system_pkgs | str join ' ')..."
+        install-system-packages $os_id $missing_system_pkgs
+    }
+
+    if ($missing_special_pkgs | is-not-empty) {
+        print $"\n(ansi cyan_bold)==>(ansi reset) Installing standalone tools..."
+        for tool in $missing_special_pkgs {
+            install-special-tool $tool $os_id
         }
-    })
+    }
 
-    print $"(ansi yellow_bold)--- Essential CLI Tools Audit ---(ansi reset)"
-    print ($audit_results | table)
+    # Ensure ~/.local/bin is in PATH for current script execution
+    let local_bin = ($env.HOME | path join ".local" "bin")
+    if not ($env.PATH | any { |it| $it == $local_bin }) {
+        $env.PATH = ($env.PATH | prepend $local_bin)
+    }
 
-    let missing_tools = ($audit_results | where Location == "-" | get Tool)
+    # Final verification
+    let re_audit = (audit-tools $os_id)
+    let still_missing = ($re_audit | where missing)
 
-    if ($missing_tools | is-empty) {
-        print $"\n(ansi green_bold)✓ All essential CLI tools are installed!(ansi reset)"
+    if ($still_missing | is-empty) {
+        print $"\n(ansi green_bold)✓ All essential CLI tools and dependencies are installed.(ansi reset)"
     } else {
-        print $"\n(ansi yellow_bold)Installing missing tools: ($missing_tools | str join ', ')...(ansi reset)"
-        install-missing-tools $missing_tools
+        print $"\n(ansi yellow_bold)⚠ Some tools could not be automatically installed:(ansi reset)"
+        $still_missing | select tool pkg | print
     }
 
     # Ensure dotfiles symlinks are active
     sync-stow-links
 }
 
-# Installs missing tools based on system package manager
-def install-missing-tools [missing: list<string>] {
-    let os_id = (if ("/etc/os-release" | path exists) {
-        let matches = (open /etc/os-release | lines | where $it =~ "^ID=")
-        let id_line = if ($matches | is-not-empty) { $matches | first } else { "ID=unknown" }
-        $id_line | str replace --regex '^ID=' '' | str replace -a '"' ''
+# Determines the OS distribution ID
+def get-os-id [] {
+    if $nu.os-info.name == "macos" {
+        "darwin"
+    } else if ("/etc/os-release" | path exists) {
+        open /etc/os-release | get ID? | default "unknown"
     } else {
-        $nu.os-info.name
-    })
+        "unknown"
+    }
+}
 
-    print $"Detected OS distribution: (ansi cyan_bold)($os_id)(ansi reset)"
+# Core package definitions across distributions
+def tool-definitions [] {
+    [
+        { tool: "git",      arch: "git",       debian: "git",       fedora: "git",       suse: "git",       alpine: "git",       brew: "git" }
+        { tool: "curl",     arch: "curl",      debian: "curl",      fedora: "curl",      suse: "curl",      alpine: "curl",      brew: "curl" }
+        { tool: "stow",     arch: "stow",      debian: "stow",      fedora: "stow",      suse: "stow",      alpine: "stow",      brew: "stow" }
+        { tool: "just",     arch: "just",      debian: "just",      fedora: "just",      suse: "just",      alpine: "just",      brew: "just" }
+        { tool: "nu",       arch: "nushell",   debian: "nushell",   fedora: "nushell",   suse: "nushell",   alpine: "nushell",   brew: "nushell" }
+        { tool: "starship", arch: "starship",  debian: "starship",  fedora: "starship",  suse: "starship",  alpine: "starship",  brew: "starship" }
+        { tool: "zoxide",   arch: "zoxide",    debian: "zoxide",    fedora: "zoxide",    suse: "zoxide",    alpine: "zoxide",    brew: "zoxide" }
+        { tool: "atuin",    arch: "atuin",     debian: "atuin",     fedora: "atuin",     suse: "atuin",     alpine: "atuin",     brew: "atuin" }
+        { tool: "eza",      arch: "eza",       debian: "eza",       fedora: "eza",       suse: "eza",       alpine: "eza",       brew: "eza" }
+        { tool: "bat",      arch: "bat",       debian: "bat",       fedora: "bat",       suse: "bat",       alpine: "bat",       brew: "bat" }
+        { tool: "rg",       arch: "ripgrep",   debian: "ripgrep",   fedora: "ripgrep",   suse: "ripgrep",   alpine: "ripgrep",   brew: "ripgrep" }
+        { tool: "fd",       arch: "fd",        debian: "fd-find",   fedora: "fd-find",   suse: "fd",        alpine: "fd",        brew: "fd" }
+        { tool: "fzf",      arch: "fzf",       debian: "fzf",       fedora: "fzf",       suse: "fzf",       alpine: "fzf",       brew: "fzf" }
+        { tool: "delta",    arch: "git-delta", debian: "git-delta", fedora: "git-delta", suse: "git-delta", alpine: "git-delta", brew: "git-delta" }
+        { tool: "yazi",     arch: "yazi",      debian: "yazi",      fedora: "yazi",      suse: "yazi",      alpine: "yazi",      brew: "yazi" }
+        { tool: "fnm",      arch: "fnm",       debian: "fnm",       fedora: "fnm",       suse: "fnm",       alpine: "fnm",       brew: "fnm" }
+    ]
+}
 
-    match $os_id {
-        "cachyos" | "arch" => {
-            print "Running pacman package installer..."
-            let pkg_map = { "rg": "ripgrep", "delta": "git-delta" }
-            let pacman_pkgs = ($missing | each {|cmd| $pkg_map | get -o $cmd | default $cmd })
-            ^sudo pacman -S --needed --noconfirm ...$pacman_pkgs
+# Audits current environment against required tools
+def audit-tools [os_id: string] {
+    let defs = (tool-definitions)
+    let os_key = match $os_id {
+        "arch" | "cachyos" | "endeavouros" | "manjaro" => "arch",
+        "ubuntu" | "debian" | "pop" | "linuxmint" => "debian",
+        "fedora" | "rhel" | "centos" => "fedora",
+        "opensuse" | "opensuse-tumbleweed" | "opensuse-leap" | "suse" => "suse",
+        "alpine" => "alpine",
+        "darwin" => "brew",
+        _ => "debian"
+    }
+
+    $defs | each { |entry|
+        let is_installed = not (which $entry.tool | is-empty)
+        let pkg_name = ($entry | get $os_key)
+
+        let is_special = match $os_key {
+            "debian" => ($entry.tool in ["starship", "atuin", "eza", "yazi", "fnm", "just", "delta"]),
+            "fedora" => ($entry.tool in ["fnm", "yazi"]),
+            "suse"   => ($entry.tool in ["fnm", "yazi"]),
+            _ => false
         }
-        "ubuntu" | "debian" | "tuxedo" | "pop" | "mint" => {
-            print "Running APT package installer..."
-            let apt_map = { "rg": "ripgrep", "delta": "git-delta", "bat": "bat" }
-            let apt_pkgs = ($missing | each {|cmd| $apt_map | get -o $cmd | default $cmd })
-            
-            try {
-                ^sudo apt-get update -qq
-                ^sudo apt-get install -y -qq ...$apt_pkgs
-            } catch {
-                nu-fail "Some APT packages failed to install. Falling back to individual installation."
-            }
 
-            # Handle standalone installations for tools missing from standard apt repos
-            if "just" in $missing and (which just | is-empty) {
-                print "Installing just via standalone script..."
-                ^curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | ^bash -s -- --to $"($env.HOME)/.local/bin"
-            }
+        {
+            tool: $entry.tool,
+            pkg: $pkg_name,
+            missing: (not $is_installed),
+            install_type: (if $is_special { "special" } else { "system" })
+        }
+    }
+}
 
-            if "starship" in $missing and (which starship | is-empty) {
-                print "Installing starship prompt..."
-                ^curl -sS https://starship.rs/install.sh | ^sh -s -- -y -b $"($env.HOME)/.local/bin"
+# Installs system packages via native package manager
+def install-system-packages [os_id: string, pkgs: list<string>] {
+    match $os_id {
+        "arch" | "cachyos" | "endeavouros" | "manjaro" => {
+            if not (which paru | is-empty) {
+                ^paru -S --needed --noconfirm ...$pkgs
+            } else if not (which yay | is-empty) {
+                ^yay -S --needed --noconfirm ...$pkgs
+            } else {
+                ^sudo pacman -S --needed --noconfirm ...$pkgs
             }
+        }
+        "ubuntu" | "debian" | "pop" | "linuxmint" => {
+            ^sudo apt update
+            ^sudo apt install -y ...$pkgs
+        }
+        "fedora" | "rhel" | "centos" => {
+            ^sudo dnf install -y ...$pkgs
+        }
+        "opensuse" | "opensuse-tumbleweed" | "opensuse-leap" | "suse" => {
+            ^sudo zypper install -y ...$pkgs
+        }
+        "alpine" => {
+            ^sudo apk add ...$pkgs
+        }
+        "darwin" => {
+            ^brew install ...$pkgs
+        }
+        _ => {
+            nu-fail $"Unsupported OS distribution '($os_id)' for automatic package installation. Please install missing packages manually."
+        }
+    }
+}
 
-            if "uv" in $missing and (which uv | is-empty) {
-                print "Installing uv Python manager..."
-                ^curl -LsSf https://astral.sh/uv/install.sh | ^sh
+# Fallback installer for tools not in standard repos
+def install-special-tool [tool: string, os_id: string] {
+    let local_bin = ($env.HOME | path join ".local" "bin")
+    mkdir $local_bin
+
+    match $tool {
+        "starship" => {
+            print "Installing starship via official install script..."
+            ^curl -sS https://starship.rs/install.sh | ^sh -s -- -y -b $local_bin
+        }
+        "atuin" => {
+            print "Installing atuin via official install script..."
+            ^curl --proto "=https" --tlsv1.2 -sSf https://setup.atuin.sh | ^bash
+        }
+        "eza" => {
+            if not (which cargo | is-empty) {
+                print "Installing eza via cargo..."
+                ^cargo install eza
             }
-
-            if "nu" in $missing and (which nu | is-empty) {
-                print "Installing Nushell via Fury APT repository..."
-                ^sudo mkdir -p /etc/apt/keyrings
-                ^curl -fsSL https://apt.fury.io/nushell/gpg.key | ^sudo gpg --dearmor -o /etc/apt/keyrings/fury-nushell.gpg
-                "deb [signed-by=/etc/apt/keyrings/fury-nushell.gpg] https://apt.fury.io/nushell/ /" | ^sudo tee /etc/apt/sources.list.d/fury-nushell.list
-                ^sudo apt-get update -qq
-                ^sudo apt-get install -y -qq nushell
+        }
+        "just" => {
+            print "Installing just via official script..."
+            ^curl --proto "=https" --tlsv1.2 -sSf https://just.systems/install.sh | ^bash -s -- --to $local_bin
+        }
+        "delta" => {
+            if not (which cargo | is-empty) {
+                print "Installing git-delta via cargo..."
+                ^cargo install git-delta
             }
-
-            if "lazygit" in $missing and (which lazygit | is-empty) {
-                print "Installing lazygit..."
-                let version = (^curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | ^grep -oP '"tag_name": "v\K[^"]+' | str trim)
-                let tmp_tar = $"($env.HOME)/.local/bin/lazygit.tar.gz"
-                ^curl -sLo $tmp_tar $"https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_($version)_Linux_x86_64.tar.gz"
-                ^tar -xzf $tmp_tar -C $"($env.HOME)/.local/bin" lazygit
-                rm -f $tmp_tar
+        }
+        "yazi" => {
+            if not (which cargo | is-empty) {
+                print "Installing yazi via cargo..."
+                ^cargo install --locked yazi-fm yazi-cli
             }
-
-            if "lazydocker" in $missing and (which lazydocker | is-empty) {
-                print "Installing lazydocker..."
-                with-env { DIR: $"($env.HOME)/.local/bin" } {
-                    ^curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | ^bash
-                }
-            }
-
-            if "atuin" in $missing and (which atuin | is-empty) {
-                print "Installing atuin..."
-                ^curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | ^bash
-            }
-
-            if "yazi" in $missing and (which yazi | is-empty) {
-                print "Installing yazi..."
-                let tmp_zip = $"($env.HOME)/.local/bin/yazi.zip"
-                ^curl -sLo $tmp_zip "https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-gnu.zip"
-                let tmp_dir = (mktemp -d)
-                ^unzip -q $tmp_zip -d $tmp_dir
-                let yazi_bin = (glob $"($tmp_dir)/yazi-*/yazi" | first)
-                let ya_bin = (glob $"($tmp_dir)/yazi-*/ya" | first)
-                ^cp $yazi_bin $"($env.HOME)/.local/bin/yazi"
-                ^cp $ya_bin $"($env.HOME)/.local/bin/ya"
-                rm -rf $tmp_dir
-                rm -f $tmp_zip
-            }
-
-            if "matugen" in $missing and (which matugen | is-empty) {
-                print "Installing matugen..."
-                if not (which cargo | is-empty) {
-                    ^cargo install matugen
-                } else {
-                    let asset_url = (^curl -s "https://api.github.com/repos/InioX/matugen/releases/latest" | ^grep -oP '"browser_download_url": "\K[^"]*x86_64\.tar\.gz' | head -n 1 | str trim)
-                    if not ($asset_url | is-empty) {
-                        let tmp_tar = $"($env.HOME)/.local/bin/matugen.tar.gz"
-                        ^curl -sLo $tmp_tar $asset_url
-                        ^tar -xzf $tmp_tar -C $"($env.HOME)/.local/bin" matugen
-                        rm -f $tmp_tar
-                    }
-                }
-            }
-
-            if "fnm" in $missing and (which fnm | is-empty) {
-                print "Installing fnm..."
+        }
+        "fnm" => {
+            print "Installing Fast Node Manager (fnm)..."
+            if not (which curl | is-empty) {
                 ^curl -fsSL https://fnm.vercel.app/install | ^bash -s -- --install-dir $"($env.HOME)/.local/bin" --skip-shell
             }
         }
@@ -183,10 +208,10 @@ def sync-stow-links [] {
         ^just link
         if not (which ya | is-empty) {
             print "Installing Yazi plugins..."
-            try { ^just install } catch {}
+            try { ^just install } catch {}\
         }
     } else if not (which stow | is-empty) {
-        ^stow -R common --verbose
+        ^stow -R common --target $env.HOME --verbose
     } else {
         nu-fail "Neither 'just' nor 'stow' found. Cannot link dotfiles."
     }
