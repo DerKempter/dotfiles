@@ -26,7 +26,7 @@ def main [] {
 
     # Audit essential tools
     let audit_results = (audit-tools $os_id)
-
+    
     let missing_system_pkgs = ($audit_results | where missing and ($it.install_type == "system") | get pkg)
     let missing_special_pkgs = ($audit_results | where missing and ($it.install_type == "special") | get tool)
 
@@ -69,7 +69,28 @@ def get-os-id [] {
     if $nu.os-info.name == "macos" {
         "darwin"
     } else if ("/etc/os-release" | path exists) {
-        open /etc/os-release | get ID? | default "unknown"
+        let os_data = (open /etc/os-release --raw
+            | lines
+            | where { |l| $l =~ "^[A-Z_]+=" }
+            | parse "{key}={value}"
+            | upsert value { |r| $r.value | str trim -c '"' }
+        )
+        let os_id = ($os_data | where key == "ID" | get 0.value? | default "unknown")
+        let id_like = ($os_data | where key == "ID_LIKE" | get 0.value? | default "")
+
+        if $os_id in ["ubuntu", "debian", "pop", "linuxmint", "tuxedo", "elementary", "neon", "zorin"] {
+            $os_id
+        } else if ($id_like =~ "ubuntu|debian") {
+            "debian"
+        } else if ($id_like =~ "arch") {
+            "arch"
+        } else if ($id_like =~ "fedora|rhel") {
+            "fedora"
+        } else if ($id_like =~ "suse") {
+            "suse"
+        } else {
+            $os_id
+        }
     } else {
         "unknown"
     }
@@ -102,7 +123,7 @@ def audit-tools [os_id: string] {
     let defs = (tool-definitions)
     let os_key = match $os_id {
         "arch" | "cachyos" | "endeavouros" | "manjaro" => "arch",
-        "ubuntu" | "debian" | "pop" | "linuxmint" => "debian",
+        "ubuntu" | "debian" | "pop" | "linuxmint" | "tuxedo" | "elementary" | "neon" | "zorin" => "debian",
         "fedora" | "rhel" | "centos" => "fedora",
         "opensuse" | "opensuse-tumbleweed" | "opensuse-leap" | "suse" => "suse",
         "alpine" => "alpine",
@@ -142,7 +163,7 @@ def install-system-packages [os_id: string, pkgs: list<string>] {
                 ^sudo pacman -S --needed --noconfirm ...$pkgs
             }
         }
-        "ubuntu" | "debian" | "pop" | "linuxmint" => {
+        "ubuntu" | "debian" | "pop" | "linuxmint" | "tuxedo" | "elementary" | "neon" | "zorin" => {
             ^sudo apt update
             ^sudo apt install -y ...$pkgs
         }
