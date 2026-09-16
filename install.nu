@@ -26,7 +26,7 @@ def main [] {
 
     # Audit essential tools
     let audit_results = (audit-tools $os_id)
-    
+
     let missing_system_pkgs = ($audit_results | where missing and ($it.install_type == "system") | get pkg)
     let missing_special_pkgs = ($audit_results | where missing and ($it.install_type == "special") | get tool)
 
@@ -107,7 +107,6 @@ def tool-definitions [] {
         { tool: "starship", arch: "starship",  debian: "starship",  fedora: "starship",  suse: "starship",  alpine: "starship",  brew: "starship" }
         { tool: "zoxide",   arch: "zoxide",    debian: "zoxide",    fedora: "zoxide",    suse: "zoxide",    alpine: "zoxide",    brew: "zoxide" }
         { tool: "atuin",    arch: "atuin",     debian: "atuin",     fedora: "atuin",     suse: "atuin",     alpine: "atuin",     brew: "atuin" }
-        { tool: "eza",      arch: "eza",       debian: "eza",       fedora: "eza",       suse: "eza",       alpine: "eza",       brew: "eza" }
         { tool: "bat",      arch: "bat",       debian: "bat",       fedora: "bat",       suse: "bat",       alpine: "bat",       brew: "bat" }
         { tool: "rg",       arch: "ripgrep",   debian: "ripgrep",   fedora: "ripgrep",   suse: "ripgrep",   alpine: "ripgrep",   brew: "ripgrep" }
         { tool: "fd",       arch: "fd",        debian: "fd-find",   fedora: "fd-find",   suse: "fd",        alpine: "fd",        brew: "fd" }
@@ -136,7 +135,7 @@ def audit-tools [os_id: string] {
         let pkg_name = ($entry | get $os_key)
 
         let is_special = match $os_key {
-            "debian" => ($entry.tool in ["starship", "atuin", "eza", "yazi", "fnm", "just", "delta"]),
+            "debian" => ($entry.tool in ["starship", "atuin", "yazi", "fnm", "just", "delta"]),
             "fedora" => ($entry.tool in ["fnm", "yazi"]),
             "suse"   => ($entry.tool in ["fnm", "yazi"]),
             _ => false
@@ -198,12 +197,6 @@ def install-special-tool [tool: string, os_id: string] {
         "atuin" => {
             print "Installing atuin via official install script..."
             ^curl --proto "=https" --tlsv1.2 -sSf https://setup.atuin.sh | ^bash
-        }
-        "eza" => {
-            if (has-binary cargo) {
-                print "Installing eza via cargo..."
-                ^cargo install eza
-            }
         }
         "just" => {
             print "Installing just via official script..."

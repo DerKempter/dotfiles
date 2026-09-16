@@ -65,7 +65,6 @@ ESSENTIAL_TOOLS=(
     "starship:starship:starship:starship:starship:starship:starship"
     "zoxide:zoxide:zoxide:zoxide:zoxide:zoxide:zoxide"
     "atuin:atuin:atuin:atuin:atuin:atuin:atuin"
-    "eza:eza:eza:eza:eza:eza:eza"
     "bat:bat:bat:bat:bat:bat:bat"
     "rg:ripgrep:ripgrep:ripgrep:ripgrep:ripgrep:ripgrep"
     "fd:fd:fd-find:fd-find:fd:fd:fd"
@@ -89,8 +88,8 @@ for entry in "${ESSENTIAL_TOOLS[@]}"; do
             arch|cachyos|endeavouros|manjaro)
                 MISSING_PKGS+=("$arch_pkg")
                 ;;
-            ubuntu|debian|pop|linuxmint)
-                if [[ "$bin_name" =~ ^(starship|atuin|eza|yazi|fnm|just|delta)$ ]]; then
+            ubuntu|debian|pop|linuxmint|tuxedo|elementary|neon|zorin)
+                if [[ "$bin_name" =~ ^(starship|atuin|yazi|fnm|just|delta)$ ]]; then
                     SPECIAL_INSTALLS+=("$bin_name")
                 else
                     MISSING_PKGS+=("$debian_pkg")
@@ -137,7 +136,7 @@ if [ "${#MISSING_PKGS[@]}" -gt 0 ]; then
                 sudo pacman -S --needed --noconfirm "${MISSING_PKGS[@]}"
             fi
             ;;
-        ubuntu|debian|pop|linuxmint)
+        ubuntu|debian|pop|linuxmint|tuxedo|elementary|neon|zorin)
             sudo apt update && sudo apt install -y "${MISSING_PKGS[@]}"
             ;;
         fedora|rhel|centos)
@@ -170,12 +169,6 @@ for tool in "${SPECIAL_INSTALLS[@]}"; do
         atuin)
             log_info "Installing atuin via official install script..."
             curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | bash
-            ;;
-        eza)
-            log_info "Installing eza..."
-            if command -v cargo >/dev/null 2>&1; then
-                cargo install eza
-            fi
             ;;
         just)
             log_info "Installing just via official script..."
