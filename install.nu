@@ -26,7 +26,7 @@ def main [] {
 
     # Audit essential tools
     let audit_results = (audit-tools $os_id)
-    
+
     let missing_system_pkgs = ($audit_results | where missing and ($it.install_type == "system") | get pkg)
     let missing_special_pkgs = ($audit_results | where missing and ($it.install_type == "special") | get tool)
 
@@ -219,7 +219,7 @@ def sync-stow-links [] {
         ^just link
         if (has-binary ya) {
             print "Installing Yazi plugins..."
-            try { ^just install } catch {}\
+            try { ^just install } catch {}
         }
     } else if (has-binary stow) {
         ^stow -R common --target $env.HOME --verbose
