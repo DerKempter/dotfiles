@@ -141,7 +141,8 @@ def audit-tools [os_id: string] {
             _ => false
         }
 
-        {\n            tool: $entry.tool,
+        {
+            tool: $entry.tool,
             pkg: $pkg_name,
             missing: (not $is_installed),
             install_type: (if $is_special { "special" } else { "system" })

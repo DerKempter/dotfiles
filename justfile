@@ -1,4 +1,4 @@
-# justfile
+# =============================================================================
 # Automation recipes for managing dotfiles, symlinks, and cross-shell testing
 
 set shell := ["nu", "-c"]
@@ -8,7 +8,7 @@ repo_dir := justfile_directory()
 # Linking & Environment Provisioning
 # =============================================================================
 
-# Apply GNU Stow symlinks across common and machine-specific configurations
+# Symlink dotfiles configs
 link:
     if $nu.os-info.name == "windows" { just link-windows } else { just link-linux }
 
@@ -54,12 +54,14 @@ setup:
 check:
     print "=== Validating Bash ==="
     bash -n common/.bashrc
+    bash -n install.sh
     print "✓ Bash syntax OK"
 
     print "=== Validating Zsh ==="
     if (which zsh | is-empty) == false { zsh -n common/.zshrc; print "✓ Zsh syntax OK" } else { print "⚠ Zsh is not installed on host. Static check skipped." }
 
     print "=== Validating Nushell ==="
+    nu --ide-check 20 install.nu
     glob common/.config/nushell/**/*.nu | each { |file| nu --ide-check 20 $file }
     glob tests/*.nu | each { |file| nu --ide-check 20 $file }
     print "✓ Nushell syntax OK"
