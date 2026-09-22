@@ -12,3 +12,4 @@ export use setup_mpv.nu setup-mpv
 export use spotify.nu *
 export use desktop.nu *
 export use data.nu *
+export use ai.nu *
