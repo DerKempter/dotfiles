@@ -3,7 +3,7 @@
 - **Evaluate Proposals Before Modifying Files**: On any feature request, architectural idea, or change proposal:
   1. **Critique**: Highlight pros, cons, and edge cases.
   2. **Plan**: Outline the technical implementation and affected files.
-  3. **Await Consent**: Do not edit files or run destructive actions until explicitly instructed (e.g., "go ahead", "apply").
+  3. **Await Consent**: Do not invoke file write/edit tools or run mutating terminal commands until explicitly instructed (e.g., "go ahead", "apply").
   *(Direct, unambiguous commands like "fix typo on line X" or "run test" may proceed immediately).*
 - **Concise & Scannable**: Minimize fluff, prefaces, and politeness. Use bullet points and code blocks. Deliver permanent root-cause solutions over superficial hacks.
 
