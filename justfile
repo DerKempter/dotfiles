@@ -27,12 +27,12 @@ unlink-linux:
 
 link-windows:
     print "=== Linking Windows Targets ==="
-    let appdata = $env.APPDATA; let userprofile = $env.USERPROFILE; let win_links = [ ['common/.config/nushell', $"($appdata)/nushell"], ['common/.config/yazi', $"($appdata)/yazi"], ['common/.config/zed', $"($appdata)/Zed"], ['common/.config/starship.toml', $"($userprofile)/.config/starship.toml"], ['common/.gitconfig', $"($userprofile)/.gitconfig"] ]; $win_links | each { |entry| let src = ('{{repo_dir}}' | path join $entry.0); let target = $entry.1; if ($src | path exists) { mkdir ($target | path dirname); if ($target | path exists) { rm -rf $target }; ln -s $src $target; print $"✓ Linked ($entry.0) -> ($target)" } }
+    let appdata = $env.APPDATA; let userprofile = $env.USERPROFILE; let win_links = [ ['common/.config/nushell', $"($appdata)/nushell"], ['common/.config/yazi', $"($appdata)/yazi"], ['common/.config/zed', $"($appdata)/Zed"], ['common/.config/starship.toml', $"($userprofile)/.config/starship.toml"], ['common/.gitconfig', $"($userprofile)/.gitconfig"], ['common/.gemini/GEMINI.md', $"($userprofile)/.gemini/GEMINI.md"] ]; $win_links | each { |entry| let src = ('{{repo_dir}}' | path join $entry.0); let target = $entry.1; if ($src | path exists) { mkdir ($target | path dirname); if ($target | path exists) { rm -rf $target }; ln -s $src $target; print $"✓ Linked ($entry.0) -> ($target)" } }
     just bootstrap-themes
 
 unlink-windows:
     print "=== Unlinking Windows Targets ==="
-    let appdata = $env.APPDATA; let userprofile = $env.USERPROFILE; let win_targets = [ $"($appdata)/nushell", $"($appdata)/yazi", $"($appdata)/Zed", $"($userprofile)/.config/starship.toml", $"($userprofile)/.gitconfig" ]; $win_targets | each { |target| if ($target | path exists) { rm -rf $target; print $"✓ Removed ($target)" } }
+    let appdata = $env.APPDATA; let userprofile = $env.USERPROFILE; let win_targets = [ $"($appdata)/nushell", $"($appdata)/yazi", $"($appdata)/Zed", $"($userprofile)/.config/starship.toml", $"($userprofile)/.gitconfig", $"($userprofile)/.gemini/GEMINI.md" ]; $win_targets | each { |target| if ($target | path exists) { rm -rf $target; print $"✓ Removed ($target)" } }
 
 # Bootstrap fallback themes from matugen defaults if not already present
 bootstrap-themes:
