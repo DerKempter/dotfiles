@@ -183,6 +183,37 @@ if (has-binary keychain) {
     print -e $"(ansi yellow)Warning: keychain is not installed. SSH Agent has not been initialized.(ansi reset)"
 }
 
+# Distro-agnostic GUI Askpass detection (KDE, Wayland/Hyprland, LXQt, GNOME)
+let is_gui = ($env.WAYLAND_DISPLAY? | is-not-empty) or ($env.DISPLAY? | is-not-empty)
+
+if $is_gui {
+    let askpass_candidates = [
+        "ksshaskpass"
+        "lxqt-openssh-askpass"
+        "gnome-ssh-askpass"
+        "ssh-askpass"
+    ]
+
+    let resolved_askpass = (
+        $askpass_candidates
+        | each { |bin| do -i { which $bin } }
+        | flatten
+        | where type == "external"
+        | get -o 0.path
+    )
+
+    if ($resolved_askpass | is-not-empty) {
+        {
+            SSH_ASKPASS: $resolved_askpass
+            SSH_ASKPASS_REQUIRE: "prefer"
+        }
+    } else {
+        {}
+    }
+} else {
+    {}
+} | load-env
+
 # Starship Prompt Cache initialization
 let starship_path = ($nu.data-dir | path join "vendor/autoload/starship.nu")
 if (has-binary starship) {

@@ -42,6 +42,17 @@ if command -v keychain >/dev/null 2>&1; then
   eval $(SHELL=/bin/zsh keychain --eval --quiet --noask)
 fi
 
+# Distro-agnostic GUI SSH Askpass
+if [ -n "$WAYLAND_DISPLAY" ] || [ -n "$DISPLAY" ]; then
+  for askpass in ksshaskpass lxqt-openssh-askpass gnome-ssh-askpass ssh-askpass; do
+    if command -v "$askpass" >/dev/null 2>&1; then
+      export SSH_ASKPASS="$(command -v "$askpass")"
+      export SSH_ASKPASS_REQUIRE="prefer"
+      break
+    fi
+  done
+fi
+
 # ==========================================
 # Muscle-Memory Parity Aliases
 # ==========================================

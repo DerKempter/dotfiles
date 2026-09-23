@@ -89,8 +89,11 @@ if (has-binary starship) {
 }
 
 # ==============================================================================
-# Custom Completions
+# Custom Completions & SSH Key Fleet
 # ==============================================================================
 
 # Import all autocompletion scripts via the completions module
 use completions *
+
+# Auto-load SSH identities into agent
+ssh-load-fleet

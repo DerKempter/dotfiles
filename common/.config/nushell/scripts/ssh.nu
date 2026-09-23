@@ -17,6 +17,51 @@ export def "ssh-hosts" [] {
     }
 }
 
+# Automatically load SSH keys defined in ~/.ssh/config into ssh-agent
+export def ssh-load-fleet [] {
+    # 1. Guard: Ensure ssh-agent is running and reachable
+    if ($env.SSH_AUTH_SOCK? == null) or not ($env.SSH_AUTH_SOCK | path exists) {
+        return
+    }
+
+    # 2. Guard: Ensure ~/.ssh/config exists
+    let ssh_config = ($env.HOME | path join ".ssh" "config")
+    if not ($ssh_config | path exists) {
+        return
+    }
+
+    # 3. Guard: Check if identities are already loaded in memory (0 = keys present)
+    let agent_status = (do -i { ^ssh-add -l } | complete)
+    if $agent_status.exit_code == 0 {
+        return
+    }
+
+    # 4. Extract target private keys from ~/.ssh/config
+    let target_keys = (
+        open $ssh_config
+        | lines
+        | parse --regex '(?i)^\s*IdentityFile\s+(?P<path>.+)$'
+        | get -o path
+        | default []
+        | str trim
+        | str trim -c '"'
+        | each { |p| $p | path expand }
+        | uniq
+        | where ($it | path exists)
+    )
+
+    if ($target_keys | is-empty) {
+        return
+    }
+
+    # 5. Load keys quietly using GUI askpass if configured
+    if ($env.SSH_ASKPASS? != null) {
+        with-env { SSH_ASKPASS_REQUIRE: "force" } {
+            do -i { ^ssh-add -q ...$target_keys } | complete
+        }
+    }
+}
+
 # Sync local starship configuration to a remote host via SSH
 export def sync-starship [
     host: string@"ssh-hosts" # The SSH host (e.g., user@remote-server)
