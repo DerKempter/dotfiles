@@ -252,6 +252,27 @@ export def "docker fleet" [
 # Shorthand alias for docker fleet
 export alias dfleet = docker fleet
 
+# Audit published host ports across all remote servers
+export def "docker fleet-ports" [] {
+    docker fleet -a
+    | where Ports != "-" and ($it.Ports | is-not-empty)
+    | each { |row|
+        $row.Ports
+        | split row ", "
+        | parse --regex '(?:(?P<ip>[^:]+):)?(?P<host_port>\d+)->(?P<container_port>\d+)/(?P<proto>\w+)'
+        | insert host $row.host
+        | insert container $row.Names
+    }
+    | flatten
+    | select host host_port container_port proto container
+    | uniq
+    | into int host_port container_port
+    | sort-by host host_port
+}
+
+# Shorthand alias for docker fleet-ports
+export alias dfports = docker fleet-ports
+
 # Auto-discover and register Docker contexts from ~/.ssh/config hosts running Docker
 export def "docker sync-contexts" [] {
     let ssh_config = ("~/.ssh/config" | path expand)
