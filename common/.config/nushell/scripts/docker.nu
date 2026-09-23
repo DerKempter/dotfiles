@@ -326,12 +326,22 @@ export def "docker watch" [
     --loop (-l): duration = 0sec # Continuously refresh at interval (e.g. --loop 5sec)
 ] {
     if $loop > 0sec {
-        loop {
-            clear
-            print $"(ansi dark_gray)[(date now | format date "%H:%M:%S")] Polling watched containers... (Ctrl+C to stop)(ansi reset)\n"
-            docker watch
-            sleep $loop
+        # Switch to alternate screen buffer (TUI mode) so terminal scrollback history is preserved
+        print -n "\u{1b}[?1049h\u{1b}[H"
+        try {
+            loop {
+                # Fetch and render the updated table in memory first (no blank screen flicker during SSH fetch)
+                let ts = (date now | format date "%H:%M:%S")
+                let content = (docker watch | table -e)
+                let header = $"(ansi dark_gray)[($ts)] Polling watched containers... [Ctrl+C to stop](ansi reset)\n"
+
+                # Atomic frame swap: reset cursor to (1, 1), write content, and clear any leftover trailing lines
+                print -n $"\u{1b}[H($header)\n($content)\u{1b}[J\n"
+                sleep $loop
+            }
         }
+        # Restore primary screen buffer on exit (Ctrl-C or error)
+        print -n "\u{1b}[?1049l"
         return
     }
 
