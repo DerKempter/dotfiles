@@ -273,6 +273,40 @@ export def "docker fleet-ports" [] {
 # Shorthand alias for docker fleet-ports
 export alias dfports = docker fleet-ports
 
+# Interactively select any container across the entire fleet to stream logs
+export def "docker fleet-logs" [
+    --tail (-n): int = 100
+    --follow (-f)
+] {
+    let containers = (
+        docker fleet -a
+        | where State != "idle" and State != "dead"
+    )
+
+    if ($containers | is-empty) {
+        print "No inspectable containers found."
+        return
+    }
+
+    # Format into selectable lines for Nushell's interactive picker
+    let display_options = (
+        $containers
+        | each { |c| $"($c.host | fill -w 16) | ($c.Names | fill -w 35) | ($c.Image)" }
+    )
+
+    let choice = ($display_options | input list "Select a container to inspect logs:" --fuzzy)
+    if ($choice == null) { return }
+
+    let selected_idx = ($display_options | wrap item | enumerate | where item == $choice | get 0.index)
+    let target = ($containers | get $selected_idx)
+
+    let flags = if $follow { ["-f"] } else { [] }
+    ^docker --context $target.host logs --tail $tail ...$flags $target.Names
+}
+
+# Shorthand alias for docker fleet-logs
+export alias dlogs = docker fleet-logs
+
 # Auto-discover and register Docker contexts from ~/.ssh/config hosts running Docker
 export def "docker sync-contexts" [] {
     let ssh_config = ("~/.ssh/config" | path expand)
