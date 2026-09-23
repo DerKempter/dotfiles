@@ -278,7 +278,7 @@ export def "docker sync-contexts" [] {
         | default []
         | each { |line| $line | split row -r '\s+' }
         | flatten
-        | str trim
+        | each { |h| $h | str trim }
         | where { |h| not ($h =~ '[*?]|github\.com|gitlab\.') }
         | uniq
     )
@@ -290,7 +290,8 @@ export def "docker sync-contexts" [] {
         return
     }
 
-    print $"Checking ($unregistered | length) candidate host(s) for Docker daemons..."
+    let count = ($unregistered | length)
+    print $"Checking ($count) candidate hosts for Docker daemons..."
 
     # 3. Probe candidate hosts concurrently (BatchMode prevents hangs if key is missing)
     let probe_results = (
@@ -315,7 +316,7 @@ export def "docker sync-contexts" [] {
                 print $"(ansi yellow)⚠ Failed to register ($res.host): ($create.stderr | str trim)(ansi reset)"
             }
         } else {
-            print $"(ansi dark_gray)• ($res.host): No active Docker daemon (skipped)(ansi reset)"
+            print $"(ansi dark_gray)• ($res.host): No active Docker daemon [skipped](ansi reset)"
         }
     }
 }
