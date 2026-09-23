@@ -308,7 +308,7 @@ export def "docker fleet-logs" [
 export alias dlogs = docker fleet-logs
 
 def get-docker-watchlist [] {
-    let watchfile = ("~/.config/nushell/docker-watch.nuon" | path expand)
+    let watchfile = ($nu.default-config-dir | path join "docker-watch.nuon")
     if ($watchfile | path exists) {
         open $watchfile | default []
     } else {
@@ -317,11 +317,11 @@ def get-docker-watchlist [] {
 }
 
 def save-docker-watchlist [list: list<record<host: string, name: string>>] {
-    let watchfile = ("~/.config/nushell/docker-watch.nuon" | path expand)
+    let watchfile = ($nu.default-config-dir | path join "docker-watch.nuon")
     $list | uniq | to nuon | save -f $watchfile
 }
 
-# Monitor health status of watched containers across all hosts
+# Monitor health status of watched containers across relevant hosts
 export def "docker watch" [] {
     let watchlist = (get-docker-watchlist)
     if ($watchlist | is-empty) {
@@ -329,31 +329,82 @@ export def "docker watch" [] {
         return
     }
 
-    let containers = (docker fleet -a)
+    # Query only the distinct remote hosts that contain watched containers
+    let target_hosts = ($watchlist | get host | uniq)
+
+    let fleet_results = (
+        $target_hosts | par-each { |ctx|
+            try {
+                let output = (do -i {
+                    ^timeout 4s docker --context $ctx ps -a --format "{{json .}}"
+                } | complete)
+
+                if $output.exit_code != 0 {
+                    error make { msg: "Context unreachable" }
+                }
+
+                let parsed = (
+                    $output.stdout
+                    | lines
+                    | where ($it | str trim | is-not-empty)
+                    | each { |line| $line | from json }
+                )
+
+                if ($parsed | is-empty) {
+                    [{ host: $ctx, Names: "", State: "idle", Status: "" }]
+                } else {
+                    $parsed | insert host $ctx
+                }
+            } catch {
+                [{ host: $ctx, Names: "", State: "unreachable", Status: "Connection timeout / SSH error" }]
+            }
+        }
+        | flatten
+    )
 
     $watchlist | each { |target|
-        let match = ($containers | where { |c| $c.host == $target.host and $c.Names == $target.name })
-        if ($match | is-empty) {
+        let host_matches = ($fleet_results | where host == $target.host)
+        let is_host_unreachable = ($host_matches | any { |c| $c.State == "unreachable" })
+
+        if $is_host_unreachable {
             {
                 host: $target.host
                 name: $target.name
-                health: $"(ansi red)MISSING(ansi reset)"
-                status: "Container not found on host"
+                health: $"(ansi red)HOST UNREACHABLE(ansi reset)"
+                status: "Connection timeout / SSH error"
             }
         } else {
-            let row = ($match | first)
-            let health = match $row.State {
-                "running" => $"(ansi green)RUNNING(ansi reset)"
-                "exited" => $"(ansi red)DOWN(ansi reset)"
-                "dead" => $"(ansi red)DEAD(ansi reset)"
-                _ => $"(ansi yellow)($row.State | str uppercase)(ansi reset)"
-            }
+            let container_match = ($host_matches | where Names == $target.name)
+            if ($container_match | is-empty) {
+                {
+                    host: $target.host
+                    name: $target.name
+                    health: $"(ansi red)MISSING(ansi reset)"
+                    status: "Container not found on host"
+                }
+            } else {
+                let row = ($container_match | first)
+                let health = match $row.State {
+                    "running" => (
+                        if ($row.Status | str contains "(unhealthy)") {
+                            $"(ansi red)UNHEALTHY(ansi reset)"
+                        } else if ($row.Status | str contains "(health: starting)") {
+                            $"(ansi yellow)STARTING(ansi reset)"
+                        } else {
+                            $"(ansi green)RUNNING(ansi reset)"
+                        }
+                    )
+                    "exited" => $"(ansi red)DOWN(ansi reset)"
+                    "dead" => $"(ansi red)DEAD(ansi reset)"
+                    _ => $"(ansi yellow)($row.State | str uppercase)(ansi reset)"
+                }
 
-            {
-                host: $row.host
-                name: $row.Names
-                health: $health
-                status: $row.Status
+                {
+                    host: $row.host
+                    name: $row.Names
+                    health: $health
+                    status: $row.Status
+                }
             }
         }
     }
