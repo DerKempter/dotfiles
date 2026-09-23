@@ -166,6 +166,160 @@ export def dockeri [
     }
 }
 
+# Query all remote Docker contexts in parallel and aggregate container statuses
+export def "docker fleet" [
+    --all (-a)  # Show all containers across all hosts (default shows running only)
+] {
+    let contexts = (
+        ^docker context ls --format "{{json .}}"
+        | lines
+        | each { |line| $line | from json }
+        | where Name != "default" and Name != "desktop-linux"
+        | get -o Name
+        | default []
+    )
+
+    if ($contexts | is-empty) {
+        print "No custom Docker contexts found."
+        return []
+    }
+
+    let ps_args = if $all {
+        ["ps", "-a", "--format", "{{json .}}"]
+    } else {
+        ["ps", "--format", "{{json .}}"]
+    }
+
+    let raw_results = (
+        $contexts | par-each { |ctx|
+            try {
+                # 4-second hard timeout prevents a single dropped/hung server from stalling par-each
+                let output = (do -i {
+                    ^timeout 4s docker --context $ctx ...$ps_args
+                } | complete)
+
+                if $output.exit_code != 0 {
+                    error make { msg: "Docker context unreachable" }
+                }
+
+                let parsed = (
+                    $output.stdout
+                    | lines
+                    | where ($it | str trim | is-not-empty)
+                    | each { |line| $line | from json }
+                )
+
+                if ($parsed | is-empty) {
+                    # Host is alive, but has zero matching containers
+                    [
+                        {
+                            host: $ctx
+                            Names: "(none)"
+                            Image: "-"
+                            Status: (if $all { "No containers" } else { "0 running" })
+                            State: "idle"
+                            Ports: "-"
+                        }
+                    ]
+                } else {
+                    $parsed | insert host $ctx
+                }
+            } catch {
+                [
+                    {
+                        host: $ctx
+                        Names: "UNREACHABLE"
+                        Image: "-"
+                        Status: "Connection timeout / SSH error"
+                        State: "dead"
+                        Ports: "-"
+                    }
+                ]
+            }
+        }
+        | flatten
+    )
+
+    if ($raw_results | is-empty) {
+        return []
+    }
+
+    $raw_results
+    | select host Names Image State Status Ports
+    | sort-by host State
+}
+
+# Shorthand alias for docker fleet
+export alias dfleet = docker fleet
+
+# Auto-discover and register Docker contexts from ~/.ssh/config hosts running Docker
+export def "docker sync-contexts" [] {
+    let ssh_config = ("~/.ssh/config" | path expand)
+    if not ($ssh_config | path exists) {
+        print "No ~/.ssh/config found."
+        return
+    }
+
+    # 1. Existing context names
+    let existing_contexts = (
+        ^docker context ls --format "{{json .}}"
+        | lines
+        | each { |l| $l | from json }
+        | get -o Name
+        | default []
+    )
+
+    # 2. Extract valid SSH hosts from config (handles multiple hosts per line)
+    let hosts = (
+        open $ssh_config
+        | lines
+        | parse --regex '(?i)^\s*Host\s+(?P<hosts>.+)$'
+        | get -o hosts
+        | default []
+        | each { |line| $line | split row -r '\s+' }
+        | flatten
+        | str trim
+        | where { |h| not ($h =~ '[*?]|github\.com|gitlab\.') }
+        | uniq
+    )
+
+    let unregistered = ($hosts | where { |h| $h not-in $existing_contexts })
+
+    if ($unregistered | is-empty) {
+        print $"(ansi green)✓ All candidate hosts in ~/.ssh/config are already registered as Docker contexts.(ansi reset)"
+        return
+    }
+
+    print $"Checking ($unregistered | length) candidate host(s) for Docker daemons..."
+
+    # 3. Probe candidate hosts concurrently (BatchMode prevents hangs if key is missing)
+    let probe_results = (
+        $unregistered | par-each { |h|
+            let check = (do -i {
+                ^ssh -o ConnectTimeout=2 -o BatchMode=yes -o StrictHostKeyChecking=accept-new $h "docker info >/dev/null 2>&1"
+            } | complete)
+
+            { host: $h, has_docker: ($check.exit_code == 0) }
+        }
+    )
+
+    for res in $probe_results {
+        if $res.has_docker {
+            let create = (do -i {
+                ^docker context create $res.host --docker $"host=ssh://($res.host)" --description $"SSH remote host ($res.host)"
+            } | complete)
+
+            if $create.exit_code == 0 {
+                print $"(ansi green)✓ Created Docker context for ($res.host)(ansi reset)"
+            } else {
+                print $"(ansi yellow)⚠ Failed to register ($res.host): ($create.stderr | str trim)(ansi reset)"
+            }
+        } else {
+            print $"(ansi dark_gray)• ($res.host): No active Docker daemon (skipped)(ansi reset)"
+        }
+    }
+}
+
 # --- Docker extern definitions for completions ---
 
 # Log in to a Docker registry
