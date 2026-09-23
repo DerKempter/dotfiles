@@ -297,7 +297,7 @@ export def "docker fleet-logs" [
     let choice = ($display_options | input list "Select a container to inspect logs:" --fuzzy)
     if ($choice == null) { return }
 
-    let selected_idx = ($display_options | wrap item | enumerate | where item == $choice | get 0.index)
+    let selected_idx = ($display_options | enumerate | where item == $choice | get index.0)
     let target = ($containers | get $selected_idx)
 
     let flags = if $follow { ["-f"] } else { [] }
@@ -392,7 +392,7 @@ export def "docker watch add" [] {
     let choice = ($display_options | input list "Select a container to add to your watchlist:" --fuzzy)
     if ($choice == null) { return }
 
-    let selected_idx = ($display_options | wrap item | enumerate | where item == $choice | get 0.index)
+    let selected_idx = ($display_options | enumerate | where item == $choice | get index.0)
     let target = ($candidates | get $selected_idx)
 
     let updated = ($watchlist | append { host: $target.host, name: $target.Names })
@@ -417,7 +417,7 @@ export def "docker watch remove" [] {
     let choice = ($display_options | input list "Select a container to remove from your watchlist:" --fuzzy)
     if ($choice == null) { return }
 
-    let selected_idx = ($display_options | wrap item | enumerate | where item == $choice | get 0.index)
+    let selected_idx = ($display_options | enumerate | where item == $choice | get index.0)
     let target = ($watchlist | get $selected_idx)
 
     let updated = ($watchlist | where { |w| not ($w.host == $target.host and $w.name == $target.name) })
