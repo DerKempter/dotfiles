@@ -310,7 +310,7 @@ export alias dlogs = docker fleet-logs
 def get-docker-watchlist [] {
     let watchfile = ($nu.default-config-dir | path join "docker-watch.nuon")
     if ($watchfile | path exists) {
-        open $watchfile | default []
+        try { open $watchfile | default [] } catch { [] }
     } else {
         []
     }
@@ -322,7 +322,19 @@ def save-docker-watchlist [list: list<record<host: string, name: string>>] {
 }
 
 # Monitor health status of watched containers across relevant hosts
-export def "docker watch" [] {
+export def "docker watch" [
+    --loop (-l): duration = 0sec # Continuously refresh at interval (e.g. --loop 5sec)
+] {
+    if $loop > 0sec {
+        loop {
+            clear
+            print $"(ansi dark_gray)[(date now | format date "%H:%M:%S")] Polling watched containers... (Ctrl+C to stop)(ansi reset)\n"
+            docker watch
+            sleep $loop
+        }
+        return
+    }
+
     let watchlist = (get-docker-watchlist)
     if ($watchlist | is-empty) {
         print $"(ansi yellow)Watchlist is empty. Run 'docker watch add' to track containers.(ansi reset)"
@@ -394,6 +406,7 @@ export def "docker watch" [] {
                             $"(ansi green)RUNNING(ansi reset)"
                         }
                     )
+                    "restarting" => $"(ansi red)CRASHLOOP(ansi reset)"
                     "exited" => $"(ansi red)DOWN(ansi reset)"
                     "dead" => $"(ansi red)DEAD(ansi reset)"
                     _ => $"(ansi yellow)($row.State | str uppercase)(ansi reset)"
