@@ -174,7 +174,7 @@ export def "docker fleet" [
         ^docker context ls --format "{{json .}}"
         | lines
         | each { |line| $line | from json }
-        | where Name != "default" and Name != "desktop-linux"
+        | where Name != "desktop-linux"
         | get -o Name
         | default []
     )
