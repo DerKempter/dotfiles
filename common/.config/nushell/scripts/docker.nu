@@ -307,6 +307,133 @@ export def "docker fleet-logs" [
 # Shorthand alias for docker fleet-logs
 export alias dlogs = docker fleet-logs
 
+def get-docker-watchlist [] {
+    let watchfile = ("~/.config/nushell/docker-watch.nuon" | path expand)
+    if ($watchfile | path exists) {
+        open $watchfile | default []
+    } else {
+        []
+    }
+}
+
+def save-docker-watchlist [list: list<record<host: string, name: string>>] {
+    let watchfile = ("~/.config/nushell/docker-watch.nuon" | path expand)
+    $list | uniq | to nuon | save -f $watchfile
+}
+
+# Monitor health status of watched containers across all hosts
+export def "docker watch" [] {
+    let watchlist = (get-docker-watchlist)
+    if ($watchlist | is-empty) {
+        print $"(ansi yellow)Watchlist is empty. Run 'docker watch add' to track containers.(ansi reset)"
+        return
+    }
+
+    let containers = (docker fleet -a)
+
+    $watchlist | each { |target|
+        let match = ($containers | where { |c| $c.host == $target.host and $c.Names == $target.name })
+        if ($match | is-empty) {
+            {
+                host: $target.host
+                name: $target.name
+                health: $"(ansi red)MISSING(ansi reset)"
+                status: "Container not found on host"
+            }
+        } else {
+            let row = ($match | first)
+            let health = match $row.State {
+                "running" => $"(ansi green)RUNNING(ansi reset)"
+                "exited" => $"(ansi red)DOWN(ansi reset)"
+                "dead" => $"(ansi red)DEAD(ansi reset)"
+                _ => $"(ansi yellow)($row.State | str uppercase)(ansi reset)"
+            }
+
+            {
+                host: $row.host
+                name: $row.Names
+                health: $health
+                status: $row.Status
+            }
+        }
+    }
+}
+
+# Interactively add a container to your fleet watchlist
+export def "docker watch add" [] {
+    let containers = (
+        docker fleet -a
+        | where State != "idle" and State != "dead"
+    )
+
+    if ($containers | is-empty) {
+        print "No active containers found to add."
+        return
+    }
+
+    let watchlist = (get-docker-watchlist)
+    let current_keys = ($watchlist | each { |w| $"($w.host)::($w.name)" })
+
+    let candidates = (
+        $containers
+        | where { |c| ($"($c.host)::($c.Names)" not-in $current_keys) }
+    )
+
+    if ($candidates | is-empty) {
+        print "All discovered containers are already in your watchlist."
+        return
+    }
+
+    let display_options = (
+        $candidates
+        | each { |c| $"($c.host | fill -w 16) | ($c.Names | fill -w 35) | ($c.Image)" }
+    )
+
+    let choice = ($display_options | input list "Select a container to add to your watchlist:" --fuzzy)
+    if ($choice == null) { return }
+
+    let selected_idx = ($display_options | wrap item | enumerate | where item == $choice | get 0.index)
+    let target = ($candidates | get $selected_idx)
+
+    let updated = ($watchlist | append { host: $target.host, name: $target.Names })
+    save-docker-watchlist $updated
+
+    print $"(ansi green)✓ Added ($target.host)::($target.Names) to watchlist.(ansi reset)"
+}
+
+# Interactively remove a container from your fleet watchlist
+export def "docker watch remove" [] {
+    let watchlist = (get-docker-watchlist)
+    if ($watchlist | is-empty) {
+        print "Watchlist is empty."
+        return
+    }
+
+    let display_options = (
+        $watchlist
+        | each { |w| $"($w.host | fill -w 16) | ($w.name)" }
+    )
+
+    let choice = ($display_options | input list "Select a container to remove from your watchlist:" --fuzzy)
+    if ($choice == null) { return }
+
+    let selected_idx = ($display_options | wrap item | enumerate | where item == $choice | get 0.index)
+    let target = ($watchlist | get $selected_idx)
+
+    let updated = ($watchlist | where { |w| not ($w.host == $target.host and $w.name == $target.name) })
+    save-docker-watchlist $updated
+
+    print $"(ansi yellow)✓ Removed ($target.host)::($target.name) from watchlist.(ansi reset)"
+}
+
+# Show all currently watched containers
+export def "docker watch list" [] {
+    get-docker-watchlist
+}
+
+# Shorthand alias for docker watch
+export alias dwatch = docker watch
+
 # Auto-discover and register Docker contexts from ~/.ssh/config hosts running Docker
 export def "docker sync-contexts" [] {
     let ssh_config = ("~/.ssh/config" | path expand)
