@@ -26,6 +26,9 @@
 **/hyprswitch/colors.css
 **/ghostty/themes/matugen
 
+# Nushell autoload vendor directory
+**/nushell/vendor/
+
 # Ignore all dynamic/bootstrapped assets in the mpv directory except tracked configurations
 **/mpv/*
 !**/mpv/mpv.conf

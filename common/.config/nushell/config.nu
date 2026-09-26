@@ -4,8 +4,21 @@
 
 $env.config.show_banner = false
 
-# Import modular helper scripts and apply Catppuccin theme
-use scripts *
+# Import modular helper scripts (Linux only) and apply Catppuccin theme
+const LINUX_SCRIPTS = (if $nu.os-info.name == "windows" {
+    ($nu.default-config-dir | path join "empty.nu")
+} else {
+    "scripts"
+})
+use $LINUX_SCRIPTS *
+
+const THEME_SCRIPT = (if $nu.os-info.name == "windows" {
+    ($nu.default-config-dir | path join "scripts" "catppuccin_mocha.nu")
+} else {
+    ($nu.default-config-dir | path join "empty.nu")
+})
+use $THEME_SCRIPT *
+
 $env.config.color_config = (catppuccin_mocha)
 
 $env.config.table.index_mode = "auto"
@@ -19,7 +32,6 @@ $env.config.datetime_format = {
     # table: '%d.%m.%y %I:%M:%S%p'          # generally shows up in tabular outputs such as ls. commenting this out will change it to the default human readable datetime format
 }
 
-
 # ==============================================================================
 # Shell Hooks & Integrations
 # ==============================================================================
@@ -31,10 +43,15 @@ source ($nu.config-path | path dirname | path join "hooks" "py_env-hook.nu")
 const ZOXIDE_PATH = ($nu.home-dir | path join ".zoxide.nu")
 source $ZOXIDE_PATH
 
-# Atuin shell history hook & PTY proxy overlay
-source ($nu.config-path | path dirname | path join "hooks" "atuin_proxy.nu")
-const ATUIN_PATH = ($nu.home-dir | path join ".local" "share" "atuin" "init.nu")
-const ATUIN_COMPLETIONS_PATH = ($nu.config-path | path dirname | path join "hooks" "atuin.nu")
+# Atuin shell history hook & PTY proxy overlay (Linux only)
+if $nu.os-info.name != "windows" {
+    source ($nu.config-path | path dirname | path join "hooks" "atuin_proxy.nu")
+}
+const ATUIN_PATH = (if $nu.os-info.name == "windows" {
+    ($nu.default-config-dir | path join "empty.nu")
+} else {
+    ($nu.home-dir | path join ".local" "share" "atuin" "init.nu")
+})
 source $ATUIN_PATH
 
 # ==============================================================================
@@ -82,7 +99,9 @@ if (has-binary starship) {
         starship init nu | save -f $starship_path
     }
 } else {
-    print -e $"(ansi yellow)Warning: starship is not installed. Custom prompt has not been initialized.(ansi reset)"
+    if $nu.os-info.name != "windows" {
+        print -e $"(ansi yellow)Warning: starship is not installed. Custom prompt has not been initialized.(ansi reset)"
+    }
     if ($starship_path | path exists) {
         rm $starship_path
     }
@@ -95,5 +114,7 @@ if (has-binary starship) {
 # Import all autocompletion scripts via the completions module
 use completions *
 
-# Auto-load SSH identities into agent
-ssh-load-fleet
+# Auto-load SSH identities into agent (Linux only)
+if $nu.os-info.name != "windows" {
+    ssh-load-fleet
+}
