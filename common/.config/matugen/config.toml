@@ -17,6 +17,11 @@ input_path = "~/.config/matugen/templates/ghostty-colors"
 output_path = "~/.config/ghostty/themes/matugen"
 post_hook = "pkill -SIGUSR2 -x ghostty || true"
 
+[templates.btop]
+input_path = "~/.config/matugen/templates/btop-theme.theme"
+output_path = "~/.config/btop/themes/matugen.theme"
+post_hook = "pkill -SIGUSR2 -x btop || true"
+
 [templates.starship]
 input_path = "~/.config/matugen/templates/starship.toml"
 output_path = "~/.cache/starship.toml"

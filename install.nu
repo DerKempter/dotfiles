@@ -231,6 +231,7 @@ def bootstrap-default-themes [] {
     let defaults_dir = ($env.FILE_PWD? | default "." | path join "common/.config/matugen/defaults")
     let targets = [
         [($defaults_dir | path join "ghostty-theme"), ($env.HOME | path join ".config/ghostty/themes/matugen")],
+        [($defaults_dir | path join "btop-theme.theme"), ($env.HOME | path join ".config/btop/themes/matugen.theme")],
         [($defaults_dir | path join "yazi-flavor.toml"), ($env.HOME | path join ".config/yazi/flavors/matugen.yazi/flavor.toml")],
         [($defaults_dir | path join "atuin-theme.toml"), ($env.HOME | path join ".config/atuin/themes/matugen.toml")],
         [($defaults_dir | path join "micro-colorscheme.micro"), ($env.HOME | path join ".config/micro/colorschemes/matugen.micro")],

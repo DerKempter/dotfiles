@@ -202,6 +202,7 @@ bootstrap_default_themes() {
     local defaults_dir="$SCRIPT_DIR/common/.config/matugen/defaults"
     local pairs=(
         "$defaults_dir/ghostty-theme:$HOME/.config/ghostty/themes/matugen"
+        "$defaults_dir/btop-theme.theme:$HOME/.config/btop/themes/matugen.theme"
         "$defaults_dir/yazi-flavor.toml:$HOME/.config/yazi/flavors/matugen.yazi/flavor.toml"
         "$defaults_dir/atuin-theme.toml:$HOME/.config/atuin/themes/matugen.toml"
         "$defaults_dir/micro-colorscheme.micro:$HOME/.config/micro/colorschemes/matugen.micro"
