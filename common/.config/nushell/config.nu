@@ -114,7 +114,7 @@ if (has-binary starship) {
 # Import all autocompletion scripts via the completions module
 use completions *
 
-# Auto-load SSH identities into agent (Linux only)
-if $nu.os-info.name != "windows" {
+# Auto-load SSH identities into agent (Linux only, when not using systemd/KeePassXC socket)
+if $nu.os-info.name != "windows" and not (($env.XDG_RUNTIME_DIR? | default "" | path join "ssh-agent.socket") | path exists) {
     ssh-load-fleet
 }

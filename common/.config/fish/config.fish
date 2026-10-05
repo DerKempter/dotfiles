@@ -22,8 +22,10 @@ set -Ux WEBKIT_DISABLE_DMABUF_RENDERER 1
 set -Ux LIBGL_ALWAYS_SOFTWARE 1
 set -Ux QT_XCB_FORCE_SOFTWARE_OPENGL 1
 
-# Keychain SSH Agent setup
-if command -v keychain >/dev/null 2>&1
+# SSH Agent Key Management: Prioritize systemd socket (KeePassXC / work laptop), fallback to keychain (home)
+if test -S "$XDG_RUNTIME_DIR/ssh-agent.socket"
+  set -gx SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/ssh-agent.socket"
+else if command -v keychain >/dev/null 2>&1
   env SHELL=fish keychain --eval --quiet --noask | source
 end
 

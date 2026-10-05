@@ -68,8 +68,17 @@ export def dps [
         ["Names", "Image", "Status"]
     }
 
-    let raw = (^docker ...$args
+    let res = (do -i { ^docker ...$args } | complete)
+    if $res.exit_code != 0 {
+        if ($res.stderr | is-not-empty) {
+            print -e ($res.stderr | str trim)
+        }
+        return
+    }
+
+    let raw = ($res.stdout
         | lines
+        | where { |l| $l | str starts-with "{" }
         | each { from json }
     )
 

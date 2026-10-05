@@ -191,8 +191,11 @@ if $nu.os-info.name == "windows" {
         touch $atuin_pty
     }
 
-    # Keychain SSH Key Management
-    if (has-binary keychain) {
+    # SSH Agent Key Management: Prioritize systemd socket (KeePassXC / work laptop), fallback to keychain (home)
+    let systemd_agent = ($env.XDG_RUNTIME_DIR? | default "" | path join "ssh-agent.socket")
+    if ($systemd_agent | path exists) {
+        $env.SSH_AUTH_SOCK = $systemd_agent
+    } else if (has-binary keychain) {
         let keychain_output = (with-env { SHELL: csh } {
             keychain --eval --quiet --noask
         })
@@ -212,7 +215,7 @@ if $nu.os-info.name == "windows" {
 
         load-env $keychain_env
     } else {
-        print -e $"(ansi yellow)Warning: keychain is not installed. SSH Agent has not been initialized.(ansi reset)"
+        print -e $"(ansi yellow)Warning: keychain is not installed and no systemd ssh-agent socket found. SSH Agent has not been initialized.(ansi reset)"
     }
 
     # Distro-agnostic GUI Askpass detection (KDE, Wayland/Hyprland, LXQt, GNOME)
