@@ -169,6 +169,8 @@ Custom commands in `.config/nushell/scripts/`:
 | `test-speed` | [test-speed.nu](common/.config/nushell/scripts/test-speed.nu) | Runs a native network download speed test in Nushell. |
 | `setup-mpv` | [setup_mpv.nu](common/.config/nushell/scripts/setup_mpv.nu) | Bootstraps the MPV stack: provisions isolated `yt-dlp`, deploys `uosc` overlays and `sponsorblock` scripts, and configures the `ff2mpv` Firefox native messaging host bridge. |
 | `update-aerion` | [misc.nu](common/.config/nushell/scripts/misc.nu) | Installs/upgrades the Aerion email client from GitHub releases. |
+| `update-spotifast` | [misc.nu](common/.config/nushell/scripts/misc.nu) | Installs/upgrades the Spotifast native Spotify client from GitHub releases. |
+| `update-zapfast` | [misc.nu](common/.config/nushell/scripts/misc.nu) | Installs/upgrades the Zapfast native WhatsApp client from GitHub releases. |
 
 ### Auto .venv Detection
 When navigating (`cd` / `z`) into any folder with a `.venv` directory, the shell automatically updates `$env.PATH` and loads `VIRTUAL_ENV`. Navigating out of the project ancestry tree deactivates it.

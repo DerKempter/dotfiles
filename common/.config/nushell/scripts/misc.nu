@@ -128,6 +128,194 @@ export def update-aerion [
     print $"(ansi green)🎉 Aerion update workflow completed!(ansi reset)"
 }
 
+# Download, extract, and install the latest Spotifast release from GitHub
+export def update-spotifast [
+    --pre-release (-p) # Pass this flag to include pre-releases/testing builds
+] {
+    let repo = "crmne/spotifast"
+    let temp_dir = (mktemp -d -t "spotifast-upgrade.XXXXXX")
+    let archive_path = ($temp_dir | path join "spotifast.tar.gz")
+
+    print $"(ansi yellow)Fetching Spotifast release metadata from GitHub...(ansi reset)"
+    let releases = try {
+        http get $"https://api.github.com/repos/($repo)/releases"
+    } catch {
+        rm -rf $temp_dir
+        error make { msg: "Failed to connect to GitHub API. Check network or rate limits." }
+    }
+
+    if ($releases | is-empty) {
+        rm -rf $temp_dir
+        error make { msg: "No releases found on GitHub." }
+    }
+
+    let target_release = if $pre_release {
+        $releases | first
+    } else {
+        let stable = ($releases | where prerelease == false)
+        if ($stable | is-empty) { $releases | first } else { $stable | first }
+    }
+
+    let asset = ($target_release.assets
+        | where name =~ '^spotifast-.*-x86_64-unknown-linux-gnu\.tar\.gz$'
+        | get -o 0)
+
+    if ($asset | is-empty) {
+        rm -rf $temp_dir
+        error make { msg: $"No Linux x86_64 release asset found in ($target_release.tag_name)." }
+    }
+
+    print $"(ansi cyan)Found build: ($target_release.tag_name) \(Pre-release: ($target_release.prerelease)\)(ansi reset)"
+    print $"(ansi green)Downloading Spotifast archive...(ansi reset)"
+
+    try {
+        http get $asset.browser_download_url | save -f $archive_path
+    } catch {
+        rm -rf $temp_dir
+        error make { msg: "Failed to download Spotifast archive." }
+    }
+
+    print $"(ansi green)Extracting archive...(ansi reset)"
+    tar -xzf $archive_path -C $temp_dir
+
+    let extracted_dirs = (ls $temp_dir | where type == "dir" and name =~ 'spotifast-' | get name)
+    if ($extracted_dirs | is-empty) {
+        rm -rf $temp_dir
+        error make { msg: "Unexpected archive structure: extraction folder not found." }
+    }
+    let base_dir = ($extracted_dirs | first)
+
+    let bin_dir = ("~/.local/bin" | path expand)
+    let app_dir = ("~/.local/share/applications" | path expand)
+    let icon_dir = ("~/.local/share/icons/hicolor/scalable/apps" | path expand)
+
+    mkdir $bin_dir $app_dir $icon_dir
+
+    print $"(ansi green)Installing binary to ($bin_dir)/spotifast...(ansi reset)"
+    install -m 755 ($base_dir | path join "spotifast") ($bin_dir | path join "spotifast")
+
+    # Clean up stale cargo binary if present to avoid PATH shadowing/drift
+    let cargo_bin = ("~/.cargo/bin/spotifast" | path expand)
+    if ($cargo_bin | path exists) {
+        rm -f $cargo_bin
+    }
+
+    let desktop_file = ($base_dir | path join "packaging/applications/spotifast.desktop")
+    if ($desktop_file | path exists) {
+        print $"(ansi green)Installing desktop shortcut...(ansi reset)"
+        cp -f $desktop_file ($app_dir | path join "spotifast.desktop")
+    }
+
+    let icon_file = ($base_dir | path join "packaging/icons/spotifast.svg")
+    if ($icon_file | path exists) {
+        print $"(ansi green)Installing icon...(ansi reset)"
+        cp -f $icon_file ($icon_dir | path join "spotifast.svg")
+    }
+
+    if (which update-desktop-database | is-not-empty) {
+        update-desktop-database $app_dir
+    }
+
+    print $"(ansi green)Cleaning up temporary files...(ansi reset)"
+    rm -rf $temp_dir
+
+    print $"(ansi green)🎉 Spotifast ($target_release.tag_name) update completed successfully!(ansi reset)"
+}
+
+# Download, extract, and install the latest Zapfast release from GitHub
+export def update-zapfast [
+    --pre-release (-p) # Pass this flag to include pre-releases/testing builds
+] {
+    let repo = "crmne/zapfast"
+    let temp_dir = (mktemp -d -t "zapfast-upgrade.XXXXXX")
+    let archive_path = ($temp_dir | path join "zapfast.tar.gz")
+
+    print $"(ansi yellow)Fetching Zapfast release metadata from GitHub...(ansi reset)"
+    let releases = try {
+        http get $"https://api.github.com/repos/($repo)/releases"
+    } catch {
+        rm -rf $temp_dir
+        error make { msg: "Failed to connect to GitHub API. Check network or rate limits." }
+    }
+
+    if ($releases | is-empty) {
+        rm -rf $temp_dir
+        error make { msg: "No releases found on GitHub." }
+    }
+
+    let target_release = if $pre_release {
+        $releases | first
+    } else {
+        let stable = ($releases | where prerelease == false)
+        if ($stable | is-empty) { $releases | first } else { $stable | first }
+    }
+
+    let asset = ($target_release.assets
+        | where name =~ '^zapfast-.*-x86_64-unknown-linux-gnu\.tar\.gz$'
+        | get -o 0)
+
+    if ($asset | is-empty) {
+        rm -rf $temp_dir
+        error make { msg: $"No Linux x86_64 release asset found in ($target_release.tag_name)." }
+    }
+
+    print $"(ansi cyan)Found build: ($target_release.tag_name) \(Pre-release: ($target_release.prerelease)\)(ansi reset)"
+    print $"(ansi green)Downloading Zapfast archive...(ansi reset)"
+
+    try {
+        http get $asset.browser_download_url | save -f $archive_path
+    } catch {
+        rm -rf $temp_dir
+        error make { msg: "Failed to download Zapfast archive." }
+    }
+
+    print $"(ansi green)Extracting archive...(ansi reset)"
+    tar -xzf $archive_path -C $temp_dir
+
+    let extracted_dirs = (ls $temp_dir | where type == "dir" and name =~ 'zapfast-' | get name)
+    if ($extracted_dirs | is-empty) {
+        rm -rf $temp_dir
+        error make { msg: "Unexpected archive structure: extraction folder not found." }
+    }
+    let base_dir = ($extracted_dirs | first)
+
+    let bin_dir = ("~/.local/bin" | path expand)
+    let app_dir = ("~/.local/share/applications" | path expand)
+    let icon_dir = ("~/.local/share/icons/hicolor/scalable/apps" | path expand)
+
+    mkdir $bin_dir $app_dir $icon_dir
+
+    print $"(ansi green)Installing binary to ($bin_dir)/zapfast...(ansi reset)"
+    install -m 755 ($base_dir | path join "zapfast") ($bin_dir | path join "zapfast")
+
+    # Clean up stale cargo binary if present to avoid PATH shadowing/drift
+    let cargo_bin = ("~/.cargo/bin/zapfast" | path expand)
+    if ($cargo_bin | path exists) {
+        rm -f $cargo_bin
+    }
+
+    let desktop_file = ($base_dir | path join "packaging/applications/zapfast.desktop")
+    if ($desktop_file | path exists) {
+        print $"(ansi green)Installing desktop shortcut...(ansi reset)"
+        cp -f $desktop_file ($app_dir | path join "zapfast.desktop")
+    }
+
+    let icon_file = ($base_dir | path join "packaging/icons/zapfast.svg")
+    if ($icon_file | path exists) {
+        print $"(ansi green)Installing icon...(ansi reset)"
+        cp -f $icon_file ($icon_dir | path join "zapfast.svg")
+    }
+
+    if (which update-desktop-database | is-not-empty) {
+        update-desktop-database $app_dir
+    }
+
+    print $"(ansi green)Cleaning up temporary files...(ansi reset)"
+    rm -rf $temp_dir
+
+    print $"(ansi green)🎉 Zapfast ($target_release.tag_name) update completed successfully!(ansi reset)"
+}
+
 # Helper to determine fallback TERM when running in Ghostty to avoid remote/container terminfo missing issues
 export def get-term [] {
     if "TERM" in $env and $env.TERM == "xterm-ghostty" {

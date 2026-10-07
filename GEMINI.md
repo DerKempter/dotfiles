@@ -15,7 +15,7 @@ This repository contains personal configuration files for Linux development envi
       - `python.nu`: `py` command helper for `uv` virtual environments.
       - `dotnet.nu`: `dn` command helper for .NET development.
       - `node.nu`: Completions for `npm` and `npm run` scripts using Nushell's SQLite storage (`stor`).
-      - `misc.nu`: Standardized error handler (`nu-fail`), system helpers (`fix-anims`, `parse-scraper`, `rgt`, `update-aerion`), and `git histogram`.
+      - `misc.nu`: Standardized error handler (`nu-fail`), system helpers (`fix-anims`, `parse-scraper`, `rgt`, `update-aerion`, `update-spotifast`, `update-zapfast`), and `git histogram`.
       - `test-speed.nu`: Streaming native download performance test.
       - `catppuccin_mocha.nu`: Catppuccin color configuration.
       - `yazi.nu`: Yazi file manager integration with automatic exit cd syncing.
