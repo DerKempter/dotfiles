@@ -147,8 +147,7 @@ sudo apt install zsh bash stow just bat micro zoxide keychain git-delta fzf ripg
 
 ## Nushell Helpers
 
-Custom commands in `.config/nushell/scripts/`:
-
+Custom commands in `.config/nushell/scripts/`:\n
 | Command | Script | Description |
 |:---|:---|:---|
 | `wallpaper <path\|category\|random>` | [desktop.nu](common/.config/nushell/scripts/desktop.nu) | Sets wallpaper across KDE Plasma and Wayland, extracts Material You colors, and reloads all app themes. Supports case-insensitive category resolution and tab autocompletions. |
@@ -156,6 +155,8 @@ Custom commands in `.config/nushell/scripts/`:
 | `wallpaper list` | [desktop.nu](common/.config/nushell/scripts/desktop.nu) | Displays a structured table of all indexed wallpapers and subcategories. |
 | `theme <profile\|color\|mode>` | [desktop.nu](common/.config/nushell/scripts/desktop.nu) | Re-applies theme schemes (`expressive`, `fruit-salad`, `vibrant`, `rainbow`, etc.), toggles dark/light mode, or sets custom extracted hex swatches. |
 | `git feature`, `git catchup`, `git publish`, `git history`, `git uncommit`, `git clean-merged`, `git gone`, `git nuke` | [git.nu](common/.config/nushell/scripts/git.nu) | Custom Git workflow subcommands (safe branching, rebasing, publishing, tabular history, uncommitting, and cleanup/nuking). |
+| `update-app [app]` | [apps.nu](common/.config/nushell/scripts/apps.nu) | Automated updater for GitHub releases. Supports device-specific tracking via `apps.toml`, `--init`, `--all`, `--dry-run`, and `--list`. |
+| `update-aerion`, `update-spotifast`, `update-zapfast` | [apps.nu](common/.config/nushell/scripts/apps.nu) | Backward-compatible alias commands forwarding to `update-app <name>`. |
 | `nu-fail <msg>` | [misc.nu](common/.config/nushell/scripts/misc.nu) | Standardized error output helper supporting interactive stderr printing or non-zero exit codes (`--code` / `--fatal`) for automation. |
 | `py <action>` | [python.nu](common/.config/nushell/scripts/python.nu) | Runs scripts using `uv` virtualenv when available, falling back to system Python. |
 | `dn <action>` | [dotnet.nu](common/.config/nushell/scripts/dotnet.nu) | Wrapper for `.csproj` tasks (`run`, `watch`, `build`, `test`). |
@@ -168,9 +169,6 @@ Custom commands in `.config/nushell/scripts/`:
 | `rgt <pattern>` | [misc.nu](common/.config/nushell/scripts/misc.nu) | Searches files recursively using `ripgrep` and outputs matches in a beautiful, highlighted Nushell table. |
 | `test-speed` | [test-speed.nu](common/.config/nushell/scripts/test-speed.nu) | Runs a native network download speed test in Nushell. |
 | `setup-mpv` | [setup_mpv.nu](common/.config/nushell/scripts/setup_mpv.nu) | Bootstraps the MPV stack: provisions isolated `yt-dlp`, deploys `uosc` overlays and `sponsorblock` scripts, and configures the `ff2mpv` Firefox native messaging host bridge. |
-| `update-aerion` | [misc.nu](common/.config/nushell/scripts/misc.nu) | Installs/upgrades the Aerion email client from GitHub releases. |
-| `update-spotifast` | [misc.nu](common/.config/nushell/scripts/misc.nu) | Installs/upgrades the Spotifast native Spotify client from GitHub releases. |
-| `update-zapfast` | [misc.nu](common/.config/nushell/scripts/misc.nu) | Installs/upgrades the Zapfast native WhatsApp client from GitHub releases. |
 
 ### Auto .venv Detection
 When navigating (`cd` / `z`) into any folder with a `.venv` directory, the shell automatically updates `$env.PATH` and loads `VIRTUAL_ENV`. Navigating out of the project ancestry tree deactivates it.

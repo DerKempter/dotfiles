@@ -8,14 +8,16 @@ This repository contains personal configuration files for Linux development envi
   - `antigravity/`: Persistent global instructions and persona directives.
   - `nushell/`: Nushell configuration and custom modular scripts.
     - `config.nu` / `env.nu`: Core shell environment and initialization.
+    - `apps.toml`: (Local/Untracked) Device-specific tracked applications and custom app recipes. Initialized via `update-app --init`.
     - `scripts/`: Modular Nushell scripts (loaded via `mod.nu`).
+      - `apps.nu`: Automated application release updater (`update-app`) for GitHub releases with strategy handlers (`cargo_desktop`, `installer_script`, `binary`), device-specific activation (`apps.toml`), and app aliases (`update-spotifast`, `update-zapfast`, `update-aerion`).
       - `docker.nu`: Extensive completions for Docker/Compose and helpers (`dps`, `dx`, `dockeri`).
       - `git.nu`: Custom Git subcommands (`git feature`, `git catchup`, `git publish`, `git history`, `git uncommit`, `git clean-merged`, `git gone`, `git nuke`).
       - `ssh.nu`: Modular SSH command suite and autocomplete helpers (`sshi`, `sshc`, `sync-starship`, `sync-nushell`).
       - `python.nu`: `py` command helper for `uv` virtual environments.
       - `dotnet.nu`: `dn` command helper for .NET development.
       - `node.nu`: Completions for `npm` and `npm run` scripts using Nushell's SQLite storage (`stor`).
-      - `misc.nu`: Standardized error handler (`nu-fail`), system helpers (`fix-anims`, `parse-scraper`, `rgt`, `update-aerion`, `update-spotifast`, `update-zapfast`), and `git histogram`.
+      - `misc.nu`: Standardized error handler (`nu-fail`), system helpers (`fix-anims`, `parse-scraper`, `rgt`), and `git histogram`.
       - `test-speed.nu`: Streaming native download performance test.
       - `catppuccin_mocha.nu`: Catppuccin color configuration.
       - `yazi.nu`: Yazi file manager integration with automatic exit cd syncing.

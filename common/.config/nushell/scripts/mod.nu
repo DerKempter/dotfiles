@@ -1,3 +1,4 @@
+export use apps.nu *
 export use catppuccin_mocha.nu *
 export use docker.nu *
 export use dotnet.nu *
