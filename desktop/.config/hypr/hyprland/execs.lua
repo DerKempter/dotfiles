@@ -19,6 +19,7 @@ hl.on("hyprland.start", function()
     -- Daemons without systemd units
     hl.exec_cmd("awww-daemon || swww-daemon")
     hl.exec_cmd("swayosd-server")
+    hl.exec_cmd("qs-wallpaperpicker")
 
     -- Auto delete trash 30 days old
     hl.exec_cmd("trash-empty 30")

@@ -95,6 +95,7 @@ return {
     kbWindowDecreaseHeight     = { "SUPER + SHIFT + Minus", "SUPER + ALT + Up" },
     kbWindowIncreaseHeight     = { "SUPER + SHIFT + Equal", "SUPER + ALT + Down" },
 
+    -- Window Movement / Layout
     kbMoveWindow               = "SUPER + Z",
     kbResizeWindow             = "SUPER + X",
     kbCenterWindow             = "CTRL + SUPER + Backslash",
@@ -126,7 +127,8 @@ return {
     kbScreenshotRegion         = "SUPER + SHIFT + ALT + S",
     kbScreenshotOCR            = "SUPER + ALT + S",
     kbWallpaperRandom          = "SUPER + ALT + W",
-    kbWallpaperSelect          = "SUPER + SHIFT + W",
+    kbWallpaperPicker          = "SUPER + SHIFT + W",
+    kbWallpaperSelect          = "SUPER + CTRL + SHIFT + W",
     kbRecord                   = "CTRL + ALT + R",
     kbRecordSound              = "SUPER + ALT + R",
     kbRecordRegion             = "SUPER + SHIFT + ALT + R",
