@@ -32,6 +32,7 @@ def "nu-complete wallpaper targets" [] {
         { value: "pick", description: "Interactive fuzzy picker with live terminal preview" },
         { value: "preview", description: "Show terminal preview of current or specified wallpaper" },
         { value: "list", description: "List all wallpapers and categories" },
+        { value: "sync", description: "Sync categorized wallpapers into flat ~/Pictures/wallpapers" },
     ]
 
     let categories = (
@@ -120,9 +121,43 @@ def render-image-preview [img_path: string, size: string = "50x20"] {
     } catch { }
 }
 
+# Sync wallpapers from categorized directory into flat directory (~/Pictures/wallpapers) for qs-wallpaperpicker
+export def wallpaper-sync [] {
+    let root = (get-wallpaper-root)
+    if ($root | is-empty) {
+        print -e "No wallpapers directory found."
+        return
+    }
+
+    let flat_dir = ("~/Pictures/wallpapers" | path expand)
+    if not ($flat_dir | path exists) {
+        mkdir $flat_dir
+    }
+
+    let files = (glob $"($root)/**/*.{png,jpg,jpeg,webp,PNG,JPG,JPEG,WEBP}" | sort)
+    mut count = 0
+
+    for file in $files {
+        let base = ($file | path basename)
+        let link_path = ($flat_dir | path join $base)
+        let needs_link = if not ($link_path | path exists) {
+            true
+        } else {
+            try { ($link_path | path expand) != ($file | path expand) } catch { true }
+        }
+
+        if $needs_link {
+            ln -sf $file $link_path
+            $count = $count + 1
+        }
+    }
+
+    print $"✓ Synced ($files | length) wallpapers into ($flat_dir) \(($count) new/updated\)"
+}
+
 # Set desktop wallpaper and generate matching dynamic theme
 export def wallpaper [
-    target?: string@"nu-complete wallpaper targets"         # Image path, category name, relative name, "random", "pick", "preview", or "list"
+    target?: string@"nu-complete wallpaper targets"         # Image path, category name, relative name, "random", "pick", "preview", "list", or "sync"
     category?: string@"nu-complete wallpaper categories"   # Category or target for random/preview
     --type (-t): string@"nu-complete theme types" = "scheme-expressive" # Scheme profile
     --pick (-p)                                             # Interactive fuzzy picker with live terminal preview
@@ -143,6 +178,12 @@ export def wallpaper [
 
     let target_str = ($target | default "")
     let target_lower = ($target_str | str lowercase)
+
+    # Handle "sync" subcommand for flat wallpaper folder
+    if $target_lower == "sync" {
+        wallpaper-sync
+        return
+    }
 
     # Handle interactive fuzzy picker with live preview
     if $pick or $target_lower == "pick" or $target_lower == "select" or $target_lower == "fzf" {
