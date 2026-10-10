@@ -328,9 +328,10 @@ export def wallpaper [
         return
     }
 
-    # 1. Update cache symlink
+    # 1. Update cache symlinks
     mkdir $"($env.HOME)/.cache"
-    ln -sf $resolved_path $"($env.HOME)/.cache/current_wallpaper"
+    ln -sfn $resolved_path $"($env.HOME)/.cache/current_wallpaper"
+    ln -sfn $resolved_path $"($env.HOME)/.cache/current_wallpaper_source"
 
     # 2. Update wallpaper with smooth transition (supports plasma, awww, or swww)
     if (which plasma-apply-wallpaperimage | is-empty) == false {
@@ -356,6 +357,11 @@ export def wallpaper [
         if (which notify-send | is-empty) == false {
             notify-send -u low "Wallpaper & Theme" $"Applied ($stype) from ($resolved_path | path basename)" -i $resolved_path
         }
+    }
+
+    # 4. Notify qs-wallpaperpicker if running
+    if (which qs | is-not-empty) and (pgrep -f "qs-wallpaperpicker" | is-not-empty) {
+        try { ^qs -p ("~/.config/qs-wallpaperpicker" | path expand) ipc call wallpaper refresh } catch { }
     }
 }
 
