@@ -118,6 +118,7 @@ enabled = [
 # asset = ''^my-tool-.*-linux-x86_64\.tar\.gz$''
 # strategy = "deb"             # "cargo_desktop" | "installer_script" | "binary" | "deb"
 # binary = "my-tool"            # optional, defaults to app key
+# package = "my-tool-bin"       # optional package name for deb strategy
 # description = "Internal CLI tool"
 '
 
@@ -229,8 +230,9 @@ def get-installed-version [app_name: string, config: record] {
         if not (has-binary dpkg-query) {
             return null
         }
+        let pkg = ($config.package? | default ($config.binary? | default $app_name))
         return (try {
-            let ver = (^dpkg-query -W -f='${Version}' $binary | complete)
+            let ver = (^dpkg-query -W -f='${Version}' $pkg | complete)
             if $ver.exit_code == 0 and ($ver.stdout | is-not-empty) {
                 $ver.stdout | str trim
             } else {
@@ -444,7 +446,12 @@ def update-single-app [
     let release_ver = (normalize-version $release.tag_name)
     let norm_installed = (if ($installed_ver | is-not-empty) { normalize-version $installed_ver } else { null })
 
-    let is_up_to_date = ($norm_installed | is-not-empty) and ($norm_installed == $release_ver)
+    let is_up_to_date = (
+        ($norm_installed | is-not-empty) and (
+            $norm_installed == $release_ver or
+            ($norm_installed | str replace -r '-[0-9]+$' '') == $release_ver
+        )
+    )
 
     if $is_up_to_date and not $force {
         if $dry_run {
