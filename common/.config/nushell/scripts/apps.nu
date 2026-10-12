@@ -191,6 +191,84 @@ def unpack-archive [archive_path: path, dest_dir: path] {
 }
 
 # -----------------------------------------------------------------------------------------
+# Version Probing & Normalization
+# -----------------------------------------------------------------------------------------
+
+# Normalizes version strings by removing common prefixes (v, V, app-v, etc.)
+def normalize-version [ver: string] {
+    if ($ver | is-empty) { return "" }
+    $ver | str trim | str replace -r "^[a-zA-Z_-]*v?" ""
+}
+
+# Probes the currently installed version on the local system
+def get-installed-version [app_name: string, config: record] {
+    let binary = ($config.binary? | default $app_name)
+    let strategy = ($config.strategy? | default "binary")
+
+    # Custom version command override if specified in configuration
+    if ($config.version_cmd? | is-not-empty) {
+        let custom_out = try {
+            match ($config.version_cmd | describe) {
+                "string" => { ^$config.version_cmd | complete },
+                _ => {
+                    let cmd = ($config.version_cmd | first)
+                    let args = ($config.version_cmd | skip 1)
+                    ^$cmd ...$args | complete
+                }
+            }
+        } catch { { exit_code: 1, stdout: "" } }
+
+        if $custom_out.exit_code == 0 and ($custom_out.stdout | is-not-empty) {
+            let parsed = ($custom_out.stdout | parse -r '(?P<ver>(?:\d+\.)+\d+(?:-[a-zA-Z0-9.]+)*)' | get -o ver.0)
+            return (if ($parsed | is-not-empty) { $parsed | str trim } else { $custom_out.stdout | str trim })
+        }
+    }
+
+    # Strategy: Debian package query
+    if ($strategy == "deb" or $strategy == "apt") {
+        if not (has-binary dpkg-query) {
+            return null
+        }
+        return (try {
+            let ver = (^dpkg-query -W -f='${Version}' $binary | complete)
+            if $ver.exit_code == 0 and ($ver.stdout | is-not-empty) {
+                $ver.stdout | str trim
+            } else {
+                null
+            }
+        } catch { null })
+    }
+
+    # Strategy: Binary CLI execution (--version or -V)
+    if not (has-binary $binary) {
+        return null
+    }
+
+    try {
+        let res = (try { ^$binary --version | complete } catch { { exit_code: 1, stdout: "" } })
+        let out = if $res.exit_code == 0 and ($res.stdout | is-not-empty) {
+            $res.stdout
+        } else {
+            let res_short = (try { ^$binary -V | complete } catch { { exit_code: 1, stdout: "" } })
+            if $res_short.exit_code == 0 { $res_short.stdout } else { "" }
+        }
+
+        if ($out | is-empty) {
+            return null
+        }
+
+        let parsed = ($out | parse -r '(?P<ver>(?:\d+\.)+\d+(?:-[a-zA-Z0-9.]+)*)' | get -o ver.0)
+        if ($parsed | is-not-empty) {
+            $parsed | str trim
+        } else {
+            null
+        }
+    } catch {
+        null
+    }
+}
+
+# -----------------------------------------------------------------------------------------
 # Installation Strategies
 # -----------------------------------------------------------------------------------------
 
@@ -337,7 +415,8 @@ def install-deb [app_name: string, config: record, deb_path: path] {
 def update-single-app [
     app_name: string,
     pre_release: bool = false,
-    dry_run: bool = false
+    dry_run: bool = false,
+    force: bool = false
 ] {
     let registry = (resolve-registry)
     if not ($app_name in $registry) {
@@ -359,6 +438,21 @@ def update-single-app [
     if ($asset | is-empty) {
         nu-fail $"No matching asset found in ($release.tag_name) matching '($asset_pattern)'." -c "ASSET_NOT_FOUND"
         return false
+    }
+
+    let installed_ver = (get-installed-version $app_name $config)
+    let release_ver = (normalize-version $release.tag_name)
+    let norm_installed = (if ($installed_ver | is-not-empty) { normalize-version $installed_ver } else { null })
+
+    let is_up_to_date = ($norm_installed | is-not-empty) and ($norm_installed == $release_ver)
+
+    if $is_up_to_date and not $force {
+        if $dry_run {
+            print $"(ansi cyan)[dry-run] ($app_name) is already up to date \(($installed_ver)\). Would skip.(ansi reset)"
+        } else {
+            print $"(ansi cyan)✓ ($app_name) is already up to date \(($installed_ver)\). Use --force to reinstall.(ansi reset)"
+        }
+        return true
     }
 
     print $"(ansi cyan)Found build: ($release.tag_name) \(Pre-release: ($release.prerelease)\)(ansi reset)"
@@ -437,7 +531,7 @@ export def update-app [
     --dry-run (-d)                  # Check release and download URL without installing
     --list (-l)                     # List all configured applications and device status
     --init                          # Initialize a local apps.toml template for this device
-    --force (-f)                    # Overwrite existing apps.toml when initializing
+    --force (-f)                    # Force re-installation even if already up to date (or overwrite on --init)
 ] {
     if $init {
         init-device-config $force
@@ -451,8 +545,9 @@ export def update-app [
             $registry
             | transpose app cfg
             | insert status { |row| if $row.app in $active { "enabled" } else { "available" } }
-            | select app status cfg.repo cfg.strategy cfg.description?
-            | rename app status repo strategy description
+            | insert installed { |row| get-installed-version $row.app $row.cfg | default "-" }
+            | select app status installed cfg.repo cfg.strategy cfg.description?
+            | rename app status installed repo strategy description
         )
     }
 
@@ -469,7 +564,7 @@ export def update-app [
             print $"(ansi white_bold)Updating ($a)...(ansi reset)"
             print $"(ansi white_bold)========================================(ansi reset)"
             let ok = try {
-                update-single-app $a $pre_release $dry_run
+                update-single-app $a $pre_release $dry_run $force
             } catch { |err|
                 print -e $"(ansi red)Error updating ($a): ($err.msg)(ansi reset)"
                 false
@@ -483,27 +578,30 @@ export def update-app [
         return $results
     }
 
-    update-single-app $app $pre_release $dry_run
+    update-single-app $app $pre_release $dry_run $force
 }
 
 # Backward-compatibility alias wrappers
 export def update-spotifast [
     --pre-release (-p)
     --dry-run (-d)
+    --force (-f)
 ] {
-    update-app spotifast --pre-release=$pre_release --dry-run=$dry_run
+    update-app spotifast --pre-release=$pre_release --dry-run=$dry_run --force=$force
 }
 
 export def update-zapfast [
     --pre-release (-p)
     --dry-run (-d)
+    --force (-f)
 ] {
-    update-app zapfast --pre-release=$pre_release --dry-run=$dry_run
+    update-app zapfast --pre-release=$pre_release --dry-run=$dry_run --force=$force
 }
 
 export def update-aerion [
     --pre-release (-p)
     --dry-run (-d)
+    --force (-f)
 ] {
-    update-app aerion --pre-release=$pre_release --dry-run=$dry_run
+    update-app aerion --pre-release=$pre_release --dry-run=$dry_run --force=$force
 }
