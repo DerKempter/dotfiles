@@ -10,7 +10,7 @@ This repository contains personal configuration files for Linux development envi
     - `config.nu` / `env.nu`: Core shell environment and initialization.
     - `apps.toml`: (Local/Untracked) Device-specific tracked applications and custom app recipes. Initialized via `update-app --init`.
     - `scripts/`: Modular Nushell scripts (loaded via `mod.nu`).
-      - `apps.nu`: Automated application release updater (`update-app`) for GitHub releases with strategy handlers (`cargo_desktop`, `installer_script`, `binary`), device-specific activation (`apps.toml`), and app aliases (`update-spotifast`, `update-zapfast`, `update-aerion`).
+      - `apps.nu`: Automated application release updater (`update-app`) for GitHub releases with strategy handlers (`cargo_desktop`, `installer_script`, `binary`, `deb`), device-specific activation (`apps.toml`), and app aliases (`update-spotifast`, `update-zapfast`, `update-aerion`).
       - `docker.nu`: Extensive completions for Docker/Compose and helpers (`dps`, `dx`, `dockeri`).
       - `git.nu`: Custom Git subcommands (`git feature`, `git catchup`, `git publish`, `git history`, `git uncommit`, `git clean-merged`, `git gone`, `git nuke`).
       - `ssh.nu`: Modular SSH command suite and autocomplete helpers (`sshi`, `sshc`, `sync-starship`, `sync-nushell`).

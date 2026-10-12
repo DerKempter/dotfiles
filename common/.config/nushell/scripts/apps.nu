@@ -2,11 +2,11 @@
 # Automated application release installer and updater for GitHub releases.
 # Supports shared catalog recipes and device-specific activation configs.
 
-use misc.nu nu-fail
+use misc.nu [has-binary nu-fail]
 
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 # Global Application Recipe Catalog
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 
 export const APP_CATALOG = {
     spotifast: {
@@ -32,9 +32,9 @@ export const APP_CATALOG = {
     }
 }
 
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 # Device Configuration Loader
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 
 # Returns the standard path for device-specific apps.toml
 def get-config-path [] {
@@ -116,7 +116,7 @@ enabled = [
 # [custom.my-tool]
 # repo = "owner/repo"
 # asset = ''^my-tool-.*-linux-x86_64\.tar\.gz$''
-# strategy = "binary"           # "cargo_desktop" | "installer_script" | "binary"
+# strategy = "deb"             # "cargo_desktop" | "installer_script" | "binary" | "deb"
 # binary = "my-tool"            # optional, defaults to app key
 # description = "Internal CLI tool"
 '
@@ -129,9 +129,9 @@ enabled = [
     }
 }
 
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 # GitHub Release & Archive Helpers
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 
 # Fetch latest or pre-release release metadata from GitHub API
 def fetch-release [repo: string, pre_release: bool] {
@@ -190,9 +190,9 @@ def unpack-archive [archive_path: path, dest_dir: path] {
     }
 }
 
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 # Installation Strategies
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 
 # Strategy: Cargo/Rust desktop application bundle
 def install-cargo-desktop [app_name: string, config: record, temp_dir: path] {
@@ -312,9 +312,26 @@ def install-binary [app_name: string, config: record, temp_dir: path] {
     true
 }
 
-# -----------------------------------------------------------------------------
+# Strategy: Debian/Ubuntu package installation via apt
+def install-deb [app_name: string, config: record, deb_path: path] {
+    if not (has-binary apt) {
+        nu-fail "apt package manager not found on this system. 'deb' strategy requires a Debian/Ubuntu-based distribution." -c "APT_NOT_FOUND"
+        return false
+    }
+
+    print $"(ansi green)Installing package via apt [sudo required]...(ansi reset)"
+    try {
+        ^sudo apt install -y $deb_path
+        true
+    } catch {
+        nu-fail $"Failed to install '($app_name)' package via apt." -c "APT_INSTALL_FAILED"
+        false
+    }
+}
+
+# -----------------------------------------------------------------------------------------
 # Updater Pipeline
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 
 # Internal updater routine for a single application
 def update-single-app [
@@ -369,24 +386,28 @@ def update-single-app [
         return false
     }
 
-    print $"(ansi green)Extracting archive...(ansi reset)"
-    let extract_success = try {
-        unpack-archive $archive_path $temp_dir
-        true
-    } catch {
-        rm -rf $temp_dir
-        nu-fail $"Failed to extract archive '($archive_path)'." -c "EXTRACT_FAILED"
-        false
-    }
+    let is_deb = ($config.strategy == "deb" or $config.strategy == "apt")
+    if not $is_deb {
+        print $"(ansi green)Extracting archive...(ansi reset)"
+        let extract_success = try {
+            unpack-archive $archive_path $temp_dir
+            true
+        } catch {
+            rm -rf $temp_dir
+            nu-fail $"Failed to extract archive '($archive_path)'." -c "EXTRACT_FAILED"
+            false
+        }
 
-    if not $extract_success {
-        return false
+        if not $extract_success {
+            return false
+        }
     }
 
     let install_ok = match $config.strategy {
         "cargo_desktop" => { install-cargo-desktop $app_name $config $temp_dir },
         "installer_script" => { install-installer-script $app_name $config $temp_dir },
         "binary" => { install-binary $app_name $config $temp_dir },
+        "deb" | "apt" => { install-deb $app_name $config $archive_path },
         _ => {
             nu-fail $"Unknown installation strategy: '($config.strategy)'." -c "UNKNOWN_STRATEGY"
             false
@@ -404,9 +425,9 @@ def update-single-app [
     }
 }
 
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 # User Commands & Aliases
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 
 # Update an installed application or all configured applications from GitHub releases
 export def update-app [
