@@ -252,6 +252,8 @@ window#waybar.empty #window {
 /* Reset submodules inside capsules */
 #hardware #idle_inhibitor,
 #hardware #cpu,
+#hardware #temperature,
+#hardware #custom-gpu,
 #hardware #memory,
 #hardware #custom-weather,
 #connectivity #network,
@@ -261,6 +263,8 @@ window#waybar.empty #window {
 #time #custom-notification,
 .hardware #idle_inhibitor,
 .hardware #cpu,
+.hardware #temperature,
+.hardware #custom-gpu,
 .hardware #memory,
 .hardware #custom-weather,
 .connectivity #network,
@@ -279,6 +283,8 @@ window#waybar.empty #window {
 /* Submodule Hover Highlights */
 #hardware #idle_inhibitor:hover,
 #hardware #cpu:hover,
+#hardware #temperature:hover,
+#hardware #custom-gpu:hover,
 #hardware #memory:hover,
 #hardware #custom-weather:hover,
 #connectivity #network:hover,
@@ -287,6 +293,8 @@ window#waybar.empty #window {
 #time #custom-notification:hover,
 .hardware #idle_inhibitor:hover,
 .hardware #cpu:hover,
+.hardware #temperature:hover,
+.hardware #custom-gpu:hover,
 .hardware #memory:hover,
 .hardware #custom-weather:hover,
 .connectivity #network:hover,
@@ -317,6 +325,19 @@ window#waybar.empty #window {
 /* Capsule 1: Hardware Accents */
 #cpu {
     color: @secondary;
+}
+
+#temperature {
+    color: @secondary;
+}
+
+#custom-gpu {
+    color: @tertiary;
+}
+
+#temperature.critical,
+#custom-gpu.critical {
+    color: @error;
 }
 
 #memory {

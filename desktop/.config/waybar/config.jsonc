@@ -1,236 +1,412 @@
-{
-    "layer": "top",
-    "position": "top",
-    "margin-top": 0,
-    "margin-left": 0,
-    "margin-right": 0,
-    "margin-bottom": 0,
-    "height": 42,
-    "spacing": 8,
+[
+    {
+        "name": "main-bar",
+        "output": ["DP-2"],
+        "layer": "top",
+        "position": "top",
+        "margin-top": 0,
+        "margin-left": 0,
+        "margin-right": 0,
+        "margin-bottom": 0,
+        "height": 42,
+        "spacing": 8,
 
-    "modules-left": [
-        "custom/os",
-        "hyprland/workspaces",
-        "group/window-info"
-    ],
-    "modules-center": [
-        "group/media"
-    ],
-    "modules-right": [
-        "privacy",
-        "group/hardware",
-        "group/connectivity",
-        "group/time"
-    ],
+        "modules-left": [
+            "custom/os",
+            "hyprland/workspaces",
+            "group/window-info"
+        ],
+        "modules-center": [
+            "group/media"
+        ],
+        "modules-right": [
+            "privacy",
+            "group/hardware",
+            "group/connectivity",
+            "group/time"
+        ],
 
-    "custom/os": {
-        "format": " ",
-        "tooltip": false,
-        "on-click": "vicinae toggle"
-    },
-
-    "hyprland/workspaces": {
-        "disable-scroll": false,
-        "all-outputs": true,
-        "active-only": false,
-        "format": "{name}",
-        "on-click": "activate"
-    },
-
-    "group/window-info": {
-        "orientation": "horizontal",
-        "modules": [
-            "wlr/taskbar",
-            "hyprland/window"
-        ]
-    },
-
-    "wlr/taskbar": {
-        "format": "{icon}",
-        "icon-size": 17,
-        "tooltip-format": "{title} ({app_id})",
-        "on-click": "activate",
-        "on-click-middle": "close",
-        "all-outputs": true,
-        "active-only": false
-    },
-
-    "hyprland/window": {
-        "max-length": 30,
-        "separate-outputs": true
-    },
-
-    "group/media": {
-        "orientation": "horizontal",
-        "drawer": {
-            "transition-duration": 400,
-            "transition-left-to-right": true,
-            "click-to-reveal": false
+        "custom/os": {
+            "format": " ",
+            "tooltip": false,
+            "on-click": "vicinae toggle"
         },
-        "modules": [
-            "mpris",
-            "pulseaudio"
-        ]
-    },
 
-    "mpris": {
-        "format": "{player_icon} {dynamic}",
-        "format-paused": "{status_icon} <i>{dynamic}</i>",
-        "player-icons": {
-            "default": "",
-            "spotify": "",
-            "spotify_player": "",
-            "fastpotify": "",
-            "firefox": "",
-            "zen": "󰈹",
-            "chromium": "",
-            "mpv": ""
+        "hyprland/workspaces": {
+            "disable-scroll": false,
+            "all-outputs": true,
+            "active-only": false,
+            "format": "{name}",
+            "on-click": "activate"
         },
-        "status-icons": {
-            "paused": "⏸"
-        },
-        "dynamic-order": ["title", "artist"],
-        "dynamic-importance-order": ["title", "artist"],
-        "dynamic-len": 45,
-        "title-len": 25,
-        "artist-len": 20,
-        "tooltip-format": "{player} ({status}): {title} - {artist}\n\n󰍽 Left-click: Play/Pause\n󰍽 Right-click: Next track",
-        "on-click": "playerctl play-pause",
-        "on-click-right": "playerctl next"
-    },
 
-    "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-muted": "󰝟 Muted",
-        "format-icons": {
-            "default": ["󰕿", "󰖀", "󰕾"]
+        "group/window-info": {
+            "orientation": "horizontal",
+            "modules": [
+                "wlr/taskbar",
+                "hyprland/window"
+            ]
         },
-        "on-click": "pwvucontrol",
-        "scroll-step": 2
-    },
 
-    "privacy": {
-        "icon-spacing": 6,
-        "icon-size": 13,
-        "transition-duration": 250,
-        "modules": [
-            {
-                "type": "screenshare",
-                "tooltip": true,
-                "tooltip-icon-size": 16
+        "wlr/taskbar": {
+            "format": "{icon}",
+            "icon-size": 17,
+            "tooltip-format": "{title} ({app_id})",
+            "on-click": "activate",
+            "on-click-middle": "close",
+            "all-outputs": true,
+            "active-only": false
+        },
+
+        "hyprland/window": {
+            "max-length": 30,
+            "separate-outputs": true
+        },
+
+        "group/media": {
+            "orientation": "horizontal",
+            "drawer": {
+                "transition-duration": 400,
+                "transition-left-to-right": true,
+                "click-to-reveal": false
             },
-            {
-                "type": "audio-in",
-                "tooltip": true,
-                "tooltip-icon-size": 16
-            }
-        ]
-    },
-
-    "group/hardware": {
-        "orientation": "horizontal",
-        "modules": [
-            "idle_inhibitor",
-            "cpu",
-            "memory",
-            "custom/weather"
-        ]
-    },
-
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "󰅶",
-            "deactivated": "󰾪"
+            "modules": [
+                "mpris",
+                "pulseaudio"
+            ]
         },
-        "tooltip-format-activated": "Idle Inhibitor: Active (Screen stays awake)",
-        "tooltip-format-deactivated": "Idle Inhibitor: Inactive (Normal power savings)"
-    },
 
-    "cpu": {
-        "format": " {usage}%",
-        "interval": 2,
-        "tooltip": false,
-        "on-click": "ghostty -e btop"
-    },
-
-    "memory": {
-        "format": " {percentage}%",
-        "interval": 2,
-        "tooltip-format": "RAM: {used:0.1f}GiB / {total:0.1f}GiB ({percentage}%)\nSwap: {swapUsed:0.1f}GiB / {swapTotal:0.1f}GiB",
-        "on-click": "ghostty -e btop"
-    },
-
-    "custom/weather": {
-        "format": "{}",
-        "tooltip": true,
-        "interval": 900,
-        "exec": "~/.config/waybar/scripts/weather.py",
-        "return-type": "json",
-        "on-click": "ghostty --title='Weather Forecast' -e sh -c \"curl -s 'https://wttr.in' | less -S -R\""
-    },
-
-    "group/connectivity": {
-        "orientation": "horizontal",
-        "modules": [
-            "network",
-            "bluetooth"
-        ]
-    },
-
-    "network": {
-        "format-wifi": " {essid}",
-        "format-ethernet": "󰈀 Wired",
-        "format-disconnected": "󰤭 Disconnected",
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n󰅃 {bandwidthUpBytes}  󰅀 {bandwidthDownBytes}",
-        "on-click": "nm-connection-editor"
-    },
-
-    "bluetooth": {
-        "format": " {status}",
-        "format-connected": " {device_alias}",
-        "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
-        "on-click": "ghostty -e bluetoothctl"
-    },
-
-    "group/time": {
-        "orientation": "horizontal",
-        "modules": [
-            "clock",
-            "tray",
-            "custom/notification"
-        ]
-    },
-
-    "tray": {
-        "icon-size": 16,
-        "spacing": 8
-    },
-
-    "clock": {
-        "interval": 1,
-        "format": " {:%a, %d %b   %H:%M:%S}",
-        "tooltip-format": "<tt><small>{calendar}</small></tt>"
-    },
-
-    "custom/notification": {
-        "tooltip": false,
-        "format": "{icon}",
-        "format-icons": {
-            "notification": "<span foreground='#f38ba8'><sup></sup></span>",
-            "none": "",
-            "dnd-notification": "<span foreground='#f38ba8'><sup></sup></span>",
-            "dnd-none": "",
-            "inhibited-notification": "<span foreground='#f38ba8'><sup></sup></span>",
-            "inhibited-none": "",
-            "dnd-inhibited-notification": "<span foreground='#f38ba8'><sup></sup></span>",
-            "dnd-inhibited-none": ""
+        "mpris": {
+            "format": "{player_icon} {dynamic}",
+            "format-paused": "{status_icon} <i>{dynamic}</i>",
+            "player-icons": {
+                "default": "",
+                "spotify": "",
+                "spotify_player": "",
+                "fastpotify": "",
+                "firefox": "",
+                "zen": "󰸹",
+                "chromium": "",
+                "mpv": ""
+            },
+            "status-icons": {
+                "paused": "⏸"
+            },
+            "dynamic-order": ["title", "artist"],
+            "dynamic-importance-order": ["title", "artist"],
+            "dynamic-len": 45,
+            "title-len": 25,
+            "artist-len": 20,
+            "tooltip-format": "{player} ({status}): {title} - {artist}\n\n󰽷 Left-click: Play/Pause\n󰽷 Right-click: Next track",
+            "on-click": "playerctl play-pause",
+            "on-click-right": "playerctl next"
         },
-        "return-type": "json",
-        "exec-if": "which swaync-client",
-        "exec": "swaync-client -swb",
-        "on-click": "swaync-client -t -sw",
-        "on-click-right": "swaync-client -d -sw",
-        "escape": true
+
+        "pulseaudio": {
+            "format": "{icon} {volume}%",
+            "format-muted": "󱝟 Muted",
+            "format-icons": {
+                "default": ["󱕿", "󱖀", "󱕾"]
+            },
+            "on-click": "pwvucontrol",
+            "scroll-step": 2
+        },
+
+        "privacy": {
+            "icon-spacing": 6,
+            "icon-size": 13,
+            "transition-duration": 250,
+            "modules": [
+                {
+                    "type": "screenshare",
+                    "tooltip": true,
+                    "tooltip-icon-size": 16
+                },
+                {
+                    "type": "audio-in",
+                    "tooltip": true,
+                    "tooltip-icon-size": 16
+                }
+            ]
+        },
+
+        "group/hardware": {
+            "orientation": "horizontal",
+            "modules": [
+                "idle_inhibitor",
+                "cpu",
+                "temperature",
+                "custom/gpu",
+                "memory",
+                "custom/weather"
+            ]
+        },
+
+        "idle_inhibitor": {
+            "format": "{icon}",
+            "format-icons": {
+                "activated": "󰕶",
+                "deactivated": "󰾪"
+            },
+            "tooltip-format-activated": "Idle Inhibitor: Active (Screen stays awake)",
+            "tooltip-format-deactivated": "Idle Inhibitor: Inactive (Normal power savings)"
+        },
+
+        "cpu": {
+            "format": " {usage}%",
+            "interval": 2,
+            "tooltip": false,
+            "on-click": "ghostty -e btop"
+        },
+
+        "temperature": {
+            "hwmon-path-abs": [
+                "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+                "/sys/devices/platform/coretemp.0/hwmon",
+                "/sys/devices/platform/k10temp.0/hwmon"
+            ],
+            "input-filename": "temp1_input",
+            "critical-threshold": 80,
+            "warning-threshold": 70,
+            "interval": 2,
+            "format": " {temperatureC}°C",
+            "format-critical": " {temperatureC}°C",
+            "tooltip": true,
+            "tooltip-format": "CPU: {temperatureC}°C",
+            "on-click": "ghostty -e btop"
+        },
+
+        "custom/gpu": {
+            "format": "󲂮 {}",
+            "tooltip": true,
+            "interval": 2,
+            "exec": "~/.config/waybar/scripts/gpu.py",
+            "return-type": "json",
+            "on-click": "ghostty -e btop"
+        },
+
+        "memory": {
+            "format": " {percentage}%",
+            "interval": 2,
+            "tooltip-format": "RAM: {used:0.1f}GiB / {total:0.1f}GiB ({percentage}%)\nSwap: {swapUsed:0.1f}GiB / {swapTotal:0.1f}GiB",
+            "on-click": "ghostty -e btop"
+        },
+
+        "custom/weather": {
+            "format": "{}",
+            "tooltip": true,
+            "interval": 900,
+            "exec": "~/.config/waybar/scripts/weather.py",
+            "return-type": "json",
+            "on-click": "ghostty --title='Weather Forecast' -e sh -c \"curl -s 'https://wttr.in' | less -S -R\""
+        },
+
+        "group/connectivity": {
+            "orientation": "horizontal",
+            "modules": [
+                "network",
+                "bluetooth"
+            ]
+        },
+
+        "network": {
+            "format-wifi": " {essid}",
+            "format-ethernet": "󰠀 Wired",
+            "format-disconnected": "󰒭 Disconnected",
+            "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n󰕓 {bandwidthUpBytes}  󰕐 {bandwidthDownBytes}",
+            "on-click": "nm-connection-editor"
+        },
+
+        "bluetooth": {
+            "format": " {status}",
+            "format-connected": " {device_alias}",
+            "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+            "on-click": "ghostty -e bluetoothctl"
+        },
+
+        "group/time": {
+            "orientation": "horizontal",
+            "modules": [
+                "clock",
+                "tray",
+                "custom/notification"
+            ]
+        },
+
+        "tray": {
+            "icon-size": 16,
+            "spacing": 8
+        },
+
+        "clock": {
+            "interval": 1,
+            "format": " {:%a, %d %b   %H:%M:%S}",
+            "tooltip-format": "<tt><small>{calendar}</small></tt>"
+        },
+
+        "custom/notification": {
+            "tooltip": false,
+            "format": "{icon}",
+            "format-icons": {
+                "notification": "<span foreground='#f38ba8'><sup></sup></span>",
+                "none": "",
+                "dnd-notification": "<span foreground='#f38ba8'><sup></sup></span>",
+                "dnd-none": "",
+                "inhibited-notification": "<span foreground='#f38ba8'><sup></sup></span>",
+                "inhibited-none": "",
+                "dnd-inhibited-notification": "<span foreground='#f38ba8'><sup></sup></span>",
+                "dnd-inhibited-none": ""
+            },
+            "return-type": "json",
+            "exec-if": "which swaync-client",
+            "exec": "swaync-client -swb",
+            "on-click": "swaync-client -t -sw",
+            "on-click-right": "swaync-client -d -sw",
+            "escape": true
+        }
+    },
+    {
+        "name": "vertical-bar",
+        "output": ["DP-1"],
+        "layer": "top",
+        "position": "top",
+        "margin-top": 0,
+        "margin-left": 0,
+        "margin-right": 0,
+        "margin-bottom": 0,
+        "height": 42,
+        "spacing": 8,
+
+        "modules-left": [
+            "hyprland/workspaces",
+            "group/window-info"
+        ],
+        "modules-center": [
+            "group/media"
+        ],
+        "modules-right": [
+            "group/time"
+        ],
+
+        "hyprland/workspaces": {
+            "disable-scroll": false,
+            "all-outputs": true,
+            "active-only": false,
+            "format": "{name}",
+            "on-click": "activate"
+        },
+
+        "group/window-info": {
+            "orientation": "horizontal",
+            "modules": [
+                "wlr/taskbar",
+                "hyprland/window"
+            ]
+        },
+
+        "wlr/taskbar": {
+            "format": "{icon}",
+            "icon-size": 17,
+            "tooltip-format": "{title} ({app_id})",
+            "on-click": "activate",
+            "on-click-middle": "close",
+            "all-outputs": true,
+            "active-only": false
+        },
+
+        "hyprland/window": {
+            "max-length": 25,
+            "separate-outputs": true
+        },
+
+        "group/media": {
+            "orientation": "horizontal",
+            "drawer": {
+                "transition-duration": 400,
+                "transition-left-to-right": true,
+                "click-to-reveal": false
+            },
+            "modules": [
+                "mpris",
+                "pulseaudio"
+            ]
+        },
+
+        "mpris": {
+            "format": "{player_icon} {dynamic}",
+            "format-paused": "{status_icon} <i>{dynamic}</i>",
+            "player-icons": {
+                "default": "",
+                "spotify": "",
+                "spotify_player": "",
+                "fastpotify": "",
+                "firefox": "",
+                "zen": "󰸹",
+                "chromium": "",
+                "mpv": ""
+            },
+            "status-icons": {
+                "paused": "⏸"
+            },
+            "dynamic-order": ["title", "artist"],
+            "dynamic-importance-order": ["title", "artist"],
+            "dynamic-len": 35,
+            "title-len": 20,
+            "artist-len": 15,
+            "tooltip-format": "{player} ({status}): {title} - {artist}\n\n󰽷 Left-click: Play/Pause\n󰽷 Right-click: Next track",
+            "on-click": "playerctl play-pause",
+            "on-click-right": "playerctl next"
+        },
+
+        "pulseaudio": {
+            "format": "{icon} {volume}%",
+            "format-muted": "󱝟 Muted",
+            "format-icons": {
+                "default": ["󱕿", "󱖀", "󱕾"]
+            },
+            "on-click": "pwvucontrol",
+            "scroll-step": 2
+        },
+
+        "group/time": {
+            "orientation": "horizontal",
+            "modules": [
+                "clock",
+                "tray",
+                "custom/notification"
+            ]
+        },
+
+        "tray": {
+            "icon-size": 16,
+            "spacing": 8
+        },
+
+        "clock": {
+            "interval": 1,
+            "format": " {:%a, %d %b   %H:%M:%S}",
+            "tooltip-format": "<tt><small>{calendar}</small></tt>"
+        },
+
+        "custom/notification": {
+            "tooltip": false,
+            "format": "{icon}",
+            "format-icons": {
+                "notification": "<span foreground='#f38ba8'><sup></sup></span>",
+                "none": "",
+                "dnd-notification": "<span foreground='#f38ba8'><sup></sup></span>",
+                "dnd-none": "",
+                "inhibited-notification": "<span foreground='#f38ba8'><sup></sup></span>",
+                "inhibited-none": "",
+                "dnd-inhibited-notification": "<span foreground='#f38ba8'><sup></sup></span>",
+                "dnd-inhibited-none": ""
+            },
+            "return-type": "json",
+            "exec-if": "which swaync-client",
+            "exec": "swaync-client -swb",
+            "on-click": "swaync-client -t -sw",
+            "on-click-right": "swaync-client -d -sw",
+            "escape": true
+        }
     }
-}
+]
