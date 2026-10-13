@@ -10,7 +10,7 @@
 **/atuin/themes/matugen.toml
 **/btop/themes/matugen.theme
 **/fish/fish_variables
-**/OpenRGB/logs/
+**/OpenRGB/
 **/niri/dms/
 **/hypr/scheme/current.conf
 **/hypr/scheme/current.lua
