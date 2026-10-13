@@ -292,10 +292,10 @@ def install-cargo-desktop [app_name: string, config: record, temp_dir: path] {
 
     mkdir $bin_dir $app_dir $icon_dir
 
-    let binary_src = if (($base_dir | path join $binary) | path exists) {
+    let binary_src = if (($base_dir | path join $binary) | path exists) and ((($base_dir | path join $binary) | path type) == "file") {
         $base_dir | path join $binary
     } else {
-        let candidates = (glob $"($temp_dir)/**/($binary)")
+        let candidates = (glob $"($temp_dir)/**/($binary)" | where { |p| ($p | path type) == "file" })
         if ($candidates | is-not-empty) {
             $candidates | first
         } else {
@@ -317,26 +317,28 @@ def install-cargo-desktop [app_name: string, config: record, temp_dir: path] {
     let desktop_file = if (($base_dir | path join $"packaging/applications/($binary).desktop") | path exists) {
         $base_dir | path join $"packaging/applications/($binary).desktop"
     } else {
-        let candidates = (glob $"($temp_dir)/**/*.desktop")
+        let candidates = (glob $"($temp_dir)/**/*.desktop" | where { |p| ($p | path type) == "file" })
         if ($candidates | is-not-empty) { $candidates | first } else { "" }
     }
 
     if ($desktop_file | is-not-empty) and ($desktop_file | path exists) {
-        print $"(ansi green)Installing desktop shortcut...(ansi reset)"
-        cp -f $desktop_file ($app_dir | path join $"($binary).desktop")
+        let target_desktop_name = ($desktop_file | path basename)
+        print $"(ansi green)Installing desktop shortcut \(($target_desktop_name)\)...(ansi reset)"
+        cp -f $desktop_file ($app_dir | path join $target_desktop_name)
     }
 
     # Install icon if present
     let icon_file = if (($base_dir | path join $"packaging/icons/($binary).svg") | path exists) {
         $base_dir | path join $"packaging/icons/($binary).svg"
     } else {
-        let candidates = (glob $"($temp_dir)/**/($binary).svg")
+        let candidates = (glob $"($temp_dir)/**/*.svg" | where { |p| ($p | path type) == "file" })
         if ($candidates | is-not-empty) { $candidates | first } else { "" }
     }
 
     if ($icon_file | is-not-empty) and ($icon_file | path exists) {
-        print $"(ansi green)Installing icon...(ansi reset)"
-        cp -f $icon_file ($icon_dir | path join $"($binary).svg")
+        let target_icon_name = ($icon_file | path basename)
+        print $"(ansi green)Installing icon \(($target_icon_name)\)...(ansi reset)"
+        cp -f $icon_file ($icon_dir | path join $target_icon_name)
     }
 
     if (which update-desktop-database | is-not-empty) {
@@ -375,10 +377,10 @@ def install-binary [app_name: string, config: record, temp_dir: path] {
     let bin_dir = ("~/.local/bin" | path expand)
     mkdir $bin_dir
 
-    let binary_src = if (($temp_dir | path join $binary) | path exists) {
+    let binary_src = if (($temp_dir | path join $binary) | path exists) and ((($temp_dir | path join $binary) | path type) == "file") {
         $temp_dir | path join $binary
     } else {
-        let candidates = (glob $"($temp_dir)/**/($binary)")
+        let candidates = (glob $"($temp_dir)/**/($binary)" | where { |p| ($p | path type) == "file" })
         if ($candidates | is-not-empty) { $candidates | first } else { "" }
     }
 
