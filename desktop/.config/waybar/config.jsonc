@@ -85,7 +85,7 @@
                 "spotify_player": "",
                 "fastpotify": "",
                 "firefox": "",
-                "zen": "󰸹",
+                "zen": "󰈹",
                 "chromium": "",
                 "mpv": ""
             },
@@ -97,16 +97,16 @@
             "dynamic-len": 45,
             "title-len": 25,
             "artist-len": 20,
-            "tooltip-format": "{player} ({status}): {title} - {artist}\n\n󰽷 Left-click: Play/Pause\n󰽷 Right-click: Next track",
+            "tooltip-format": "{player} ({status}): {title} - {artist}\n\n󰍽 Left-click: Play/Pause\n󰍽 Right-click: Next track",
             "on-click": "playerctl play-pause",
             "on-click-right": "playerctl next"
         },
 
         "pulseaudio": {
             "format": "{icon} {volume}%",
-            "format-muted": "󱝟 Muted",
+            "format-muted": "󰝟 Muted",
             "format-icons": {
-                "default": ["󱕿", "󱖀", "󱕾"]
+                "default": ["󰕿", "󰖀", "󰕾"]
             },
             "on-click": "pwvucontrol",
             "scroll-step": 2
@@ -145,7 +145,7 @@
         "idle_inhibitor": {
             "format": "{icon}",
             "format-icons": {
-                "activated": "󰕶",
+                "activated": "󰅶",
                 "deactivated": "󰾪"
             },
             "tooltip-format-activated": "Idle Inhibitor: Active (Screen stays awake)",
@@ -177,7 +177,7 @@
         },
 
         "custom/gpu": {
-            "format": "󲂮 {}",
+            "format": "󰢮 {}",
             "tooltip": true,
             "interval": 2,
             "exec": "~/.config/waybar/scripts/gpu.py",
@@ -211,9 +211,9 @@
 
         "network": {
             "format-wifi": " {essid}",
-            "format-ethernet": "󰠀 Wired",
-            "format-disconnected": "󰒭 Disconnected",
-            "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n󰕓 {bandwidthUpBytes}  󰕐 {bandwidthDownBytes}",
+            "format-ethernet": "󰈀 Wired",
+            "format-disconnected": "󰤭 Disconnected",
+            "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n󰅃 {bandwidthUpBytes}  󰅀 {bandwidthDownBytes}",
             "on-click": "nm-connection-editor"
         },
 
@@ -341,7 +341,7 @@
                 "spotify_player": "",
                 "fastpotify": "",
                 "firefox": "",
-                "zen": "󰸹",
+                "zen": "󰈹",
                 "chromium": "",
                 "mpv": ""
             },
@@ -353,16 +353,16 @@
             "dynamic-len": 35,
             "title-len": 20,
             "artist-len": 15,
-            "tooltip-format": "{player} ({status}): {title} - {artist}\n\n󰽷 Left-click: Play/Pause\n󰽷 Right-click: Next track",
+            "tooltip-format": "{player} ({status}): {title} - {artist}\n\n󰍽 Left-click: Play/Pause\n󰍽 Right-click: Next track",
             "on-click": "playerctl play-pause",
             "on-click-right": "playerctl next"
         },
 
         "pulseaudio": {
             "format": "{icon} {volume}%",
-            "format-muted": "󱝟 Muted",
+            "format-muted": "󰝟 Muted",
             "format-icons": {
-                "default": ["󱕿", "󱖀", "󱕾"]
+                "default": ["󰕿", "󰖀", "󰕾"]
             },
             "on-click": "pwvucontrol",
             "scroll-step": 2
