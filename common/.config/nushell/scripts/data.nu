@@ -166,23 +166,68 @@ wb.save(out_path)
     $data | to json --raw | ^uv run --with openpyxl python3 -c $py_script ($out_path | path expand)
 }
 
-# Helper: Read CSV with flexible delimiter fallback
+# Helper: Read CSV with flexible delimiter and encoding fallback
 def open-csv-flexible [file_path: string, delimiter?: string] {
-    if ($delimiter | is-not-empty) {
-        open $file_path --raw | from csv --separator $delimiter
-    } else {
-        # Check first line for auto-detection between ',', ';', '|', '\t'
-        let sample = (open $file_path --raw | lines | first 2 | str join "\n")
-        let sep = if ($sample | str contains "|") and not ($sample | str contains ",") {
-            "|"
-        } else if ($sample | str contains ";") and not ($sample | str contains ",") {
-            ";"
-        } else if ($sample | str contains "\t") and not ($sample | str contains ",") {
-            "\t"
+    let raw = (open $file_path --raw)
+    let content = if ($raw | describe) =~ "^binary" {
+        if ($raw | bytes starts-with 0x[FF FE]) or ($raw | bytes starts-with 0x[FE FF]) {
+            $raw | decode utf-16
         } else {
-            ","
+            let u8 = ($raw | decode utf-8)
+            if ($u8 | str contains (char nul)) {
+                try { $raw | decode utf-16le } catch { $u8 }
+            } else if ($u8 | str contains (char -u fffd)) {
+                try { $raw | decode windows-1252 } catch { $u8 }
+            } else {
+                $u8
+            }
         }
-        open $file_path --raw | from csv --separator $sep
+    } else {
+        $raw
+    } | str trim --char (char -u feff)
+
+    let sep = if ($delimiter | is-not-empty) {
+        $delimiter
+    } else {
+        # Check first lines for candidate delimiters (',', ';', '\t', '|')
+        let sample = ($content | lines | take 15 | str join "\n")
+        let candidates = [",", ";", "\t", "|"]
+
+        # 1. Test candidates with standard parsing
+        let standard_candidates = ($candidates | each { |c|
+            let parsed = (try { $sample | from csv --separator $c } catch { null })
+            {
+                sep: $c,
+                valid: ($parsed != null),
+                cols: (if $parsed != null { $parsed | columns | length } else { 0 })
+            }
+        } | where valid and ($it.cols > 1) | sort-by cols --reverse)
+
+        if ($standard_candidates | is-not-empty) {
+            $standard_candidates | first | get sep
+        } else {
+            # 2. Test candidates with --flexible in case rows are ragged
+            let flexible_candidates = ($candidates | each { |c|
+                let parsed = (try { $sample | from csv --separator $c --flexible } catch { null })
+                {
+                    sep: $c,
+                    valid: ($parsed != null),
+                    cols: (if $parsed != null { $parsed | columns | length } else { 0 })
+                }
+            } | where valid and ($it.cols > 1) | sort-by cols --reverse)
+
+            if ($flexible_candidates | is-not-empty) {
+                $flexible_candidates | first | get sep
+            } else {
+                ","
+            }
+        }
+    }
+
+    try {
+        $content | from csv --separator $sep
+    } catch {
+        $content | from csv --separator $sep --flexible
     }
 }
 
