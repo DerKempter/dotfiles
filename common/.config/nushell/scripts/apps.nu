@@ -116,7 +116,7 @@ enabled = [
 # [custom.my-tool]
 # repo = "owner/repo"
 # asset = ''^my-tool-.*-linux-x86_64\.tar\.gz$''
-# strategy = "deb"             # "cargo_desktop" | "installer_script" | "binary" | "deb"
+# strategy = "deb"             # "cargo_desktop" | "bundle_desktop" | "installer_script" | "binary" | "deb"
 # binary = "my-tool"            # optional, defaults to app key
 # package = "my-tool-bin"       # optional package name for deb strategy
 # description = "Internal CLI tool"
@@ -241,6 +241,15 @@ def get-installed-version [app_name: string, config: record] {
         } catch { null })
     }
 
+    # Strategy: Desktop application bundle (e.g. Flutter/Electron version.json)
+    let flutter_ver_file = ("~/.local/share" | path expand | path join $app_name "data" "flutter_assets" "version.json")
+    if ($flutter_ver_file | path exists) {
+        let v = (try { (open $flutter_ver_file).version? } catch { null })
+        if ($v | is-not-empty) {
+            return ($v | str trim)
+        }
+    }
+
     # Strategy: Binary CLI execution (--version or -V)
     if not (has-binary $binary) {
         return null
@@ -279,7 +288,9 @@ def install-cargo-desktop [app_name: string, config: record, temp_dir: path] {
     let binary = ($config.binary? | default $app_name)
 
     let subdirs = (ls $temp_dir | where type == "dir" | get name)
-    let base_dir = if ($subdirs | length) == 1 {
+    let base_dir = if (($temp_dir | path join $binary) | path exists) and ((($temp_dir | path join $binary) | path type) == "file") {
+        $temp_dir
+    } else if ($subdirs | length) == 1 {
         $subdirs | first
     } else {
         let matched = ($subdirs | where ($it | path basename) =~ $'^(?:($app_name)|($binary))' | get -o 0)
@@ -339,6 +350,108 @@ def install-cargo-desktop [app_name: string, config: record, temp_dir: path] {
         let target_icon_name = ($icon_file | path basename)
         print $"(ansi green)Installing icon \(($target_icon_name)\)...(ansi reset)"
         cp -f $icon_file ($icon_dir | path join $target_icon_name)
+    }
+
+    if (which update-desktop-database | is-not-empty) {
+        update-desktop-database $app_dir
+    }
+
+    true
+}
+
+# Strategy: Desktop application bundle (e.g. Flutter/Electron desktop apps with data/ and lib/ folders)
+def install-bundle-desktop [app_name: string, config: record, temp_dir: path] {
+    let binary = ($config.binary? | default $app_name)
+
+    let subdirs = (ls $temp_dir | where type == "dir" | get name)
+    let base_dir = if (($temp_dir | path join $binary) | path exists) and ((($temp_dir | path join $binary) | path type) == "file") {
+        $temp_dir
+    } else if ($subdirs | length) == 1 {
+        $subdirs | first
+    } else {
+        let matched = ($subdirs | where ($it | path basename) =~ $'^(?:($app_name)|($binary))' | get -o 0)
+        if ($matched | is-not-empty) { $matched } else { $temp_dir }
+    }
+
+    let bin_dir = ("~/.local/bin" | path expand)
+    let share_dir = ("~/.local/share" | path expand)
+    let target_dir = ($share_dir | path join $app_name)
+    let app_dir = ("~/.local/share/applications" | path expand)
+    let icon_dir = ("~/.local/share/icons/hicolor/scalable/apps" | path expand)
+
+    mkdir $bin_dir $app_dir $icon_dir ($target_dir | path dirname)
+
+    let binary_src = ($base_dir | path join $binary)
+    if not ($binary_src | path exists) {
+        nu-fail $"Binary '($binary)' not found in bundle archive." -c "BINARY_NOT_FOUND"
+        return false
+    }
+
+    print $"(ansi green)Installing application bundle to ($target_dir)...(ansi reset)"
+    rm -rf $target_dir
+    mkdir $target_dir
+    let items = (ls $base_dir | get name)
+    cp -r ...$items $target_dir
+
+    let target_binary = ($target_dir | path join $binary)
+    chmod +x $target_binary
+
+    print $"(ansi green)Symlinking binary to ($bin_dir)/($binary)...(ansi reset)"
+    ln -sf $target_binary ($bin_dir | path join $binary)
+
+    # Install desktop shortcut: check bundle first or generate standard entry
+    let desktop_candidates = (glob $"($target_dir)/**/*.desktop" | where { |p| ($p | path type) == "file" })
+    let desktop_file = if ($desktop_candidates | is-not-empty) {
+        $desktop_candidates | first
+    } else {
+        ""
+    }
+
+    if ($desktop_file | is-not-empty) and ($desktop_file | path exists) {
+        let target_desktop_name = ($desktop_file | path basename)
+        print $"(ansi green)Installing desktop shortcut \(($target_desktop_name)\)...(ansi reset)"
+        cp -f $desktop_file ($app_dir | path join $target_desktop_name)
+    } else {
+        let app_label = ($config.name? | default ($app_name | str capitalize))
+        let app_desc = ($config.description? | default "")
+        let app_cat = ($config.categories? | default "AudioVideo;Video;Player;")
+        let app_wm = ($config.wm_class? | default ($app_label))
+        let desktop_content = $"[Desktop Entry]
+Type=Application
+Name=($app_label)
+Comment=($app_desc)
+Exec=($binary) %u
+Icon=($binary)
+Terminal=false
+Categories=($app_cat)
+StartupNotify=true
+StartupWMClass=($app_wm)
+"
+        print $"(ansi green)Creating desktop shortcut \(($binary).desktop\)...(ansi reset)"
+        $desktop_content | save -f ($app_dir | path join $"($binary).desktop")
+    }
+
+    # Install icon
+    let icon_candidates = (
+        glob $"($target_dir)/**/($binary)_icon.svg"
+        | append (glob $"($target_dir)/**/($binary).svg")
+        | append (glob $"($target_dir)/**/*.svg")
+        | append (glob $"($target_dir)/**/($binary)*.png")
+        | where { |p| ($p | path type) == "file" }
+    )
+
+    if ($icon_candidates | is-not-empty) {
+        let icon_file = ($icon_candidates | first)
+        let ext = ($icon_file | path parse | get extension)
+        let target_icon_name = $"($binary).($ext)"
+        let target_icon_dir = if $ext == "svg" {
+            $icon_dir
+        } else {
+            ("~/.local/share/icons/hicolor/512x512/apps" | path expand)
+        }
+        mkdir $target_icon_dir
+        print $"(ansi green)Installing icon \(($target_icon_name)\)...(ansi reset)"
+        cp -f $icon_file ($target_icon_dir | path join $target_icon_name)
     }
 
     if (which update-desktop-database | is-not-empty) {
@@ -508,6 +621,7 @@ def update-single-app [
 
     let install_ok = match $config.strategy {
         "cargo_desktop" => { install-cargo-desktop $app_name $config $temp_dir },
+        "bundle_desktop" | "flutter_desktop" => { install-bundle-desktop $app_name $config $temp_dir },
         "installer_script" => { install-installer-script $app_name $config $temp_dir },
         "binary" => { install-binary $app_name $config $temp_dir },
         "deb" | "apt" => { install-deb $app_name $config $archive_path },
