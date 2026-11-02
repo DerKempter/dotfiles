@@ -26,10 +26,11 @@ jobs:
 
       - name: Link Configurations
         run: |
-          # Remove default runner shell files to avoid stow collisions
+          # Remove default runner shell files and pre-generated configs to avoid stow collisions
           rm -f ~/.bashrc ~/.bash_logout ~/.profile ~/.zshrc
-          stow -R common --target "$HOME" --verbose
-          stow -R desktop --target "$HOME" --verbose
+          rm -rf ~/.config/fish
+          stow -R common --dir "$PWD" --target "$HOME" --verbose
+          stow -R desktop --dir "$PWD" --target "$HOME" --verbose
 
       - name: Execute Validations
         run: |
