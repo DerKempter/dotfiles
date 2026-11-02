@@ -6,16 +6,16 @@ $env.config.show_banner = false
 
 # Import modular helper scripts (Linux only) and apply Catppuccin theme
 const LINUX_SCRIPTS = (if $nu.os-info.name == "windows" {
-    ($nu.default-config-dir | path join "empty.nu")
+    "empty.nu"
 } else {
     "scripts"
 })
 use $LINUX_SCRIPTS *
 
 const THEME_SCRIPT = (if $nu.os-info.name == "windows" {
-    ($nu.default-config-dir | path join "scripts" "catppuccin_mocha.nu")
+    "scripts/catppuccin_mocha.nu"
 } else {
-    ($nu.default-config-dir | path join "empty.nu")
+    "empty.nu"
 })
 use $THEME_SCRIPT *
 
@@ -48,7 +48,7 @@ if $nu.os-info.name != "windows" {
     source ($nu.config-path | path dirname | path join "hooks" "atuin_proxy.nu")
 }
 const ATUIN_PATH = (if $nu.os-info.name == "windows" {
-    ($nu.default-config-dir | path join "empty.nu")
+    "empty.nu"
 } else {
     ($nu.home-dir | path join ".local" "share" "atuin" "init.nu")
 })

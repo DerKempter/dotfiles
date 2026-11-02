@@ -28,8 +28,8 @@ jobs:
         run: |
           # Remove default runner shell files to avoid stow collisions
           rm -f ~/.bashrc ~/.bash_logout ~/.profile ~/.zshrc
-          stow -R common --verbose
-          stow -R desktop --verbose
+          stow -R common --target "$HOME" --verbose
+          stow -R desktop --target "$HOME" --verbose
 
       - name: Execute Validations
         run: |
