@@ -121,6 +121,16 @@ def render-image-preview [img_path: string, size: string = "50x20"] {
     } catch { }
 }
 
+# Helper to resolve host-specific or custom matugen config args
+def get-matugen-args [] {
+    let desktop_cfg = ("~/.config/matugen/config.desktop.toml" | path expand)
+    if ($desktop_cfg | path exists) {
+        ["-c", $desktop_cfg]
+    } else {
+        []
+    }
+}
+
 # Sync wallpapers from categorized directory into flat directory (~/Pictures/wallpapers) for qs-wallpaperpicker
 export def wallpaper-sync [] {
     let root = (get-wallpaper-root)
@@ -352,7 +362,8 @@ export def wallpaper [
 
     # 3. Extract Material 3 colors with Matugen
     if (which matugen | is-empty) == false {
-        matugen -t $stype image $resolved_path
+        let matugen_args = (get-matugen-args)
+        ^matugen ...$matugen_args -t $stype image $resolved_path
         print $"✓ Dynamic ($stype) theme generated and applied from ($resolved_path | path basename)"
         if (which notify-send | is-empty) == false {
             notify-send -u low "Wallpaper & Theme" $"Applied ($stype) from ($resolved_path | path basename)" -i $resolved_path
@@ -392,17 +403,18 @@ export def theme [
     }
 
     let input_style = ($style | str lowercase)
+    let matugen_args = (get-matugen-args)
 
     # 1. Dark / Light mode toggle
     if $input_style == "dark" or $input_style == "light" {
-        ^matugen -m $input_style image $current_wall
+        ^matugen ...$matugen_args -m $input_style image $current_wall
         print $"✓ Switched to ($input_style) mode"
         return
     }
 
     # 2. Custom Hex color accent override
     if ($style | str starts-with "#") {
-        ^matugen color hex ($style | str replace "#" "")
+        ^matugen ...$matugen_args color hex ($style | str replace "#" "")
         print $"✓ Applied accent color ($style)"
         return
     }
@@ -414,6 +426,6 @@ export def theme [
         $"scheme-($input_style)"
     }
 
-    ^matugen -t $stype image $current_wall
+    ^matugen ...$matugen_args -t $stype image $current_wall
     print $"✓ Applied theme profile ($stype)"
 }

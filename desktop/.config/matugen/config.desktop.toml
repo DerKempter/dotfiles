@@ -1,0 +1,83 @@
+[config]
+prefer = "saturation"
+type = "scheme-expressive"
+
+[templates.kde]
+input_path = "~/.config/matugen/templates/kde-colors.colors"
+output_path = "~/.local/share/color-schemes/Matugen.colors"
+post_hook = "sh -c 'command -v plasma-apply-colorscheme >/dev/null 2>&1 && (plasma-apply-colorscheme BreezeDark >/dev/null 2>&1 || true; plasma-apply-colorscheme Matugen) || true'"
+
+[templates.vicinae]
+input_path = "~/.config/matugen/templates/vicinae-theme.toml"
+output_path = "~/.local/share/vicinae/themes/matugen.toml"
+post_hook = "sh -c 'command -v vicinae >/dev/null 2>&1 && (vicinae theme set matugen >/dev/null 2>&1 || true) || true'"
+
+[templates.ghostty]
+input_path = "~/.config/matugen/templates/ghostty-colors"
+output_path = "~/.config/ghostty/themes/matugen"
+post_hook = "pkill -SIGUSR2 -x ghostty || true"
+
+[templates.btop]
+input_path = "~/.config/matugen/templates/btop-theme.theme"
+output_path = "~/.config/btop/themes/matugen.theme"
+post_hook = "pkill -SIGUSR2 -x btop || true"
+
+[templates.starship]
+input_path = "~/.config/matugen/templates/starship.toml"
+output_path = "~/.cache/starship.toml"
+
+[templates.yazi]
+input_path = "~/.config/matugen/templates/yazi-flavor.toml"
+output_path = "~/.config/yazi/flavors/matugen.yazi/flavor.toml"
+
+[templates.micro]
+input_path = "~/.config/matugen/templates/micro-colorscheme.micro"
+output_path = "~/.config/micro/colorschemes/matugen.micro"
+
+[templates.lazygit]
+input_path = "~/.config/matugen/templates/lazygit-theme.yml"
+output_path = "~/.cache/lazygit/theme.yml"
+
+[templates.atuin]
+input_path = "~/.config/matugen/templates/atuin-theme.toml"
+output_path = "~/.config/atuin/themes/matugen.toml"
+
+[templates.spotifast]
+input_path = "~/.config/matugen/templates/spotifast-theme.json"
+output_path = "~/.config/spotifast/themes/matugen.json"
+post_hook = "sh -c 'command -v spotifast >/dev/null 2>&1 && spotifast reload-themes 2>/dev/null || true'"
+
+[templates.hyprland]
+input_path = "~/.config/matugen/templates/hyprland-colors.lua"
+output_path = "~/.config/hypr/scheme/current.lua"
+post_hook = "sh -c 'command -v hyprctl >/dev/null 2>&1 && hyprctl reload || true'"
+
+[templates.hyprlock]
+input_path = "~/.config/matugen/templates/hyprlock-colors.conf"
+output_path = "~/.config/hypr/scheme/hyprlock-colors.conf"
+
+[templates.waybar]
+input_path = "~/.config/matugen/templates/waybar-colors.css"
+output_path = "~/.config/waybar/colors.css"
+post_hook = "sh -c 'test -f ~/.config/waybar/scripts/reload.sh && ~/.config/waybar/scripts/reload.sh || true'"
+
+[templates.swaync]
+input_path = "~/.config/matugen/templates/swaync-colors.css"
+output_path = "~/.config/swaync/colors.css"
+post_hook = "sh -c 'command -v swaync-client >/dev/null 2>&1 && swaync-client -rs || true'"
+
+[templates.swayosd]
+input_path = "~/.config/matugen/templates/swayosd-colors.css"
+output_path = "~/.config/swayosd/colors.css"
+
+[templates.wlogout]
+input_path = "~/.config/matugen/templates/wlogout-colors.css"
+output_path = "~/.config/wlogout/colors.css"
+
+[templates.hyprswitch]
+input_path = "~/.config/matugen/templates/hyprswitch-colors.css"
+output_path = "~/.config/hyprswitch/colors.css"
+
+[templates.qs-wallpaperpicker]
+input_path = "~/.config/qs-wallpaperpicker/extras/matugen/quickshell.json.hbs"
+output_path = "~/.config/qs-wallpaperpicker/colors/Colors.json"

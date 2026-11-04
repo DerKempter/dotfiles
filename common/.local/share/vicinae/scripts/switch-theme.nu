@@ -71,6 +71,9 @@ def main [--detached] {
         }
     }
 
+    let desktop_cfg = ("~/.config/matugen/config.desktop.toml" | path expand)
+    let cfg_args = if ($desktop_cfg | path exists) { ["-c", $desktop_cfg] } else { [] }
+
     if ($selected | str starts-with "Profile: ") {
         let type_map = {
             "Profile: Expressive (Android Material You)": "scheme-expressive",
@@ -83,22 +86,22 @@ def main [--detached] {
             "Profile: Monochrome (Minimal Grayscale)": "scheme-monochrome",
         }
         let stype = ($type_map | get -i $selected | default "scheme-expressive")
-        ^matugen -t $stype image $current_wall
+        ^matugen ...$cfg_args -t $stype image $current_wall
         do $notify "Theme Updated" $"Applied ($selected | split row '(' | get 0 | str trim)"
     } else if ($selected | str starts-with "#") {
         let hex = ($selected | split row " " | get 0)
-        ^matugen color hex $hex
+        ^matugen ...$cfg_args color hex $hex
         do $notify "Theme Updated" $"Applied accent: ($hex)"
     } else if $selected == "Mode: Dark Mode" {
-        ^matugen -m dark -t scheme-expressive image $current_wall
+        ^matugen ...$cfg_args -m dark -t scheme-expressive image $current_wall
         do $notify "Theme Updated" "Switched to Dark Mode"
     } else if $selected == "Mode: Light Mode" {
-        ^matugen -m light -t scheme-expressive image $current_wall
+        ^matugen ...$cfg_args -m light -t scheme-expressive image $current_wall
         do $notify "Theme Updated" "Switched to Light Mode"
     } else if $selected == "Custom: Hex Color Code" {
         let hex = (^vicinae dmenu -p "Enter hex (e.g. ff007f)..." | str trim | str replace -r '^#' '')
         if ($hex | is-not-empty) {
-            ^matugen color hex $"#($hex)"
+            ^matugen ...$cfg_args color hex $"#($hex)"
             do $notify "Theme Updated" $"Applied accent: #($hex)"
         }
     }

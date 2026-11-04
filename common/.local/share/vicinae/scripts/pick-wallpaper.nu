@@ -135,7 +135,9 @@ def main [--detached] {
     }
 
     if (which matugen | is-empty) == false {
-        matugen -t scheme-expressive image $final_file
+        let desktop_cfg = ("~/.config/matugen/config.desktop.toml" | path expand)
+        let cfg_args = if ($desktop_cfg | path exists) { ["-c", $desktop_cfg] } else { [] }
+        ^matugen ...$cfg_args -t scheme-expressive image $final_file
         if (which notify-send | is-empty) == false {
             notify-send -u low "Wallpaper & Theme" $"Applied ($final_file | path basename)" -i $final_file
         }
