@@ -13,7 +13,6 @@ cursor-text = cell-background
 unfocused-split-opacity = 0.85
 
 mouse-hide-while-typing = true
-mouse-scroll-multiplier = 0.25
 
 confirm-close-surface = false
 window-decoration = none
