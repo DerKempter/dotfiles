@@ -1,6 +1,6 @@
 {
     "label" : "lock",
-    "action" : "pidof hyprlock || hyprlock",
+    "action" : "loginctl lock-session",
     "text" : "Lock (L)",
     "keybind" : "l"
 }
