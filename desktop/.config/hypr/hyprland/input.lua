@@ -24,3 +24,9 @@ hl.config({
         hotspot_padding = 1,
     },
 })
+
+hl.device({
+    name          = "logitech-g502-x-ls-1",
+    accel_profile = "flat",
+    sensitivity   = 0.5,
+})
