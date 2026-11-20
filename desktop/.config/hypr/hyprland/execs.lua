@@ -6,7 +6,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
     hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
 
-    -- Start graphical session systemd units (Waybar, SwayNC, Hypridle)
+    -- Start graphical session systemd units (Mercury, Vicinae, Hypridle, Polkit)
     hl.exec_cmd("systemctl --user start hyprland-session.target")
 
     -- Keyring daemon
@@ -18,8 +18,8 @@ hl.on("hyprland.start", function()
 
     -- Daemons without systemd units
     hl.exec_cmd("awww-daemon || swww-daemon")
-    hl.exec_cmd("swayosd-server")
-    hl.exec_cmd("qs-wallpaperpicker")
+    -- hl.exec_cmd("swayosd-server") -- Retired: Mercury Right #3 handles OSD
+    -- hl.exec_cmd("qs-wallpaperpicker") -- Retired: Mercury WallpaperDrawer & Ink-Drop handles wallpapers
 
     -- Auto delete trash 30 days old
     hl.exec_cmd("trash-empty 30")

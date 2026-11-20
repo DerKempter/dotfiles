@@ -226,4 +226,7 @@ hl.layer_rule({ match = { namespace = "selection" }, animation = "fade" })      
 hl.layer_rule({ match = { namespace = "wayfreeze" }, animation = "fade" })                  -- wayfreeze
 hl.layer_rule({ match = { namespace = "launcher" }, animation = "popin 80%", blur = true }) -- Fuzzel
 hl.layer_rule({ match = { namespace = "swayosd" }, animation = "fade", blur = true, ignore_alpha = 0.8 }) -- SwayOSD
-hl.layer_rule({ match = { namespace = "vicinae" }, animation = "popin 85%", blur = true }) -- Vicinae launcher
+hl.layer_rule({ match = { namespace = "vicinae" }, blur = true }) -- Vicinae launcher (inherits global popin 85%; suppressed during Mercury chute handoff)
+hl.layer_rule({ match = { namespace = "^mercury-.*" }, no_anim = true }) -- Mercury SDF shaders own entrance/exit geometry
+hl.layer_rule({ match = { namespace = "mercury-power" }, blur = true, ignore_alpha = 0.15 })
+hl.layer_rule({ match = { namespace = "mercury-overview" }, blur = true, ignore_alpha = 0.15 })
