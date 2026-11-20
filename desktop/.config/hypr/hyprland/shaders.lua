@@ -11,13 +11,13 @@ local M = {}
 
 -- ── Global default open & close animations ──
 M.default_open_animation = {
-    shader   = "ionize",
-    duration = 0.5,
+    shader   = "mercury",
+    duration = 0.55,
 }
 
 M.default_close_animation = {
-    shader   = "starfield",
-    duration = 0.6,
+    shader   = "mercury",
+    duration = 0.52,
 }
 
 -- ── Optional per-app open animations override ──

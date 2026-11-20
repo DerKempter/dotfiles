@@ -13,12 +13,14 @@ hl.curve("bouncyDecel", { type = "bezier", points = { { 0.34, 1.56 }, { 0.64, 1 
 hl.curve("bouncyAccel", { type = "bezier", points = { { 0.36, 0 }, { 0.66, -0.56 } } })
 hl.curve("linear", { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
 
--- Option A: Cyber Glitch / Kinetic Recoil Curves
-hl.curve("cyberRecoil", { type = "bezier", points = { { 0.68, -0.4 }, { 0.27, 1.45 } } })
-hl.curve("cyberSnap", { type = "bezier", points = { { 0.05, 0.9 }, { 0.1, 1.15 } } })
+-- Snappy Fluid / Spring Curves
+-- fluidSpring: Fast takeoff, punchy ~8% overshoot with tight recovery
+hl.curve("fluidSpring", { type = "bezier", points = { { 0.22, 1.15 }, { 0.36, 1.08 } } })
+-- fluidSnap: Quick launch with a lively 5% overshoot on workspaces/layers
+hl.curve("fluidSnap", { type = "bezier", points = { { 0.08, 0.9 }, { 0.18, 1.05 } } })
 
 -- Animation configs
-hl.animation({ leaf = "layersIn", enabled = true, speed = 6, bezier = "cyberSnap", style = "popin 85%" })
+hl.animation({ leaf = "layersIn", enabled = true, speed = 6.5, bezier = "fluidSnap", style = "popin 85%" })
 hl.animation({ leaf = "layersOut", enabled = true, speed = 5, bezier = "emphasizedAccel", style = "popin 85%" })
 hl.animation({ leaf = "fadeLayers", enabled = true, speed = 6, bezier = "standard" })
 
@@ -26,14 +28,14 @@ hl.animation({ leaf = "fadeLayers", enabled = true, speed = 6, bezier = "standar
 hl.animation({ leaf = "windowsIn", enabled = true, speed = 8, bezier = "linear", style = "popin 100%" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 8, bezier = "linear", style = "popin 100%" })
 
-hl.animation({ leaf = "windowsMove", enabled = true, speed = 6, bezier = "cyberRecoil" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "cyberSnap" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 6, bezier = "fluidSpring" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 5.5, bezier = "fluidSnap" })
 
 hl.animation({
     leaf    = "specialWorkspace",
     enabled = true,
-    speed   = 5,
-    bezier  = "cyberSnap",
+    speed   = 5.5,
+    bezier  = "fluidSnap",
     style   = "slidefadevert 15%"
 })
 hl.animation({ leaf = "fade", enabled = true, speed = 6, bezier = "standard" })

@@ -40,13 +40,13 @@ return {
 
     -- Gaps
     workspaceGaps              = 20,
-    windowGapsIn               = 5,
+    windowGapsIn               = 6,
     windowGapsOut              = 10,
     singleWindowGapsOut        = 20,
 
     -- Window styling (Subtle accent border without heavy glow)
     windowOpacity              = 0.95,
-    windowRounding             = 15,
+    windowRounding             = 12,
     windowBorderSize           = 1,
     activeWindowBorderColour   = "rgba(" .. scheme.primary .. "77)",
     inactiveWindowBorderColour = "rgba(" .. (scheme.outlineVariant or scheme.onSurfaceVariant or "ffffff") .. "33)",
