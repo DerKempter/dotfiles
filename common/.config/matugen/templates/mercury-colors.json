@@ -1,0 +1,9 @@
+{
+  "surface": "{{colors.surface_container_lowest.default.hex}}",
+  "surfaceContainer": "{{colors.surface_container.default.hex}}",
+  "border": "{{colors.outline_variant.default.hex}}",
+  "accentPink": "{{colors.primary.default.hex}}",
+  "accentCyan": "{{colors.tertiary.default.hex}}",
+  "textPrimary": "{{colors.on_surface.default.hex}}",
+  "textMuted": "{{colors.on_surface_variant.default.hex}}"
+}
