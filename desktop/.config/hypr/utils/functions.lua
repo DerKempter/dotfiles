@@ -101,10 +101,10 @@ local function default_config()
             whatsapp = { enable = true, match = { { class = "whatsapp" } }, move = true },
         },
         music = {
-            fastpotify = {
+            spotifast = {
                 enable  = true,
-                match   = { { class = "fastpotify" }, { class = "Fastpotify" } },
-                command = { "fastpotify" },
+                match   = { { class = "spotifast" }, { class = "Spotifast" } },
+                command = { "spotifast" },
                 move    = true,
             },
             spotify = {
