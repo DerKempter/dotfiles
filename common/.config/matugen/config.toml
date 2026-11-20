@@ -59,12 +59,12 @@ output_path = "~/.config/hypr/scheme/hyprlock-colors.conf"
 [templates.waybar]
 input_path = "~/.config/matugen/templates/waybar-colors.css"
 output_path = "~/.config/waybar/colors.css"
-post_hook = "sh -c 'test -f ~/.config/waybar/scripts/reload.sh && ~/.config/waybar/scripts/reload.sh || true'"
+post_hook = "sh -c 'pgrep -x waybar >/dev/null 2>&1 && test -f ~/.config/waybar/scripts/reload.sh && ~/.config/waybar/scripts/reload.sh || true'"
 
 [templates.swaync]
 input_path = "~/.config/matugen/templates/swaync-colors.css"
 output_path = "~/.config/swaync/colors.css"
-post_hook = "sh -c 'command -v swaync-client >/dev/null 2>&1 && swaync-client -rs || true'"
+post_hook = "sh -c 'pgrep -x swaync >/dev/null 2>&1 && command -v swaync-client >/dev/null 2>&1 && swaync-client -rs -sw || true'"
 
 [templates.swayosd]
 input_path = "~/.config/matugen/templates/swayosd-colors.css"
