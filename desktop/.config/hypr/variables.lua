@@ -1,3 +1,4 @@
+local home   = os.getenv("HOME")
 local scheme = require("scheme.current")
 
 return {
@@ -11,6 +12,7 @@ return {
     editor                     = "zed",
     fileExplorer               = "nautilus",
     audioSettings              = "pwvucontrol",
+    mercuryPath                = home .. "/Code/Mercury",
 
     -- Mouse & Touchpad
     mouseScrollFactor          = 0.5,
@@ -98,8 +100,8 @@ return {
     -- Window Movement / Layout
     kbMoveWindow               = "SUPER + Z",
     kbResizeWindow             = "SUPER + X",
-    kbCenterWindow             = "CTRL + SUPER + Backslash",
-    kbNormalizeWindow          = "CTRL + SUPER + ALT + Backslash",
+    kbCenterWindow             = "CTRL + SUPER + B",
+    kbNormalizeWindow          = "CTRL + SUPER + Backslash",
     kbWindowPip                = "SUPER + ALT + Backslash",
     kbPinWindow                = "SUPER + P",
     kbWindowFullscreen         = "SUPER + ALT + F",
@@ -107,7 +109,7 @@ return {
     kbToggleWindowFloating     = "SUPER + ALT + Space",
     kbCloseWindow              = "SUPER + Q",
 
-    -- Special workspaces toggles
+    -- Special Workspaces
     kbSpecialWs                = "SUPER + S",
     kbSystemMonitorWs          = "CTRL + SHIFT + Escape",
     kbMusicWs                  = "SUPER + M",
@@ -115,46 +117,42 @@ return {
     kbTodoWs                   = "SUPER + R",
 
     -- Apps
-    kbTerminal                 = "SUPER + T",
+    kbTerminal                 = "SUPER + Return",
     kbBrowser                  = "SUPER + W",
     kbEditor                   = "SUPER + C",
     kbFileExplorer             = "SUPER + E",
-    kbAudioSettings            = "CTRL + ALT + V",
+    kbAudioSettings            = "CTRL + SUPER + V",
 
-    -- Utilities
+    -- Utilities & Screenshots
     kbScreenshot               = "Print",
     kbScreenshotFreeze         = "SUPER + SHIFT + S",
-    kbScreenshotRegion         = "SUPER + SHIFT + ALT + S",
-    kbScreenshotOCR            = "SUPER + ALT + S",
-    kbWallpaperRandom          = "SUPER + ALT + W",
-    kbWallpaperPicker          = "SUPER + SHIFT + W",
-    kbWallpaperSelect          = "SUPER + CTRL + SHIFT + W",
-    kbRecord                   = "CTRL + ALT + R",
-    kbRecordSound              = "SUPER + ALT + R",
-    kbRecordRegion             = "SUPER + SHIFT + ALT + R",
+    kbScreenshotRegion         = "CTRL + SHIFT + S",
+    kbScreenshotOCR            = "SUPER + SHIFT + T",
+    kbWallpaperRandom          = "CTRL + SUPER + R",
+    kbWallpaperPicker          = "CTRL + SUPER + W",
+    kbWallpaperSelect          = "CTRL + SUPER + SHIFT + W",
     kbColorPicker              = "SUPER + SHIFT + C",
 
-    -- Media
+    -- Media & Volume
     kbMediaToggle              = "CTRL + SUPER + Space",
     kbMediaNext                = "CTRL + SUPER + Equal",
     kbMediaPrev                = "CTRL + SUPER + Minus",
-    kbMediaStop                = "CTRL + SUPER + Backspace",
-    kbVolumeMute               = "SUPER + SHIFT + M",
+    kbMediaStop                = "CTRL + SUPER + Delete",
+    kbVolumeMute               = "CTRL + SUPER + M",
 
-    -- Misc
-    kbLauncher                 = "SUPER + SUPER_L",
-    kbKeybindsCheatsheet       = "SUPER + F1",
-    kbSession                  = "CTRL + ALT + Delete",
-    kbShowSidebar              = "SUPER + N",
-    kbClearNotifs              = "CTRL + ALT + C",
-    kbShowPanels               = "SUPER + K",
-    kbLock                     = "SUPER + L",
-    kbRestoreLock              = "SUPER + ALT + L",
-    kbSleep                    = "SUPER + SHIFT + L",
-
-    -- Clipboard and emoji picker
+    -- Clipboard & Emoji
     kbClipboard                = "SUPER + V",
     kbClipboardDel             = "SUPER + ALT + V",
-    kbClipboardPasteLatest     = "CTRL + SHIFT + ALT + V",
+    kbClipboardPasteLatest     = "SUPER + SHIFT + V",
     kbEmoji                    = "SUPER + Period",
+
+    -- Shell & Session
+    kbLauncher                 = "SUPER + SUPER_L",
+    kbLock                     = "SUPER + L",
+    kbRestoreLock              = "SUPER + ALT + L",
+    kbSession                  = "CTRL + ALT + Delete",
+    kbShowSidebar              = "SUPER + N",
+    kbClearNotifs              = "SUPER + SHIFT + N",
+    kbSleep                    = "SUPER + SHIFT + L",
+    kbKeybindsCheatsheet       = "SUPER + Slash",
 }

@@ -49,6 +49,10 @@ local function extend_keybind(base, suffix)
     return valid_keybind(base) and base .. " + " .. suffix or nil
 end
 
+local function mercury_ipc(cmd)
+    return "quickshell -p " .. vars.mercuryPath .. " ipc call " .. cmd
+end
+
 -- Launcher
 local launcher_default = normalise_keybind("SUPER + SUPER_L")
 create_bind(
@@ -63,14 +67,15 @@ create_bind(
 create_bind(vars.kbKeybindsCheatsheet, hl.dsp.exec_cmd("vicinae deeplink vicinae://launch/@sovereign/store.vicinae.hypr-keybinds/hyprland-keybinds"))
 
 -- Notifications, Sidebar & Locking
-create_bind(vars.kbShowSidebar, hl.dsp.exec_cmd("swaync-client -t -sw"))
-create_bind(vars.kbClearNotifs, hl.dsp.exec_cmd("swaync-client -C"), locked)
-create_bind(vars.kbLock, hl.dsp.exec_cmd("hyprlock"))
+create_bind(vars.kbShowSidebar, hl.dsp.exec_cmd(mercury_ipc("shell toggleControl")))
+create_bind(vars.kbClearNotifs, hl.dsp.exec_cmd(mercury_ipc("notif clearAll")), locked)
+create_bind(vars.kbLock, hl.dsp.exec_cmd("loginctl lock-session"))
+create_bind(vars.kbRestoreLock, hl.dsp.exec_cmd("systemctl --user restart mercury.service && sleep 0.6 && " .. mercury_ipc("lock lock")), locked)
 create_bind(vars.kbSleep, hl.dsp.exec_cmd(vars.sleepGestureCmd))
-create_bind({ vars.kbSession, "SUPER + BackSpace" }, hl.dsp.exec_cmd("wlogout -b 6 -c 15 -r 15 -m 280"))
+create_bind({ vars.kbSession, "SUPER + BackSpace" }, hl.dsp.exec_cmd(mercury_ipc("power toggle")))
 
--- Waybar toggle / reload
-create_bind("CTRL + SUPER + SHIFT + R", hl.dsp.exec_cmd("killall waybar; waybar &"), release)
+-- Shell reload (Mercury systemd service)
+create_bind("CTRL + SUPER + SHIFT + R", hl.dsp.exec_cmd("systemctl --user restart mercury.service"), release)
 
 
 for i = 1, 10 do
@@ -99,14 +104,14 @@ create_bind(vars.kbMoveWinFromWsSpecial, hl.dsp.window.move({ workspace = "e+0" 
 
 -- Window Switcher (Alt + Tab) & Workspace Switcher (Super + Tab)
 create_bind({ vars.kbWindowCycleNext, vars.kbWindowCyclePrev }, hl.dsp.exec_cmd("nu ~/.local/share/vicinae/scripts/pick-window.nu"))
-create_bind({ "SUPER + TAB", "SUPER + SHIFT + TAB" }, hl.dsp.exec_cmd("nu ~/.local/share/vicinae/scripts/pick-workspace.nu"))
+create_bind({ "SUPER + TAB", "SUPER + SHIFT + TAB" }, hl.dsp.exec_cmd(mercury_ipc("overview toggle")))
 
 -- Window groups
 create_bind(vars.kbWindowGroupCycleNext, hl.dsp.group.next(), repeating)
 create_bind(vars.kbWindowGroupCyclePrev, hl.dsp.group.prev(), repeating)
 create_bind(vars.kbToggleGroup, hl.dsp.group.toggle())
 create_bind(vars.kbUngroup, hl.dsp.window.move({ out_of_group = true }))
-create_bind(vars.kbGroupLockActive, hl.dsp.group.lock_active())
+create_bind(vars.kbGroupLockActive, hl.dsp.group.lock())
 
 -- Window actions
 for _, dir in ipairs({ "left", "right", "up", "down" }) do
@@ -163,14 +168,14 @@ create_bind(vars.kbScreenshot, hl.dsp.exec_cmd("grim - | wl-copy"), locked)
 create_bind(vars.kbScreenshotFreeze, hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | swappy -f -"))
 create_bind(vars.kbScreenshotRegion, hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy"))
 create_bind(vars.kbScreenshotOCR, hl.dsp.exec_cmd('grim -g "$(slurp)" - | tesseract stdin stdout -l eng 2>/dev/null | wl-copy && notify-send -i edit-copy "OCR" "Text copied to clipboard!"'))
-create_bind(vars.kbWallpaperRandom, hl.dsp.exec_cmd('nu -c "use ~/.config/nushell/scripts/desktop.nu *; wallpaper random"'))
-create_bind(vars.kbWallpaperPicker, hl.dsp.exec_cmd("qs-wallpaperpicker toggle"))
+create_bind(vars.kbWallpaperRandom, hl.dsp.exec_cmd(mercury_ipc("wallpaper random")))
+create_bind(vars.kbWallpaperPicker, hl.dsp.exec_cmd(mercury_ipc("shell toggleWallpaper")))
 create_bind(vars.kbWallpaperSelect, hl.dsp.exec_cmd("nu ~/.local/share/vicinae/scripts/pick-wallpaper.nu"))
 create_bind(vars.kbColorPicker, hl.dsp.exec_cmd("hyprpicker -a"))
 
--- Brightness (swayosd / brightnessctl)
-create_bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("swayosd-client --brightness raise"), locked)
-create_bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness lower"), locked)
+-- Brightness (Mercury OSD / brightnessctl)
+create_bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(mercury_ipc("osd stepBrightness 1")), locked)
+create_bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(mercury_ipc("osd stepBrightness -1")), locked)
 
 -- Media (playerctl)
 create_bind({ vars.kbMediaToggle, "XF86AudioPlay", "XF86AudioPause" }, hl.dsp.exec_cmd("playerctl play-pause"), locked)
@@ -178,17 +183,17 @@ create_bind({ vars.kbMediaNext, "XF86AudioNext" }, hl.dsp.exec_cmd("playerctl ne
 create_bind({ vars.kbMediaPrev, "XF86AudioPrev" }, hl.dsp.exec_cmd("playerctl previous"), locked)
 create_bind({ vars.kbMediaStop, "XF86AudioStop" }, hl.dsp.exec_cmd("playerctl stop"), locked)
 
--- Volume (swayosd / wpctl)
-create_bind({ vars.kbVolumeMute, "XF86AudioMute" }, hl.dsp.exec_cmd("swayosd-client --output-volume mute-toggle"), locked)
-create_bind("XF86AudioMicMute", hl.dsp.exec_cmd("swayosd-client --input-volume mute-toggle"), locked)
+-- Volume (wpctl -> Mercury Right #3 OSD)
+create_bind({ vars.kbVolumeMute, "XF86AudioMute" }, hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), locked)
+create_bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), locked)
 create_bind(
     "XF86AudioRaiseVolume",
-    hl.dsp.exec_cmd("swayosd-client --output-volume +" .. vars.volumeStep .. " --max-volume " .. vars.volumeMax),
+    hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0 && wpctl set-volume -l " .. (vars.volumeMax / 100) .. " @DEFAULT_AUDIO_SINK@ " .. vars.volumeStep .. "%+"),
     locked_repeating
 )
 create_bind(
     "XF86AudioLowerVolume",
-    hl.dsp.exec_cmd("swayosd-client --output-volume -" .. vars.volumeStep .. " --max-volume " .. vars.volumeMax),
+    hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ " .. vars.volumeStep .. "%-"),
     locked_repeating
 )
 
