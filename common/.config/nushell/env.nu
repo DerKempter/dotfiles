@@ -191,10 +191,20 @@ if $nu.os-info.name == "windows" {
         touch $atuin_pty
     }
 
-    # SSH Agent Key Management: Prioritize systemd socket (KeePassXC / work laptop), fallback to keychain (home)
-    let systemd_agent = ($env.XDG_RUNTIME_DIR? | default "" | path join "ssh-agent.socket")
-    if ($systemd_agent | path exists) {
-        $env.SSH_AUTH_SOCK = $systemd_agent
+    # SSH Agent Key Management: Prioritize systemd/GCR sockets (gcr-ssh-agent / KeePassXC / ssh-agent), fallback to keychain
+    let runtime_dir = ($env.XDG_RUNTIME_DIR? | default "")
+    let socket_candidates = if ($runtime_dir | is-not-empty) {
+        [
+            ($runtime_dir | path join "gcr" "ssh")
+            ($runtime_dir | path join "ssh-agent.socket")
+        ]
+    } else {
+        []
+    }
+    let active_socket = ($socket_candidates | where { |sock| $sock | path exists } | get -o 0)
+
+    if ($active_socket | is-not-empty) {
+        $env.SSH_AUTH_SOCK = $active_socket
     } else if (has-binary keychain) {
         let keychain_output = (with-env { SHELL: csh } {
             keychain --eval --quiet --noask
