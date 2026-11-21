@@ -14,8 +14,12 @@ link:
 
 link-linux:
     stow -R common --target $env.HOME --verbose
-    if (sys host | get hostname) == "joshs-cachy-box" { stow -R desktop --target $env.HOME --verbose }
+    if (which hyprctl | is-not-empty) or (which Hyprland | is-not-empty) { stow -R hyprland --target $env.HOME --verbose }
     just bootstrap-themes
+
+# Symlink Hyprland customization layer explicitly
+link-hyprland:
+    stow -R hyprland --target $env.HOME --verbose
 
 # Remove GNU Stow symlinks
 unlink:
@@ -23,7 +27,11 @@ unlink:
 
 unlink-linux:
     stow -D common --target $env.HOME --verbose
-    if (sys host | get hostname) == "joshs-cachy-box" { stow -D desktop --target $env.HOME --verbose }
+    if (which hyprctl | is-not-empty) or (which Hyprland | is-not-empty) { stow -D hyprland --target $env.HOME --verbose }
+
+# Remove Hyprland customization layer symlinks explicitly
+unlink-hyprland:
+    stow -D hyprland --target $env.HOME --verbose
 
 link-windows:
     print "=== Linking Windows Targets ==="

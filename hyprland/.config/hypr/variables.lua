@@ -1,7 +1,8 @@
 local home   = os.getenv("HOME")
 local scheme = require("scheme.current")
+local json   = require("utils.json")
 
-return {
+local vars = {
     ------------------
     ---- HYPRLAND ----
     ------------------
@@ -12,7 +13,6 @@ return {
     editor                     = "zed",
     fileExplorer               = "nautilus",
     audioSettings              = "pwvucontrol",
-    mercuryPath                = home .. "/Code/Mercury",
 
     -- Mouse & Touchpad
     mouseScrollFactor          = 0.5,
@@ -156,3 +156,18 @@ return {
     kbSleep                    = "SUPER + SHIFT + L",
     kbKeybindsCheatsheet       = "SUPER + Slash",
 }
+
+local config_dir = os.getenv("XDG_CONFIG_HOME") or (home .. "/.config")
+local override_file = io.open(config_dir .. "/mercury/hyprland.json", "r")
+if override_file then
+    local raw = override_file:read("*a")
+    override_file:close()
+    local ok, overrides = pcall(json.decode, raw)
+    if ok and type(overrides) == "table" then
+        for k, v in pairs(overrides) do
+            vars[k] = v
+        end
+    end
+end
+
+return vars

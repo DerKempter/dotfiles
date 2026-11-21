@@ -4,8 +4,16 @@ This repository contains personal configuration files for Linux development envi
 
 ## Project Structure
 
+The repository uses GNU Stow packages at the root:
+- `common/`: Cross-host portable configurations (`~/.config/`, `~/.bashrc`, `~/.zshrc`, `~/.gitconfig`, etc.).
+- `hyprland/`: Optional Hyprland compositor customization layer (`~/.config/hypr/`, `~/.config/systemd/user/wallpaper-rotate.*`, `hyprland-session.target`), automatically linked when Hyprland is installed or explicitly via `just link-hyprland`.
+
+### Key Components inside `common/` & `hyprland/`
+
 - `.config/`: Contains application-specific configurations.
   - `antigravity/`: Persistent global instructions and persona directives.
+  - `hypr/` (in `hyprland/`): Modular Hyprland Lua configuration (`hyprland.lua`, `variables.lua`), reading optional runtime overrides from `~/.config/mercury/hyprland.json` and calling Mercury via `quickshell -c mercury ipc`.
+  - `matugen/`: Shared Matugen `config.toml` and templates (including `mercury-colors.json` -> `~/.cache/mercury/colors.json`).
   - `nushell/`: Nushell configuration and custom modular scripts.
     - `config.nu` / `env.nu`: Core shell environment and initialization.
     - `apps.toml`: (Local/Untracked) Device-specific tracked applications and custom app recipes. Initialized via `update-app --init`.
@@ -65,9 +73,9 @@ This repository contains personal configuration files for Linux development envi
 
 ## Safety & Privacy
 
-- **Secrets**: NEVER commit API keys, tokens, or personal information. Use `.env` files (which are git-ignored) or system-level secret management.
+- **Secrets & Identity**: NEVER commit API keys, tokens, company endpoints, or personal Git identity. `.gitconfig` includes `~/.gitconfig.local`, `.env` files are git-ignored, and `apps.toml` / `hyprland.json` hold local machine overrides.
 - **History**: Command history (`history.txt`) is ignored and should remain so.
-- **Symlinks**: This project uses **GNU Stow** managed via a top-level **`justfile`**. The repository structure mirrors the user's home directory (e.g., `common/.config/` in the repo links to `~/.config/`). To apply configurations:
+- **Symlinks**: This project uses **GNU Stow** managed via a top-level **`justfile`**. The repository structure mirrors the user's home directory (e.g., `common/.config/` and `hyprland/.config/` link to `~/.config/`). To apply configurations:
   - Run **`./install.sh`** (Bash) or **`nu install.nu`** / **`just setup`** (Nushell) for automated dependency installation and symlinking.
-  - Run **`just link`** for standard GNU Stow linking.
+  - Run **`just link`** for standard GNU Stow linking (`common/` always, plus `hyprland/` when `hyprctl` or `Hyprland` is present; use `just link-hyprland` / `just unlink-hyprland` explicitly).
   - To undo links, run **`just unlink`**. Always update the `README.md` if the installation process changes.

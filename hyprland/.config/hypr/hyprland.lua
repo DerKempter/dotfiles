@@ -51,4 +51,4 @@ require("hyprland.gestures")
 require("hyprland.keybinds")
 
 -- HyprMod / Monitor settings
-require("hyprland-gui")
+pcall(require, "hyprland-gui")

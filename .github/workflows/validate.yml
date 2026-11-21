@@ -30,7 +30,7 @@ jobs:
           rm -f ~/.bashrc ~/.bash_logout ~/.profile ~/.zshrc
           rm -rf ~/.config/fish
           stow -R common --dir "$PWD" --target "$HOME" --verbose
-          stow -R desktop --dir "$PWD" --target "$HOME" --verbose
+          stow -R hyprland --dir "$PWD" --target "$HOME" --verbose
 
       - name: Execute Validations
         run: |

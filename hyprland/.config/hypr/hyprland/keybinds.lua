@@ -50,7 +50,7 @@ local function extend_keybind(base, suffix)
 end
 
 local function mercury_ipc(cmd)
-    return "quickshell -p " .. vars.mercuryPath .. " ipc call " .. cmd
+    return "quickshell -c mercury ipc call " .. cmd
 end
 
 -- Launcher

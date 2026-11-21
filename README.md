@@ -8,9 +8,9 @@ This repository features a system-wide dynamic Material You theming pipeline pow
 
 Whenever a wallpaper is selected or a theme profile is changed, colors are instantly extracted and synchronized across all desktop environments and applications in real time:
 
-*   **Desktop Environments**:
+*   **Desktop Environments & Shells**:
     *   **KDE Plasma 6**: Automatically generates and applies decimal RGB color schemes (`Matugen.colors`) via `plasma-apply-colorscheme`.
-    *   **Hyprland / Niri / Waybar / SwayNC / SwayOSD / Wlogout**: Generates dynamic CSS and Lua palettes.
+    *   **Hyprland & Mercury**: Generates dynamic Lua palettes (`~/.config/hypr/scheme/current.lua`) and live JSON palette tokens (`~/.cache/mercury/colors.json`).
 *   **Application Launchers & Terminals**:
     *   **Vicinae**: Custom dynamic TOML theme (`~/.local/share/vicinae/themes/matugen.toml`) with instant live reload.
     *   **Starship Prompt**: Decoupled dynamic prompt palette (`~/.cache/starship.toml`), keeping git repositories clean.
@@ -53,8 +53,8 @@ Hyprland open and close window animations are augmented with custom GLSL fragmen
    ```
 
 3. **Enable & Configure**:
-   - The plugin and rules are loaded via `desktop/.config/hypr/hyprland/shaders.lua`.
-   - Window sizing during animations is kept at `popin 100%` (linear) in `desktop/.config/hypr/hyprland/animations.lua` to prevent texture stretching while shaders render.
+   - The plugin and rules are loaded via `hyprland/.config/hypr/hyprland/shaders.lua`.
+   - Window sizing during animations is kept at `popin 100%` (linear) in `hyprland/.config/hypr/hyprland/animations.lua` to prevent texture stretching while shaders render.
    - Reload Hyprland to apply:
      ```bash
      hyprctl reload
@@ -108,8 +108,21 @@ The bootstrapper automatically detects your OS distribution (CachyOS / Arch or D
 If you already have all packages installed and only want to apply symlinks:
 
 ```bash
-# Apply Stow symlinks:
+# Apply Stow symlinks (links `common/`, plus `hyprland/` automatically when Hyprland is installed):
 just link
+
+# Explicitly manage the optional Hyprland customization layer:
+just link-hyprland
+just unlink-hyprland
+```
+
+### Local Git Identity
+
+`common/.gitconfig` includes `~/.gitconfig.local` rather than hardcoding personal `[user]` details. `./install.sh` and `nu install.nu` preserve any existing global `user.name`/`user.email` into `~/.gitconfig.local` automatically, or you can set them manually:
+
+```bash
+git config -f ~/.gitconfig.local user.name "Your Name"
+git config -f ~/.gitconfig.local user.email "you@example.com"
 ```
 
 ### Dependencies & Installation
@@ -150,7 +163,7 @@ sudo apt install zsh bash stow just bat micro zoxide keychain git-delta fzf ripg
 Custom commands in `.config/nushell/scripts/`:\n
 | Command | Script | Description |
 |:---|:---|:---|
-| `wallpaper <path\|category\|random>` | [desktop.nu](common/.config/nushell/scripts/desktop.nu) | Sets wallpaper across KDE Plasma and Wayland, extracts Material You colors, and reloads all app themes. Supports case-insensitive category resolution and tab autocompletions. |
+| `wallpaper <path\|category\|random>` | [desktop.nu](common/.config/nushell/scripts/desktop.nu) | Sets wallpaper via Mercury IPC when running (or KDE Plasma / `awww` / `swww` + Matugen fallback), extracts Material You colors, and reloads all app themes. Supports case-insensitive category resolution and tab autocompletions. |
 | `wallpaper random [category]` | [desktop.nu](common/.config/nushell/scripts/desktop.nu) | Picks a random wallpaper from all subfolders or a specific category (e.g. `wallpaper random Space`, `wallpaper random Kitties`). |
 | `wallpaper list` | [desktop.nu](common/.config/nushell/scripts/desktop.nu) | Displays a structured table of all indexed wallpapers and subcategories. |
 | `theme <profile\|color\|mode>` | [desktop.nu](common/.config/nushell/scripts/desktop.nu) | Re-applies theme schemes (`expressive`, `fruit-salad`, `vibrant`, `rainbow`, etc.), toggles dark/light mode, or sets custom extracted hex swatches. |
