@@ -122,7 +122,22 @@ def main [--detached] {
 
     # 5. Apply Wallpaper & Dynamic Expressive Theme
     mkdir $"($env.HOME)/.cache"
-    ln -sf $final_file $"($env.HOME)/.cache/current_wallpaper"
+    ln -sfn $final_file $"($env.HOME)/.cache/current_wallpaper"
+    ln -sfn $final_file $"($env.HOME)/.cache/current_wallpaper_source"
+
+    let mercury_applied = if (which quickshell | is-not-empty) and (pgrep -x quickshell | is-not-empty) {
+        let ipc_res = (do { ^quickshell -c mercury ipc call wallpaper apply $final_file } | complete)
+        $ipc_res.exit_code == 0
+    } else {
+        false
+    }
+
+    if $mercury_applied {
+        if (which notify-send | is-empty) == false {
+            notify-send -u low "Wallpaper & Theme" $"Applied ($final_file | path basename)" -i $final_file
+        }
+        return
+    }
 
     if (which plasma-apply-wallpaperimage | is-empty) == false {
         plasma-apply-wallpaperimage $final_file
@@ -135,9 +150,7 @@ def main [--detached] {
     }
 
     if (which matugen | is-empty) == false {
-        let desktop_cfg = ("~/.config/matugen/config.desktop.toml" | path expand)
-        let cfg_args = if ($desktop_cfg | path exists) { ["-c", $desktop_cfg] } else { [] }
-        ^matugen ...$cfg_args -t scheme-expressive image $final_file
+        ^matugen -t scheme-expressive image $final_file
         if (which notify-send | is-empty) == false {
             notify-send -u low "Wallpaper & Theme" $"Applied ($final_file | path basename)" -i $final_file
         }

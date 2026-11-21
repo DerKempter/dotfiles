@@ -32,7 +32,6 @@ def "nu-complete wallpaper targets" [] {
         { value: "pick", description: "Interactive fuzzy picker with live terminal preview" },
         { value: "preview", description: "Show terminal preview of current or specified wallpaper" },
         { value: "list", description: "List all wallpapers and categories" },
-        { value: "sync", description: "Sync categorized wallpapers into flat ~/Pictures/wallpapers" },
     ]
 
     let categories = (
@@ -121,53 +120,9 @@ def render-image-preview [img_path: string, size: string = "50x20"] {
     } catch { }
 }
 
-# Helper to resolve host-specific or custom matugen config args
-def get-matugen-args [] {
-    let desktop_cfg = ("~/.config/matugen/config.desktop.toml" | path expand)
-    if ($desktop_cfg | path exists) {
-        ["-c", $desktop_cfg]
-    } else {
-        []
-    }
-}
-
-# Sync wallpapers from categorized directory into flat directory (~/Pictures/wallpapers) for qs-wallpaperpicker
-export def wallpaper-sync [] {
-    let root = (get-wallpaper-root)
-    if ($root | is-empty) {
-        print -e "No wallpapers directory found."
-        return
-    }
-
-    let flat_dir = ("~/Pictures/wallpapers" | path expand)
-    if not ($flat_dir | path exists) {
-        mkdir $flat_dir
-    }
-
-    let files = (glob $"($root)/**/*.{png,jpg,jpeg,webp,PNG,JPG,JPEG,WEBP}" | sort)
-    mut count = 0
-
-    for file in $files {
-        let base = ($file | path basename)
-        let link_path = ($flat_dir | path join $base)
-        let needs_link = if not ($link_path | path exists) {
-            true
-        } else {
-            try { ($link_path | path expand) != ($file | path expand) } catch { true }
-        }
-
-        if $needs_link {
-            ln -sf $file $link_path
-            $count = $count + 1
-        }
-    }
-
-    print $"✓ Synced ($files | length) wallpapers into ($flat_dir) \(($count) new/updated\)"
-}
-
 # Set desktop wallpaper and generate matching dynamic theme
 export def wallpaper [
-    target?: string@"nu-complete wallpaper targets"         # Image path, category name, relative name, "random", "pick", "preview", "list", or "sync"
+    target?: string@"nu-complete wallpaper targets"         # Image path, category name, relative name, "random", "pick", "preview", or "list"
     category?: string@"nu-complete wallpaper categories"   # Category or target for random/preview
     --type (-t): string@"nu-complete theme types" = "scheme-expressive" # Scheme profile
     --pick (-p)                                             # Interactive fuzzy picker with live terminal preview
@@ -188,12 +143,6 @@ export def wallpaper [
 
     let target_str = ($target | default "")
     let target_lower = ($target_str | str lowercase)
-
-    # Handle "sync" subcommand for flat wallpaper folder
-    if $target_lower == "sync" {
-        wallpaper-sync
-        return
-    }
 
     # Handle interactive fuzzy picker with live preview
     if $pick or $target_lower == "pick" or $target_lower == "select" or $target_lower == "fzf" {
@@ -343,7 +292,21 @@ export def wallpaper [
     ln -sfn $resolved_path $"($env.HOME)/.cache/current_wallpaper"
     ln -sfn $resolved_path $"($env.HOME)/.cache/current_wallpaper_source"
 
-    # 2. Update wallpaper with smooth transition (supports plasma, awww, or swww)
+    # 2. Delegate to Mercury IPC when running, otherwise apply directly
+    let target_wall = $resolved_path
+    let mercury_applied = if (which quickshell | is-not-empty) and (pgrep -x quickshell | is-not-empty) {
+        let ipc_res = (do { ^quickshell -c mercury ipc call wallpaper apply $target_wall } | complete)
+        $ipc_res.exit_code == 0
+    } else {
+        false
+    }
+
+    if $mercury_applied {
+        print $"✓ Applied wallpaper via Mercury: ($resolved_path | path basename)"
+        return
+    }
+
+    # 3. Update wallpaper with smooth transition (supports plasma, awww, or swww)
     if (which plasma-apply-wallpaperimage | is-empty) == false {
         plasma-apply-wallpaperimage $resolved_path
     } else if (which awww | is-empty) == false {
@@ -360,19 +323,13 @@ export def wallpaper [
         swww img $resolved_path --transition-type random --transition-fps 144 --transition-duration 1.5
     }
 
-    # 3. Extract Material 3 colors with Matugen
+    # 4. Extract Material 3 colors with Matugen
     if (which matugen | is-empty) == false {
-        let matugen_args = (get-matugen-args)
-        ^matugen ...$matugen_args -t $stype image $resolved_path
+        ^matugen -t $stype image $resolved_path
         print $"✓ Dynamic ($stype) theme generated and applied from ($resolved_path | path basename)"
         if (which notify-send | is-empty) == false {
             notify-send -u low "Wallpaper & Theme" $"Applied ($stype) from ($resolved_path | path basename)" -i $resolved_path
         }
-    }
-
-    # 4. Notify qs-wallpaperpicker if running
-    if (which qs | is-not-empty) and (pgrep -f "qs-wallpaperpicker" | is-not-empty) {
-        try { ^qs -p ("~/.config/qs-wallpaperpicker" | path expand) ipc call wallpaper refresh } catch { }
     }
 }
 
@@ -403,18 +360,17 @@ export def theme [
     }
 
     let input_style = ($style | str lowercase)
-    let matugen_args = (get-matugen-args)
 
     # 1. Dark / Light mode toggle
     if $input_style == "dark" or $input_style == "light" {
-        ^matugen ...$matugen_args -m $input_style image $current_wall
+        ^matugen -m $input_style image $current_wall
         print $"✓ Switched to ($input_style) mode"
         return
     }
 
     # 2. Custom Hex color accent override
     if ($style | str starts-with "#") {
-        ^matugen ...$matugen_args color hex ($style | str replace "#" "")
+        ^matugen color hex ($style | str replace "#" "")
         print $"✓ Applied accent color ($style)"
         return
     }
@@ -426,6 +382,6 @@ export def theme [
         $"scheme-($input_style)"
     }
 
-    ^matugen ...$matugen_args -t $stype image $current_wall
+    ^matugen -t $stype image $current_wall
     print $"✓ Applied theme profile ($stype)"
 }
