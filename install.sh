@@ -219,8 +219,32 @@ bootstrap_default_themes() {
 }
 
 # -----------------------------------------------------------------------------
+# Preserve Local Git Identity
+# -----------------------------------------------------------------------------
+ensure_git_identity() {
+    local local_cfg="$HOME/.gitconfig.local"
+    if [ -f "$local_cfg" ]; then
+        return
+    fi
+
+    local git_name git_email
+    git_name="$(git config --global user.name 2>/dev/null || true)"
+    git_email="$(git config --global user.email 2>/dev/null || true)"
+
+    if [ -n "$git_name" ] && [ -n "$git_email" ]; then
+        printf "[user]\n\tname = %s\n\temail = %s\n" "$git_name" "$git_email" > "$local_cfg"
+        log_success "Migrated existing Git identity to $local_cfg"
+    else
+        log_warn "No ~/.gitconfig.local found. Configure your identity with:"
+        printf "  git config -f ~/.gitconfig.local user.name \"Your Name\"\n"
+        printf "  git config -f ~/.gitconfig.local user.email \"you@example.com\"\n"
+    fi
+}
+
+# -----------------------------------------------------------------------------
 # Symlink Dotfiles & Yazi Plugins
 # -----------------------------------------------------------------------------
+ensure_git_identity
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 

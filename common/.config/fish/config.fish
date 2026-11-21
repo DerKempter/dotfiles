@@ -13,14 +13,15 @@ end
 fish_add_path "$HOME/.local/bin"
 fish_add_path "$HOME/.cargo/bin"
 fish_add_path "$HOME/.local/share/fnm"
-fish_add_path "/opt/mssql-tools18/bin"
 fish_add_path "$HOME/.bun/bin"
 fish_add_path "$HOME/.opencode/bin"
+fish_add_path "$HOME/.nub/bin"
+fish_add_path "$HOME/.atuin/bin"
+fish_add_path "$HOME/.lmstudio/bin"
 
-# Hardware rendering & WebKit workarounds
-set -Ux WEBKIT_DISABLE_DMABUF_RENDERER 1
-set -Ux LIBGL_ALWAYS_SOFTWARE 1
-set -Ux QT_XCB_FORCE_SOFTWARE_OPENGL 1
+if test -d /opt/mssql-tools18/bin
+  fish_add_path "/opt/mssql-tools18/bin"
+end
 
 # SSH Agent Key Management: Prioritize systemd socket (KeePassXC / work laptop), fallback to keychain (home)
 if test -S "$XDG_RUNTIME_DIR/ssh-agent.socket"

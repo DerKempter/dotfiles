@@ -2,6 +2,7 @@
 */**/.env
 **/themes/noctalia
 .antigravitycli/
+**/antigravity/credential-user-scope
 **/yazi/flavors/
 **/yazi/plugins/
 **/ghostty/shaders/ghostty-shaders
@@ -14,18 +15,9 @@
 **/niri/dms/
 **/hypr/scheme/current.conf
 **/hypr/scheme/current.lua
-**/hypr/scheme/hyprlock-colors.conf
 **/hypr/hyprland-gui.lua
 **/hypr/dms/colors.lua
 **/hypr/shaders/
-
-# Dynamic Matugen theme artifacts
-**/waybar/colors.css
-**/swaync/colors.css
-**/swayosd/colors.css
-**/wlogout/colors.css
-**/hyprswitch/colors.css
-**/ghostty/themes/matugen
 
 # Nushell autoload vendor directory and local application configs
 **/nushell/vendor/

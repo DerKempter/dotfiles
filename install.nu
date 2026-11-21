@@ -61,7 +61,28 @@ def main [] {
     }
 
     # Ensure dotfiles symlinks and fallback themes are active
+    ensure-git-identity
     sync-stow-links
+}
+
+# Preserve or prompt for local Git identity without polluting tracked .gitconfig
+def ensure-git-identity [] {
+    let local_cfg = ($env.HOME | path join ".gitconfig.local")
+    if ($local_cfg | path exists) {
+        return
+    }
+
+    let name = (try { ^git config --global user.name | str trim } catch { "" })
+    let email = (try { ^git config --global user.email | str trim } catch { "" })
+
+    if ($name | is-not-empty) and ($email | is-not-empty) {
+        $"[user]\n\tname = ($name)\n\temail = ($email)\n" | save -f $local_cfg
+        print $"(ansi green)✓ Migrated existing Git identity to ($local_cfg)(ansi reset)"
+    } else {
+        print $"(ansi yellow)⚠ No ~/.gitconfig.local found. Configure your identity with:(ansi reset)"
+        print "  git config -f ~/.gitconfig.local user.name \"Your Name\""
+        print "  git config -f ~/.gitconfig.local user.email \"you@example.com\""
+    }
 }
 
 # Determines the OS distribution ID

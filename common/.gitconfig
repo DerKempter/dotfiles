@@ -1,6 +1,5 @@
-[user]
-	email = joshua.kempter@m-result.de
-	name = Joshua Kempter
+[include]
+	path = ~/.gitconfig.local
 [init]
 	defaultBranch = main
 

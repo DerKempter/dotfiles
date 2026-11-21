@@ -5,7 +5,7 @@
 # session_path = "~/.session"
 
 ## Date and time settings
-dialect = "us"
+dialect = "uk"
 timezone = "local"
 
 ## Synchronization and updates

@@ -69,7 +69,7 @@ keybind = ctrl+shift+r=activate_key_table:resize
 
 gtk-single-instance = true
 
-custom-shader = ~/dotfiles/.config/ghostty/shaders/ghostty-shaders/cursor_blaze.glsl
+custom-shader = ~/.config/ghostty/shaders/ghostty-shaders/cursor_blaze.glsl
 
-custom-shader = ~/dotfiles/.config/ghostty/shaders/ghostty-shaders/tft.glsl
-custom-shader = ~/dotfiles/.config/ghostty/shaders/ghostty-shaders/bettercrt.glsl
+custom-shader = ~/.config/ghostty/shaders/ghostty-shaders/tft.glsl
+custom-shader = ~/.config/ghostty/shaders/ghostty-shaders/bettercrt.glsl

@@ -62,40 +62,42 @@
 	},
 	"agent_servers": {
 		"antigravity-acp": {
+   "default_config_options": {
+    "model": "gemini-4-hydrogen"
+   },
    "type": "registry"
   }
 	},
 	"agent": {
 		"dock": "right",
 		"default_model": {
-			"provider": "m-Result Hetzner",
-			"model": "hosted_vllm/gemma-4-26b-a4b"
+			"provider": "lemonade",
+			"model": "Qwen3-Coder-30B-A3B-Instruct-GGUF"
 		},
 		"show_turn_stats": true,
 		"commit_message_instructions": "Create a concise commit message based on the diff. Use Conventional Commit Syntax. Try to put the changed component in the parentheses",
 	},
 	"language_models": {
 		"openai_compatible": {
-			"m-Result Hetzner": {
-    "api_url": "http://142.132.129.229:8000/v1",
-    "available_models": [
-     {
-      "name": "hosted_vllm/gemma-4-26b-a4b",
-      "max_tokens": 200000,
-      "max_output_tokens": 32000,
-      "max_completion_tokens": 200000,
-      "capabilities": {
-       "tools": true,
-       "images": false,
-       "parallel_tool_calls": false,
-       "prompt_cache_key": false,
-       "chat_completions": true,
-       "interleaved_reasoning": false,
-       "max_tokens_parameter": false
-      }
-     }
-    ]
-   }
+			"lemonade": {
+				"api_url": "http://localhost:8000/api/v1",
+				"available_models": [
+					{
+						"name": "Qwen3-Coder-30B-A3B-Instruct-GGUF",
+						"max_tokens": 32768,
+						"max_output_tokens": 8192,
+						"capabilities": {
+							"tools": true,
+							"images": false,
+							"parallel_tool_calls": false,
+							"prompt_cache_key": false,
+							"chat_completions": true,
+							"interleaved_reasoning": false,
+							"max_tokens_parameter": true
+						}
+					}
+				]
+			}
 		}
 	},
 	"indent_guides": {
@@ -164,35 +166,8 @@
 		}
 	},
 	"lsp": {},
-	"git_hosting_providers": [
-		{
-			"provider": "gitlab",
-			"name": "m-Result Gitlab",
-			"base_url": "https://gitlab.m-result.de"
-		}
-	],
 	"profiles": {
 		"angular": {
-			"settings": {
-				"languages": {
-					"HTML": {
-						"language_servers": [
-							"angular",
-							"vscode-html-language-server",
-							"tailwindcss-language-server"
-						]
-					},
-					"TypeScript": {
-						"language_servers": ["angular", "vtsls"],
-						"formatter": null
-					},
-					"JavaScript": {
-						"formatter": null
-					}
-				}
-			}
-		},
-		"angular-ews-dashboard": {
 			"settings": {
 				"languages": {
 					"HTML": {
