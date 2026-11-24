@@ -33,7 +33,7 @@ export const APP_CATALOG = {
 }
 
 # -----------------------------------------------------------------------------------------
-# Device Configuration Loader
+# Device Configuration & State Loaders
 # -----------------------------------------------------------------------------------------
 
 # Returns the standard path for device-specific apps.toml
@@ -44,6 +44,38 @@ def get-config-path [] {
         $nu.home-dir | path join ".config"
     }
     $base | path join "nushell" "apps.toml"
+}
+
+# Returns the standard path for persistent release state (used for rolling/tagged releases)
+def get-state-path [] {
+    let base = if ($env.XDG_STATE_HOME? | is-not-empty) {
+        $env.XDG_STATE_HOME
+    } else {
+        $nu.home-dir | path join ".local" "state"
+    }
+    $base | path join "nushell" "apps-state.json"
+}
+
+def load-app-state [] {
+    let state_path = (get-state-path)
+    if not ($state_path | path exists) {
+        return {}
+    }
+
+    try { open $state_path } catch { {} }
+}
+
+def save-app-state [app_name: string, release: record, asset: record] {
+    let state_path = (get-state-path)
+    mkdir ($state_path | path dirname)
+    let current = (load-app-state)
+    let entry = {
+        tag_name: $release.tag_name,
+        asset_id: ($asset.id? | default null),
+        asset_updated_at: ($asset.updated_at? | default null),
+        asset_digest: ($asset.digest? | default null),
+    }
+    $current | upsert $app_name $entry | to json | save -f $state_path
 }
 
 # Loads device configuration from apps.toml (if present)
@@ -115,9 +147,12 @@ enabled = [
 # Example:
 # [custom.my-tool]
 # repo = "owner/repo"
+# tag = "twilight-1"            # optional, fetch a specific/rolling release tag directly
+# rolling = true                # optional, compare remote asset metadata instead of tag version
 # asset = ''^my-tool-.*-linux-x86_64\.tar\.gz$''
-# strategy = "deb"             # "cargo_desktop" | "bundle_desktop" | "installer_script" | "binary" | "deb"
-# binary = "my-tool"            # optional, defaults to app key
+# strategy = "deb"              # "cargo_desktop" | "bundle_desktop" | "installer_script" | "binary" | "deb"
+# binary = "my-tool"            # optional, binary name inside archive (defaults to app key)
+# bin_name = "my-tool-custom"   # optional, symlink/desktop/icon name to avoid PATH collisions
 # package = "my-tool-bin"       # optional package name for deb strategy
 # description = "Internal CLI tool"
 '
@@ -134,12 +169,23 @@ enabled = [
 # GitHub Release & Archive Helpers
 # -----------------------------------------------------------------------------------------
 
-# Fetch latest or pre-release release metadata from GitHub API
-def fetch-release [repo: string, pre_release: bool] {
+# Fetch latest, pre-release, or specific tag release metadata from GitHub API
+def fetch-release [repo: string, pre_release: bool, tag?: string] {
     let headers = if ($env.GITHUB_TOKEN? | is-not-empty) {
         { Authorization: $"Bearer ($env.GITHUB_TOKEN)" }
     } else {
         {}
+    }
+
+    if ($tag | is-not-empty) {
+        let encoded_tag = ($tag | url encode)
+        let url = $"https://api.github.com/repos/($repo)/releases/tags/($encoded_tag)"
+        return (try {
+            http get --headers $headers $url
+        } catch {
+            nu-fail $"Failed to fetch release tag '($tag)' for '($repo)' from GitHub API." -c "GITHUB_API_ERROR"
+            null
+        })
     }
 
     let url = $"https://api.github.com/repos/($repo)/releases"
@@ -201,9 +247,31 @@ def normalize-version [ver: string] {
     $ver | str trim | str replace -r "^[a-zA-Z_-]*v?" ""
 }
 
+# Checks whether the application binary/bundle is physically present on disk
+def is-app-present [app_name: string, config: record, installed_ver?: string] {
+    if ($installed_ver | is-not-empty) {
+        return true
+    }
+
+    let binary = ($config.binary? | default $app_name)
+    let bin_name = ($config.bin_name? | default $binary)
+    let strategy = ($config.strategy? | default "binary")
+
+    match $strategy {
+        "bundle_desktop" | "flutter_desktop" => {
+            ("~/.local/share" | path expand | path join $app_name $binary) | path exists
+        },
+        "cargo_desktop" | "binary" => {
+            ("~/.local/bin" | path expand | path join $bin_name) | path exists
+        },
+        _ => { false }
+    }
+}
+
 # Probes the currently installed version on the local system
 def get-installed-version [app_name: string, config: record] {
     let binary = ($config.binary? | default $app_name)
+    let bin_name = ($config.bin_name? | default $binary)
     let strategy = ($config.strategy? | default "binary")
 
     # Custom version command override if specified in configuration
@@ -220,7 +288,7 @@ def get-installed-version [app_name: string, config: record] {
         } catch { { exit_code: 1, stdout: "" } }
 
         if $custom_out.exit_code == 0 and ($custom_out.stdout | is-not-empty) {
-            let parsed = ($custom_out.stdout | parse -r '(?P<ver>(?:\d+\.)+\d+(?:-[a-zA-Z0-9.]+)*)' | get -o ver.0)
+            let parsed = ($custom_out.stdout | parse -r '(?P<ver>(?:\d+\.)+\d+(?:[a-zA-Z]+|-[a-zA-Z0-9.]+)*)' | get -o ver.0)
             return (if ($parsed | is-not-empty) { $parsed | str trim } else { $custom_out.stdout | str trim })
         }
     }
@@ -250,17 +318,26 @@ def get-installed-version [app_name: string, config: record] {
         }
     }
 
-    # Strategy: Binary CLI execution (--version or -V)
-    if not (has-binary $binary) {
-        return null
+    # For bundle_desktop, probe the bundle's own binary directly to avoid PATH collisions (e.g. /usr/bin/zen)
+    let probe_cmd = if ($strategy in ["bundle_desktop", "flutter_desktop"]) {
+        let bundle_bin = ("~/.local/share" | path expand | path join $app_name $binary)
+        if not ($bundle_bin | path exists) {
+            return null
+        }
+        $bundle_bin
+    } else {
+        if not (has-binary $bin_name) {
+            return null
+        }
+        $bin_name
     }
 
     try {
-        let res = (try { ^$binary --version | complete } catch { { exit_code: 1, stdout: "" } })
+        let res = (try { ^$probe_cmd --version | complete } catch { { exit_code: 1, stdout: "" } })
         let out = if $res.exit_code == 0 and ($res.stdout | is-not-empty) {
             $res.stdout
         } else {
-            let res_short = (try { ^$binary -V | complete } catch { { exit_code: 1, stdout: "" } })
+            let res_short = (try { ^$probe_cmd -V | complete } catch { { exit_code: 1, stdout: "" } })
             if $res_short.exit_code == 0 { $res_short.stdout } else { "" }
         }
 
@@ -268,7 +345,7 @@ def get-installed-version [app_name: string, config: record] {
             return null
         }
 
-        let parsed = ($out | parse -r '(?P<ver>(?:\d+\.)+\d+(?:-[a-zA-Z0-9.]+)*)' | get -o ver.0)
+        let parsed = ($out | parse -r '(?P<ver>(?:\d+\.)+\d+(?:[a-zA-Z]+|-[a-zA-Z0-9.]+)*)' | get -o ver.0)
         if ($parsed | is-not-empty) {
             $parsed | str trim
         } else {
@@ -359,9 +436,10 @@ def install-cargo-desktop [app_name: string, config: record, temp_dir: path] {
     true
 }
 
-# Strategy: Desktop application bundle (e.g. Flutter/Electron desktop apps with data/ and lib/ folders)
+# Strategy: Desktop application bundle (e.g. Flutter/Electron/Firefox desktop apps)
 def install-bundle-desktop [app_name: string, config: record, temp_dir: path] {
     let binary = ($config.binary? | default $app_name)
+    let bin_name = ($config.bin_name? | default $binary)
 
     let subdirs = (ls $temp_dir | where type == "dir" | get name)
     let base_dir = if (($temp_dir | path join $binary) | path exists) and ((($temp_dir | path join $binary) | path type) == "file") {
@@ -396,8 +474,8 @@ def install-bundle-desktop [app_name: string, config: record, temp_dir: path] {
     let target_binary = ($target_dir | path join $binary)
     chmod +x $target_binary
 
-    print $"(ansi green)Symlinking binary to ($bin_dir)/($binary)...(ansi reset)"
-    ln -sf $target_binary ($bin_dir | path join $binary)
+    print $"(ansi green)Symlinking binary to ($bin_dir)/($bin_name)...(ansi reset)"
+    ln -sf $target_binary ($bin_dir | path join $bin_name)
 
     # Install desktop shortcut: check bundle first or generate standard entry
     let desktop_candidates = (glob $"($target_dir)/**/*.desktop" | where { |p| ($p | path type) == "file" })
@@ -408,7 +486,11 @@ def install-bundle-desktop [app_name: string, config: record, temp_dir: path] {
     }
 
     if ($desktop_file | is-not-empty) and ($desktop_file | path exists) {
-        let target_desktop_name = ($desktop_file | path basename)
+        let target_desktop_name = if $bin_name != $binary {
+            $"($bin_name).desktop"
+        } else {
+            $desktop_file | path basename
+        }
         print $"(ansi green)Installing desktop shortcut \(($target_desktop_name)\)...(ansi reset)"
         cp -f $desktop_file ($app_dir | path join $target_desktop_name)
     } else {
@@ -420,32 +502,36 @@ def install-bundle-desktop [app_name: string, config: record, temp_dir: path] {
 Type=Application
 Name=($app_label)
 Comment=($app_desc)
-Exec=($binary) %u
-Icon=($binary)
+Exec=($bin_name) %u
+Icon=($bin_name)
 Terminal=false
 Categories=($app_cat)
 StartupNotify=true
 StartupWMClass=($app_wm)
 "
-        print $"(ansi green)Creating desktop shortcut \(($binary).desktop\)...(ansi reset)"
-        $desktop_content | save -f ($app_dir | path join $"($binary).desktop")
+        print $"(ansi green)Creating desktop shortcut \(($bin_name).desktop\)...(ansi reset)"
+        $desktop_content | save -f ($app_dir | path join $"($bin_name).desktop")
     }
 
-    # Install icon
+    # Install icon (includes Mozilla/Zen default128.png fallback)
     let icon_candidates = (
         glob $"($target_dir)/**/($binary)_icon.svg"
         | append (glob $"($target_dir)/**/($binary).svg")
         | append (glob $"($target_dir)/**/*.svg")
         | append (glob $"($target_dir)/**/($binary)*.png")
+        | append (glob $"($target_dir)/**/default128.png")
+        | append (glob $"($target_dir)/**/default*.png")
         | where { |p| ($p | path type) == "file" }
     )
 
     if ($icon_candidates | is-not-empty) {
         let icon_file = ($icon_candidates | first)
         let ext = ($icon_file | path parse | get extension)
-        let target_icon_name = $"($binary).($ext)"
+        let target_icon_name = $"($bin_name).($ext)"
         let target_icon_dir = if $ext == "svg" {
             $icon_dir
+        } else if (($icon_file | path basename) =~ '128') {
+            ("~/.local/share/icons/hicolor/128x128/apps" | path expand)
         } else {
             ("~/.local/share/icons/hicolor/512x512/apps" | path expand)
         }
@@ -487,6 +573,7 @@ def install-installer-script [app_name: string, config: record, temp_dir: path] 
 # Strategy: Direct binary installation
 def install-binary [app_name: string, config: record, temp_dir: path] {
     let binary = ($config.binary? | default $app_name)
+    let bin_name = ($config.bin_name? | default $binary)
     let bin_dir = ("~/.local/bin" | path expand)
     mkdir $bin_dir
 
@@ -502,8 +589,8 @@ def install-binary [app_name: string, config: record, temp_dir: path] {
         return false
     }
 
-    print $"(ansi green)Installing binary to ($bin_dir)/($binary)...(ansi reset)"
-    install -m 755 $binary_src ($bin_dir | path join $binary)
+    print $"(ansi green)Installing binary to ($bin_dir)/($bin_name)...(ansi reset)"
+    install -m 755 $binary_src ($bin_dir | path join $bin_name)
     true
 }
 
@@ -546,7 +633,7 @@ def update-single-app [
     let asset_pattern = $config.asset
 
     print $"(ansi yellow)Fetching ($app_name) release metadata from GitHub \(($repo)\)...(ansi reset)"
-    let release = (fetch-release $repo $pre_release)
+    let release = (fetch-release $repo $pre_release $config.tag?)
     if ($release | is-empty) {
         return false
     }
@@ -561,18 +648,37 @@ def update-single-app [
     let release_ver = (normalize-version $release.tag_name)
     let norm_installed = (if ($installed_ver | is-not-empty) { normalize-version $installed_ver } else { null })
 
-    let is_up_to_date = (
+    let is_rolling = ($config.rolling? | default false) or ($config.tag? | is-not-empty)
+    let state_entry = (load-app-state | get -o $app_name)
+    let app_present = (is-app-present $app_name $config $installed_ver)
+
+    let state_matches = (
+        $app_present and
+        ($state_entry | is-not-empty) and
+        ($state_entry.tag_name? == $release.tag_name) and
+        ($state_entry.asset_id? == ($asset.id? | default null)) and
+        ($state_entry.asset_updated_at? == ($asset.updated_at? | default null))
+    )
+
+    let ver_matches = (
         ($norm_installed | is-not-empty) and (
             $norm_installed == $release_ver or
             ($norm_installed | str replace -r '-[0-9]+$' '') == $release_ver
         )
     )
 
+    let is_up_to_date = if $is_rolling {
+        $state_matches or ((not ($config.rolling? | default false)) and $ver_matches)
+    } else {
+        $ver_matches
+    }
+
     if $is_up_to_date and not $force {
+        let display_ver = ($installed_ver | default $release.tag_name)
         if $dry_run {
-            print $"(ansi cyan)[dry-run] ($app_name) is already up to date \(($installed_ver)\). Would skip.(ansi reset)"
+            print $"(ansi cyan)[dry-run] ($app_name) is already up to date \(($display_ver)\). Would skip.(ansi reset)"
         } else {
-            print $"(ansi cyan)✓ ($app_name) is already up to date \(($installed_ver)\). Use --force to reinstall.(ansi reset)"
+            print $"(ansi cyan)✓ ($app_name) is already up to date \(($display_ver)\). Use --force to reinstall.(ansi reset)"
         }
         return true
     }
@@ -635,6 +741,7 @@ def update-single-app [
     rm -rf $temp_dir
 
     if $install_ok {
+        save-app-state $app_name $release $asset
         print $"(ansi green)🎉 ($app_name) \(($release.tag_name)\) update completed successfully!(ansi reset)"
         true
     } else {
