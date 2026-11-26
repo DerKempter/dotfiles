@@ -247,6 +247,15 @@ def normalize-version [ver: string] {
     $ver | str trim | str replace -r "^[a-zA-Z_-]*v?" ""
 }
 
+# Resolves the installation directory for bundled desktop applications
+def get-bundle-dir [app_name: string, config: record] {
+    if ($config.install_dir? | is-not-empty) {
+        $config.install_dir | path expand
+    } else {
+        "~/.local/opt" | path expand | path join $app_name
+    }
+}
+
 # Checks whether the application binary/bundle is physically present on disk
 def is-app-present [app_name: string, config: record, installed_ver?: string] {
     if ($installed_ver | is-not-empty) {
@@ -259,7 +268,9 @@ def is-app-present [app_name: string, config: record, installed_ver?: string] {
 
     match $strategy {
         "bundle_desktop" | "flutter_desktop" => {
-            ("~/.local/share" | path expand | path join $app_name $binary) | path exists
+            let bundle_bin = (get-bundle-dir $app_name $config | path join $binary)
+            let legacy_bin = ("~/.local/share" | path expand | path join $app_name $binary)
+            ($bundle_bin | path exists) or ($legacy_bin | path exists)
         },
         "cargo_desktop" | "binary" => {
             ("~/.local/bin" | path expand | path join $bin_name) | path exists
@@ -310,7 +321,9 @@ def get-installed-version [app_name: string, config: record] {
     }
 
     # Strategy: Desktop application bundle (e.g. Flutter/Electron version.json)
-    let flutter_ver_file = ("~/.local/share" | path expand | path join $app_name "data" "flutter_assets" "version.json")
+    let bundle_ver_file = (get-bundle-dir $app_name $config | path join "data" "flutter_assets" "version.json")
+    let legacy_ver_file = ("~/.local/share" | path expand | path join $app_name "data" "flutter_assets" "version.json")
+    let flutter_ver_file = if ($bundle_ver_file | path exists) { $bundle_ver_file } else { $legacy_ver_file }
     if ($flutter_ver_file | path exists) {
         let v = (try { (open $flutter_ver_file).version? } catch { null })
         if ($v | is-not-empty) {
@@ -320,11 +333,15 @@ def get-installed-version [app_name: string, config: record] {
 
     # For bundle_desktop, probe the bundle's own binary directly to avoid PATH collisions (e.g. /usr/bin/zen)
     let probe_cmd = if ($strategy in ["bundle_desktop", "flutter_desktop"]) {
-        let bundle_bin = ("~/.local/share" | path expand | path join $app_name $binary)
-        if not ($bundle_bin | path exists) {
+        let bundle_bin = (get-bundle-dir $app_name $config | path join $binary)
+        let legacy_bin = ("~/.local/share" | path expand | path join $app_name $binary)
+        if ($bundle_bin | path exists) {
+            $bundle_bin
+        } else if ($legacy_bin | path exists) {
+            $legacy_bin
+        } else {
             return null
         }
-        $bundle_bin
     } else {
         if not (has-binary $bin_name) {
             return null
@@ -452,8 +469,7 @@ def install-bundle-desktop [app_name: string, config: record, temp_dir: path] {
     }
 
     let bin_dir = ("~/.local/bin" | path expand)
-    let share_dir = ("~/.local/share" | path expand)
-    let target_dir = ($share_dir | path join $app_name)
+    let target_dir = (get-bundle-dir $app_name $config)
     let app_dir = ("~/.local/share/applications" | path expand)
     let icon_dir = ("~/.local/share/icons/hicolor/scalable/apps" | path expand)
 
